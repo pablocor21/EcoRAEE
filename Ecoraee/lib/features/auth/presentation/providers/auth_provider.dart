@@ -37,7 +37,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> _loadToken() async {
     final token = await _storage.read(key: AppConstants.jwtKey);
     final rol = await _storage.read(key: AppConstants.rolKey);
-    if (token != null) {
+    if (state.token == null && token != null) {
       state = state.copyWith(token: token, rol: rol);
     }
   }
