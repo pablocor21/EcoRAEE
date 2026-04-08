@@ -27,27 +27,17 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   Future<void> _solicitarCodigo() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final email = _emailCtrl.text.trim();
+    print('ForgotPassword: iniciar solicitud para email=$email');
+
     final success = await ref
         .read(authProvider.notifier)
-        .solicitarCodigoRecuperacion(_emailCtrl.text.trim());
+        .solicitarCodigoRecuperacion(email);
 
-    if (!mounted) return;
+    print('ForgotPassword: success=$success');
 
-    if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Código enviado a tu correo'),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      // Navega a la siguiente pantalla con el email usando queryParams
-      final email = _emailCtrl.text.trim();
-      print('Navegando a verify code con email: $email');
-      if (context.mounted) {
-        context.go('${AppRoutes.verifyCode}?email=$email');
-      }
-    } else {
+    if (!success) {
+      if (!mounted) return;
       final error = ref.read(authProvider).error;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -56,6 +46,27 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
           behavior: SnackBarBehavior.floating,
         ),
       );
+      return;
+    }
+
+    // Mostrar SnackBar de éxito
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Código enviado a tu correo'),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      // Navegar inmediatamente mientras el contexto está montado
+      print('ForgotPassword: navegando a verify code con email=$email');
+      try {
+        final encodedEmail = Uri.encodeQueryComponent(email);
+        context.go('/verify-code?email=$encodedEmail');
+        print('ForgotPassword: navigate executed');
+      } catch (e) {
+        print('ForgotPassword: Navigation error: $e');
+      }
     }
   }
 

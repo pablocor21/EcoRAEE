@@ -56,32 +56,39 @@ class _VerifyCodeScreenState extends ConsumerState<VerifyCodeScreen> {
 
     print('validarCodigoRecuperacion success: $success');
 
-    if (!mounted) return;
-
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Código verificado correctamente'),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      // Navega a la pantalla de nueva contraseña
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Código verificado correctamente'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+      // Navega a la pantalla de nueva contraseña inmediatamente
       final email = Uri.encodeComponent(widget.email);
       final codigo = Uri.encodeComponent(code);
       print('Navegando a reset password con email: $email, codigo: $codigo');
-      if (context.mounted) {
-        context.push('${AppRoutes.resetPassword}/$email/$codigo');
+      if (mounted && context.mounted) {
+        try {
+          context.go('${AppRoutes.resetPassword}/$email/$codigo');
+          print('Navigation to reset password executed');
+        } catch (e) {
+          print('Navigation error: $e');
+        }
       }
     } else {
-      final error = ref.read(authProvider).error;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error ?? 'Código inválido'),
-          backgroundColor: CicloxColors.error,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      if (mounted) {
+        final error = ref.read(authProvider).error;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error ?? 'Código inválido'),
+            backgroundColor: CicloxColors.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
