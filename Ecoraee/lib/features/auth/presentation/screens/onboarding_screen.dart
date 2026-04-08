@@ -154,39 +154,41 @@ class _OnboardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 160,
-            height: 160,
-            decoration: BoxDecoration(
-              color: CicloxColors.primary.withOpacity(0.12),
-              shape: BoxShape.circle,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                color: CicloxColors.primary.withOpacity(0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(data.icon, size: 80, color: CicloxColors.primary),
             ),
-            child: Icon(data.icon, size: 80, color: CicloxColors.primary),
-          ),
-          const SizedBox(height: 40),
-          Text(
-            data.title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: CicloxColors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
+            const SizedBox(height: 40),
+            Text(
+              data.title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: CicloxColors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            data.description,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: CicloxColors.grey,
-              fontSize: 16,
-              height: 1.6,
+            const SizedBox(height: 16),
+            Text(
+              data.description,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: CicloxColors.grey,
+                fontSize: 16,
+                height: 1.6,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

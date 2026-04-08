@@ -9,8 +9,15 @@ class ApiConstants {
   static const String signOut = '/auth/sign-out';
   static const String cambiarContrasena = '/auth/cambiar-contrasena';
 
+  // Recuperación de contraseña
+  static const String solicituarRecuperacion = '/auth/recuperacion/solicitar';
+  static const String validarCodigoRecuperacion = '/auth/recuperacion/validar';
+  static const String nuevaContrasenaRecuperacion =
+      '/auth/recuperacion/nueva-contrasena';
+
   // Usuarios
   static const String customers = '/customers';
+  static const String actualizarCustomer = '/customers/actualizar';
 
   // Dispositivos
   static const String dispositivos = '/dispositivos';

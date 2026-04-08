@@ -13,4 +13,23 @@ abstract class IAuthRepository {
     required String contrasenaActual,
     required String contrasenaNueva,
   });
+
+  Future<void> actualizarUsuario({
+    required String nombre,
+    required String email,
+    required String telefono,
+    required String direccion,
+  });
+
+  // Recuperación de contraseña
+  Future<void> solicitarCodigoRecuperacion(String email);
+  Future<void> validarCodigoRecuperacion({
+    required String email,
+    required String codigo,
+  });
+  Future<void> establecerNuevaContrasena({
+    required String email,
+    required String codigo,
+    required String contrasenaNueva,
+  });
 }

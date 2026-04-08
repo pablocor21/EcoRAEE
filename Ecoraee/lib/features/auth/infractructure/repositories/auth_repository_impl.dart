@@ -79,6 +79,75 @@ class AuthRepositoryImpl implements IAuthRepository {
     }
   }
 
+  @override
+  Future<void> actualizarUsuario({
+    required String nombre,
+    required String email,
+    required String telefono,
+    required String direccion,
+  }) async {
+    try {
+      await _dio.patch(
+        ApiConstants.actualizarCustomer,
+        data: {
+          'nombre': nombre,
+          'email': email,
+          'telefono': telefono,
+          'direccion': direccion,
+        },
+      );
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  @override
+  Future<void> solicitarCodigoRecuperacion(String email) async {
+    try {
+      await _dio.post(
+        ApiConstants.solicituarRecuperacion,
+        data: {'email': email},
+      );
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  @override
+  Future<void> validarCodigoRecuperacion({
+    required String email,
+    required String codigo,
+  }) async {
+    try {
+      await _dio.post(
+        ApiConstants.validarCodigoRecuperacion,
+        data: {'email': email, 'codigo': codigo},
+      );
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
+  @override
+  Future<void> establecerNuevaContrasena({
+    required String email,
+    required String codigo,
+    required String contrasenaNueva,
+  }) async {
+    try {
+      await _dio.post(
+        ApiConstants.nuevaContrasenaRecuperacion,
+        data: {
+          'email': email,
+          'codigo': codigo,
+          'contrasenaNueva': contrasenaNueva,
+        },
+      );
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   String _handleError(DioException e) {
     switch (e.response?.statusCode) {
       case 400:
