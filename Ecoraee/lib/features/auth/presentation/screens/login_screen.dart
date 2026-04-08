@@ -133,7 +133,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       v == null || v.isEmpty ? 'Ingresa tu contraseña' : null,
                 ),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 12),
+
+                // Enlace ¿Olvidaste tu contraseña?
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () => context.go(AppRoutes.forgotPassword),
+                    child: const Text(
+                      '¿Olvidaste tu contraseña?',
+
+                      style: TextStyle(
+                        color: CicloxColors.primary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
 
                 isLoading
                     ? const Center(

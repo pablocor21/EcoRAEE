@@ -14,10 +14,10 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _nombreCtrl = TextEditingController(text: 'Juan Pérez');
-  final _emailCtrl = TextEditingController(text: 'juan@email.com');
-  final _telefonoCtrl = TextEditingController(text: '3001234567');
-  final _direccionCtrl = TextEditingController(text: 'Calle 123 #45-67');
+  final _nombreCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
+  final _telefonoCtrl = TextEditingController();
+  final _direccionCtrl = TextEditingController();
   bool _isEditing = false;
   bool _isSaving = false;
 
@@ -33,16 +33,37 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Future<void> _saveChanges() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isSaving = true);
-    await Future.delayed(const Duration(seconds: 1)); // TODO: llamar al API
+
+    final success = await ref
+        .read(authProvider.notifier)
+        .actualizarUsuario(
+          nombre: _nombreCtrl.text.trim(),
+          email: _emailCtrl.text.trim(),
+          telefono: _telefonoCtrl.text.trim(),
+          direccion: _direccionCtrl.text.trim(),
+        );
+
     setState(() {
       _isSaving = false;
-      _isEditing = false;
     });
-    if (mounted) {
+
+    if (!mounted) return;
+
+    if (success) {
+      setState(() => _isEditing = false);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Perfil actualizado'),
           backgroundColor: Color(0xFF4CAF50),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else {
+      final error = ref.read(authProvider).error;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error ?? 'Error actualizando el perfil'),
+          backgroundColor: CicloxColors.error,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -106,9 +127,73 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 isPassword: true,
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Actualizar contraseña'),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50),
+                        side: const BorderSide(color: CicloxColors.grey),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Text('Cancelar'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey2.currentState!.validate()) {
+                          final auth = ref.read(authProvider);
+                          final success = await ref
+                              .read(authProvider.notifier)
+                              .cambiarContrasena(
+                                email: auth.email!,
+                                contrasenaActual: _actualCtrl.text,
+                                contrasenaNueva: _nuevaCtrl.text,
+                              );
+                          if (success) {
+                            Navigator.pop(context);
+                            if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Contraseña cambiada exitosamente',
+                                  ),
+                                  backgroundColor: Color(0xFF4CAF50),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          } else {
+                            // El error ya se maneja en el provider
+                            final error = ref.read(authProvider).error;
+                            if (mounted && error != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Error: $error'),
+                                  backgroundColor: CicloxColors.error,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: CicloxColors.primary,
+                        minimumSize: const Size.fromHeight(50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      child: const Text('Guardar'),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -215,6 +300,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = ref.watch(authProvider);
+    final newNombre = auth.nombre ?? '';
+    final newEmail = auth.email ?? '';
+    final newTelefono = auth.telefono ?? '';
+    final newDireccion = auth.direccion ?? '';
+
+    if (!_isEditing &&
+        (_nombreCtrl.text != newNombre ||
+            _emailCtrl.text != newEmail ||
+            _telefonoCtrl.text != newTelefono ||
+            _direccionCtrl.text != newDireccion)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || _isEditing) return;
+        _nombreCtrl.text = newNombre;
+        _emailCtrl.text = newEmail;
+        _telefonoCtrl.text = newTelefono;
+        _direccionCtrl.text = newDireccion;
+      });
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F8),
       body: SafeArea(
