@@ -149,7 +149,9 @@ class _HomeTab extends StatelessWidget {
                 label: 'Registrar\ndispositivo',
                 color: CicloxColors.primary,
                 textColor: CicloxColors.dark,
-                onTap: () {},
+                onTap: () {
+                  context.push('/registro-dispositivo');
+                },
               ),
               _ActionCard(
                 icon: Icons.local_shipping_rounded,

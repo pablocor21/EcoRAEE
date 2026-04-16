@@ -27,7 +27,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) return;
+    //if (!_formKey.currentState!.validate()) return;
+
+    // ira. la pantalla de dashboard
+    context.go(AppRoutes.dashboardCiudadano);
 
     final success = await ref
         .read(authProvider.notifier)
