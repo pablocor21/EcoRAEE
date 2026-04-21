@@ -607,6 +607,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         onTap: () {},
                       ),
                       _OptionTile(
+                        icon: Icons.policy_outlined,
+                        label: 'Políticas de prevención',
+                        onTap: () => context.push(AppRoutes.politicasPrevencion),
+                      ),
+                      _OptionTile(
                         icon: Icons.help_outline_rounded,
                         label: 'Ayuda y soporte',
                         onTap: () {},

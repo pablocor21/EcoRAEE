@@ -10,6 +10,7 @@ import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/auth/presentation/screens/dashboard_screen.dart';
 import '../../features/auth/presentation/screens/dashboard_colab_screen.dart';
 import '../../features/devices/presentation/screens/registro_dispositivo_screen.dart';
+import '../../features/auth/presentation/screens/politicas_prevencion_screen.dart';
 
 class AppRoutes {
   static const String onboarding = '/';
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String dashboardCiudadano = '/dashboard';
   static const String dashboardColaborador = '/dashboard-colaborador';
   static const String registroDispositivo = '/registro-dispositivo';
+  static const String politicasPrevencion = '/politicas-prevencion';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -92,6 +94,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.registroDispositivo,
         builder: (context, state) => const RegistroDispositivoScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.politicasPrevencion,
+        builder: (context, state) => const PoliticasPrevencionScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

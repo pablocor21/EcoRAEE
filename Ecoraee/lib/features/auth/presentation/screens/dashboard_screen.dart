@@ -2,231 +2,390 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../config/theme/app_theme.dart';
-import '../../../../config/router/app_router.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import 'profile_screen.dart';
 
 // ─────────────────────────────────────────────
 // HOME TAB
 // ─────────────────────────────────────────────
-class _HomeTab extends StatelessWidget {
+class _HomeTab extends ConsumerWidget {
   const _HomeTab();
 
   @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        // Banner
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-            child: Container(
-              padding: const EdgeInsets.all(22),
-              decoration: BoxDecoration(
-                color: CicloxColors.dark,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '¡Bienvenido!',
-                          style: TextStyle(
-                            color: CicloxColors.grey,
-                            fontSize: 13,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          '¿Qué deseas reciclar hoy?',
-                          style: TextStyle(
-                            color: CicloxColors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.eco_rounded,
-                              color: CicloxColors.primary,
-                              size: 14,
-                            ),
-                            SizedBox(width: 6),
-                            Text(
-                              'Transforma · Recupera · Reintegra',
-                              style: TextStyle(
-                                color: CicloxColors.primary,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: CicloxColors.primary.withOpacity(0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.recycling_rounded,
-                      color: CicloxColors.primary,
-                      size: 36,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final nombre = authState.nombre ?? 'Usuario';
+    // Tomar solo el primer nombre
+    final primerNombre = nombre.split(' ').first;
 
-        // Stats
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
-            child: Row(
-              children: [
-                _StatCard(
-                  label: 'Dispositivos',
-                  value: '0',
-                  icon: Icons.devices_rounded,
-                  color: CicloxColors.primary,
-                ),
-                const SizedBox(width: 12),
-                _StatCard(
-                  label: 'Solicitudes',
-                  value: '0',
-                  icon: Icons.assignment_rounded,
-                  color: CicloxColors.secondary,
-                ),
-                const SizedBox(width: 12),
-                _StatCard(
-                  label: 'CO₂ ahorrado',
-                  value: '0kg',
-                  icon: Icons.eco_rounded,
-                  color: const Color(0xFF4CAF50),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // Acciones rápidas
-        const SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 22, 20, 12),
-            child: Text(
-              'Acciones rápidas',
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 28, 20, 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ── Saludo ──────────────────────────────
+            Text(
+              '¡Bienvenida',
               style: TextStyle(
-                fontSize: 17,
+                fontSize: 22,
                 fontWeight: FontWeight.w700,
                 color: CicloxColors.dark,
               ),
             ),
-          ),
-        ),
-
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 1.05,
-            ),
-            delegate: SliverChildListDelegate([
-              _ActionCard(
-                icon: Icons.add_circle_rounded,
-                label: 'Registrar\ndispositivo',
-                color: CicloxColors.primary,
-                textColor: CicloxColors.dark,
-                onTap: () {
-                  context.push('/registro-dispositivo');
-                },
-              ),
-              _ActionCard(
-                icon: Icons.local_shipping_rounded,
-                label: 'Solicitar\nrecolección',
+            Text(
+              '$primerNombre!',
+              style: const TextStyle(
+                fontSize: 42,
+                fontWeight: FontWeight.w900,
                 color: CicloxColors.dark,
-                textColor: CicloxColors.white,
-                onTap: () {},
+                height: 1.0,
               ),
-              _ActionCard(
-                icon: Icons.devices_other_rounded,
-                label: 'Mis\ndispositivos',
-                color: CicloxColors.secondary,
-                textColor: CicloxColors.white,
-                onTap: () {},
-              ),
-              _ActionCard(
-                icon: Icons.location_on_rounded,
-                label: 'Puntos\ncercanos',
-                color: CicloxColors.primaryLight,
-                textColor: CicloxColors.dark,
-                onTap: () {},
-              ),
-            ]),
-          ),
-        ),
-
-        // Actividad reciente
-        const SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(20, 22, 20, 12),
-            child: Text(
-              'Actividad reciente',
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              '¿Que quieres hacer hoy?',
               style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-                color: CicloxColors.dark,
+                fontSize: 14,
+                color: CicloxColors.grey,
+                fontWeight: FontWeight.w400,
               ),
             ),
-          ),
-        ),
+            const SizedBox(height: 24),
 
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-            child: Container(
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: CicloxColors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.inbox_rounded,
-                    size: 48,
-                    color: CicloxColors.grey.withOpacity(0.5),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Sin actividad aún',
-                    style: TextStyle(color: CicloxColors.grey, fontSize: 14),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Registra tu primer dispositivo',
-                    style: TextStyle(color: CicloxColors.grey, fontSize: 12),
-                  ),
-                ],
+            // ── Grid de acciones ─────────────────────
+            _ActionGrid(context: context),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// GRID DE ACCIONES (2x2)
+// ─────────────────────────────────────────────
+class _ActionGrid extends StatelessWidget {
+  final BuildContext context;
+  const _ActionGrid({required this.context});
+
+  @override
+  Widget build(BuildContext ctx) {
+    const double cardHeight = 155;
+    const double spacing = 14;
+
+    return Column(
+      children: [
+        // Fila 1
+        Row(
+          children: [
+            // Tus Puntos (oscuro - izquierda)
+            Expanded(
+              child: _DarkPointsCard(height: cardHeight),
+            ),
+            const SizedBox(width: spacing),
+            // Registrar Dispositivo (blanco - derecha)
+            Expanded(
+              child: _OutlineActionCard(
+                label: 'Registrar\nDispositivo',
+                height: cardHeight,
+                onTap: () => context.push('/registro-dispositivo'),
               ),
             ),
-          ),
+          ],
+        ),
+        const SizedBox(height: spacing),
+        // Fila 2
+        Row(
+          children: [
+            // Tus Solicitudes (blanco - izquierda)
+            Expanded(
+              child: _OutlineActionCard(
+                label: 'Tus\nSolicitudes',
+                height: cardHeight,
+                onTap: () {},
+              ),
+            ),
+            const SizedBox(width: spacing),
+            // Sigue tu reciclaje (mapa - derecha)
+            Expanded(
+              child: _MapActionCard(
+                height: cardHeight,
+                onTap: () {},
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
+}
+
+// ─────────────────────────────────────────────
+// TARJETA "TUS PUNTOS" (fondo oscuro)
+// ─────────────────────────────────────────────
+class _DarkPointsCard extends StatelessWidget {
+  final double height;
+  const _DarkPointsCard({required this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        height: height,
+        decoration: BoxDecoration(
+          color: CicloxColors.dark,
+          borderRadius: BorderRadius.circular(22),
+        ),
+        child: const Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                'Tus\npuntos',
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w900,
+                  color: CicloxColors.white,
+                  height: 1.1,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// TARJETA OUTLINE (fondo blanco con borde)
+// ─────────────────────────────────────────────
+class _OutlineActionCard extends StatelessWidget {
+  final String label;
+  final double height;
+  final VoidCallback onTap;
+  const _OutlineActionCard({
+    required this.label,
+    required this.height,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        decoration: BoxDecoration(
+          color: CicloxColors.white,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: const Color(0xFFE0E0E0), width: 1.5),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: CicloxColors.dark,
+                  height: 1.2,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// TARJETA "SIGUE TU RECICLAJE" (con mapa)
+// ─────────────────────────────────────────────
+class _MapActionCard extends StatelessWidget {
+  final double height;
+  final VoidCallback onTap;
+  const _MapActionCard({required this.height, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(22),
+          // Mapa simulado con gradiente / colores de mapa
+          color: const Color(0xFFD6E4AC),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          children: [
+            // Fondo de mapa simulado con cuadrícula y colores
+            Positioned.fill(
+              child: CustomPaint(painter: _MapPainter()),
+            ),
+            // Etiqueta en esquina inferior izquierda
+            Positioned(
+              bottom: 16,
+              left: 16,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.85),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
+                  'Sigue\ntu reciclaje',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: CicloxColors.dark,
+                    height: 1.2,
+                  ),
+                ),
+              ),
+            ),
+            // Botones de zoom simulados (esquina superior derecha)
+            Positioned(
+              top: 10,
+              right: 10,
+              child: Column(
+                children: [
+                  _ZoomBtn(label: '+'),
+                  const SizedBox(height: 3),
+                  _ZoomBtn(label: '−'),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// BOTÓN DE ZOOM (decorativo)
+// ─────────────────────────────────────────────
+class _ZoomBtn extends StatelessWidget {
+  final String label;
+  const _ZoomBtn({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 26,
+      height: 26,
+      decoration: BoxDecoration(
+        color: CicloxColors.white,
+        borderRadius: BorderRadius.circular(6),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.15),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: CicloxColors.dark,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// PINTOR DE MAPA SIMULADO
+// ─────────────────────────────────────────────
+class _MapPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final roadPaint = Paint()
+      ..color = const Color(0xFFF5F0E8)
+      ..strokeWidth = 10
+      ..style = PaintingStyle.stroke;
+
+    final roadPaintNarrow = Paint()
+      ..color = const Color(0xFFF5F0E8)
+      ..strokeWidth = 5
+      ..style = PaintingStyle.stroke;
+
+    // Fondo
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      Paint()..color = const Color(0xFFD6E4AC),
+    );
+
+    // Calles horizontales
+    canvas.drawLine(
+      Offset(0, size.height * 0.3),
+      Offset(size.width, size.height * 0.3),
+      roadPaint,
+    );
+    canvas.drawLine(
+      Offset(0, size.height * 0.65),
+      Offset(size.width, size.height * 0.65),
+      roadPaintNarrow,
+    );
+
+    // Calles verticales
+    canvas.drawLine(
+      Offset(size.width * 0.35, 0),
+      Offset(size.width * 0.35, size.height),
+      roadPaint,
+    );
+    canvas.drawLine(
+      Offset(size.width * 0.7, 0),
+      Offset(size.width * 0.7, size.height),
+      roadPaintNarrow,
+    );
+
+    // Bloque diagonal
+    final path = Path()
+      ..moveTo(size.width * 0.0, size.height * 0.45)
+      ..lineTo(size.width * 0.35, size.height * 0.3)
+      ..lineTo(size.width * 0.35, size.height * 0.65)
+      ..lineTo(0, size.height * 0.75)
+      ..close();
+    canvas.drawPath(
+      path,
+      Paint()..color = const Color(0xFFC8D9A0),
+    );
+
+    // Pin de ubicación
+    final pinX = size.width * 0.5;
+    final pinY = size.height * 0.42;
+    canvas.drawCircle(
+      Offset(pinX, pinY),
+      8,
+      Paint()..color = const Color(0xFFFF5252),
+    );
+    canvas.drawCircle(
+      Offset(pinX, pinY),
+      4,
+      Paint()..color = CicloxColors.white,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 // ─────────────────────────────────────────────
@@ -243,7 +402,7 @@ class _PlaceholderTab extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 56, color: CicloxColors.grey.withOpacity(0.4)),
+          Icon(icon, size: 56, color: CicloxColors.grey.withValues(alpha: 0.4)),
           const SizedBox(height: 12),
           Text(
             label,
@@ -275,278 +434,165 @@ class DashboardScreen extends ConsumerStatefulWidget {
 }
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
-  int _selectedIndex = 0;
-  bool _isRefreshing = false;
+  int _selectedIndex = 1; // índice 1 = Inicio (ícono central)
 
   final List<Widget> _tabs = const [
-    _HomeTab(),
-    _PlaceholderTab(label: 'Dispositivos', icon: Icons.devices_other_rounded),
-    _PlaceholderTab(label: 'Solicitudes', icon: Icons.assignment_rounded),
     ProfileScreen(),
+    _HomeTab(),
+    _PlaceholderTab(label: 'Recompensas', icon: Icons.star_border_rounded),
   ];
-
-  Future<void> _refresh() async {
-    setState(() => _isRefreshing = true);
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() => _isRefreshing = false);
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Datos actualizados'),
-          backgroundColor: CicloxColors.dark,
-          behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    final isProfileTab = _selectedIndex == 3;
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F6F8),
+      backgroundColor: CicloxColors.white,
       body: SafeArea(
         child: Column(
           children: [
-            // Top bar (se oculta en el tab de perfil)
-            if (!isProfileTab)
+            // ── Top Bar ──────────────────────────────
+            if (_selectedIndex == 1)
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Logo
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: CicloxColors.dark,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(
-                              Icons.bolt_rounded,
-                              color: CicloxColors.primary,
-                              size: 24,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Text(
-                            'ciclox',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              color: CicloxColors.dark,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ],
+                    // Logo "ciclox" personalizado
+                    _CicloxLogo(),
+                    // Campana de notificaciones
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.notifications_outlined,
+                        size: 28,
+                        color: CicloxColors.dark,
                       ),
                     ),
-                    // Refresh
-                    _isRefreshing
-                        ? const SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: Center(
-                              child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: CicloxColors.dark,
-                                ),
-                              ),
-                            ),
-                          )
-                        : _IconBtn(
-                            icon: Icons.refresh_rounded,
-                            onTap: _refresh,
-                          ),
                   ],
                 ),
               ),
 
-            // Tab content
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: _refresh,
-                color: CicloxColors.primary,
-                child: _tabs[_selectedIndex],
-              ),
-            ),
+            // ── Contenido del tab ─────────────────────
+            Expanded(child: _tabs[_selectedIndex]),
           ],
         ),
       ),
 
-      // Bottom Navigation Bar
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: CicloxColors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 12,
-              offset: const Offset(0, -4),
-            ),
-          ],
+      // ── Bottom Navigation Bar ─────────────────────
+      bottomNavigationBar: _BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onTap: (i) => setState(() => _selectedIndex = i),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// LOGO CICLOX PERSONALIZADO
+// ─────────────────────────────────────────────
+class _CicloxLogo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: const TextSpan(
+        style: TextStyle(
+          fontSize: 26,
+          fontWeight: FontWeight.w900,
+          letterSpacing: -0.5,
         ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: (i) => setState(() => _selectedIndex = i),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          selectedItemColor: CicloxColors.dark,
-          unselectedItemColor: CicloxColors.grey,
-          selectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 11,
+        children: [
+          TextSpan(
+            text: 'ci',
+            style: TextStyle(color: CicloxColors.dark),
           ),
-          unselectedLabelStyle: const TextStyle(fontSize: 11),
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
-              label: 'Inicio',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.devices_rounded),
-              label: 'Dispositivos',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.assignment_rounded),
-              label: 'Solicitudes',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_rounded),
-              label: 'Perfil',
-            ),
-          ],
-        ),
+          TextSpan(
+            text: 'cl',
+            style: TextStyle(color: CicloxColors.primary),
+          ),
+          TextSpan(
+            text: 'ox',
+            style: TextStyle(color: CicloxColors.dark),
+          ),
+        ],
       ),
     );
   }
 }
 
 // ─────────────────────────────────────────────
-// WIDGETS COMPARTIDOS
+// BOTTOM NAVIGATION BAR
 // ─────────────────────────────────────────────
-class _IconBtn extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-  const _IconBtn({required this.icon, required this.onTap});
+class _BottomNavBar extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onTap;
+  const _BottomNavBar({required this.selectedIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: CicloxColors.dark.withOpacity(0.06),
-          borderRadius: BorderRadius.circular(12),
+    return Container(
+      height: 70,
+      decoration: BoxDecoration(
+        color: CicloxColors.white,
+        border: Border(
+          top: BorderSide(
+            color: CicloxColors.dark.withValues(alpha: 0.08),
+            width: 1,
+          ),
         ),
-        child: Icon(icon, size: 20, color: CicloxColors.dark),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _NavItem(
+            icon: Icons.settings_outlined,
+            index: 0,
+            selectedIndex: selectedIndex,
+            onTap: onTap,
+          ),
+          _NavItem(
+            icon: Icons.home_rounded,
+            index: 1,
+            selectedIndex: selectedIndex,
+            onTap: onTap,
+          ),
+          _NavItem(
+            icon: Icons.star_border_rounded,
+            index: 2,
+            selectedIndex: selectedIndex,
+            onTap: onTap,
+          ),
+        ],
       ),
     );
   }
 }
 
-class _StatCard extends StatelessWidget {
-  final String label;
-  final String value;
+// ─────────────────────────────────────────────
+// ÍTEM DE NAVEGACIÓN INFERIOR
+// ─────────────────────────────────────────────
+class _NavItem extends StatelessWidget {
   final IconData icon;
-  final Color color;
-  const _StatCard({
-    required this.label,
-    required this.value,
+  final int index;
+  final int selectedIndex;
+  final ValueChanged<int> onTap;
+  const _NavItem({
     required this.icon,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: CicloxColors.white,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: color, size: 22),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: CicloxColors.dark,
-              ),
-            ),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 11, color: CicloxColors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ActionCard extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final Color textColor;
-  final VoidCallback onTap;
-  const _ActionCard({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.textColor,
+    required this.index,
+    required this.selectedIndex,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool isSelected = index == selectedIndex;
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: textColor.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(icon, color: textColor, size: 24),
-            ),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: textColor,
-                height: 1.3,
-              ),
-            ),
-          ],
+      onTap: () => onTap(index),
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        child: Icon(
+          icon,
+          size: 28,
+          color: isSelected ? CicloxColors.dark : CicloxColors.dark.withValues(alpha: 0.45),
         ),
       ),
     );
