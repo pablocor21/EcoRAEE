@@ -11,6 +11,13 @@ import '../../features/auth/presentation/screens/dashboard_screen.dart';
 import '../../features/auth/presentation/screens/dashboard_colab_screen.dart';
 import '../../features/devices/presentation/screens/registro_dispositivo_screen.dart';
 import '../../features/auth/presentation/screens/politicas_prevencion_screen.dart';
+import '../../features/solicitudes/presentation/screens/crear_solicitud_screen.dart';
+import '../../features/solicitudes/presentation/screens/crear_solicitud_paso2_screen.dart';
+import '../../features/solicitudes/presentation/screens/crear_solicitud_resumen_screen.dart';
+import '../../features/solicitudes/presentation/screens/seguimiento_solicitudes_screen.dart';
+import '../../features/solicitudes/presentation/screens/solicitud_cancelada_screen.dart';
+import '../../features/solicitudes/presentation/screens/solicitud_enviada_screen.dart';
+import '../../features/solicitudes/presentation/screens/solicitudes_screen.dart';
 
 class AppRoutes {
   static const String onboarding = '/';
@@ -20,9 +27,17 @@ class AppRoutes {
   static const String verifyCode = '/verify-code';
   static const String resetPassword = '/reset-password';
   static const String dashboardCiudadano = '/dashboard';
+  static const String perfilCiudadano = '/perfil';
   static const String dashboardColaborador = '/dashboard-colaborador';
   static const String registroDispositivo = '/registro-dispositivo';
   static const String politicasPrevencion = '/politicas-prevencion';
+  static const String solicitudes = '/solicitudes';
+  static const String crearSolicitud = '/crear-solicitud';
+  static const String crearSolicitudPaso2 = '/crear-solicitud-paso2';
+  static const String crearSolicitudResumen = '/crear-solicitud-resumen';
+  static const String seguimientoSolicitudes = '/seguimiento-solicitudes';
+  static const String solicitudCancelada = '/solicitud-cancelada';
+  static const String solicitudEnviada = '/solicitud-enviada';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -85,7 +100,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.dashboardCiudadano,
-        builder: (context, state) => const DashboardScreen(),
+        builder: (context, state) => const DashboardScreen(initialIndex: 1),
+      ),
+      GoRoute(
+        path: AppRoutes.perfilCiudadano,
+        builder: (context, state) => const DashboardScreen(initialIndex: 0),
       ),
       GoRoute(
         path: AppRoutes.dashboardColaborador,
@@ -98,6 +117,34 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.politicasPrevencion,
         builder: (context, state) => const PoliticasPrevencionScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.solicitudes,
+        builder: (context, state) => const SolicitudesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.crearSolicitud,
+        builder: (context, state) => const CrearSolicitudScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.crearSolicitudPaso2,
+        builder: (context, state) => const CrearSolicitudPaso2Screen(),
+      ),
+      GoRoute(
+        path: AppRoutes.crearSolicitudResumen,
+        builder: (context, state) => const CrearSolicitudResumenScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.seguimientoSolicitudes,
+        builder: (context, state) => const SeguimientoSolicitudesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.solicitudCancelada,
+        builder: (context, state) => const SolicitudCanceladaScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.solicitudEnviada,
+        builder: (context, state) => const SolicitudEnviadaScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

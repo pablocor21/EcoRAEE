@@ -103,7 +103,7 @@ class _ActionGrid extends StatelessWidget {
               child: _OutlineActionCard(
                 label: 'Tus\nSolicitudes',
                 height: cardHeight,
-                onTap: () {},
+                onTap: () => context.push('/solicitudes'),
               ),
             ),
             const SizedBox(width: spacing),
@@ -427,14 +427,21 @@ class _PlaceholderTab extends StatelessWidget {
 // DASHBOARD SHELL (ciudadano)
 // ─────────────────────────────────────────────
 class DashboardScreen extends ConsumerStatefulWidget {
-  const DashboardScreen({super.key});
+  final int initialIndex;
+  const DashboardScreen({super.key, this.initialIndex = 1});
 
   @override
   ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
-  int _selectedIndex = 1; // índice 1 = Inicio (ícono central)
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
 
   final List<Widget> _tabs = const [
     ProfileScreen(),
