@@ -18,6 +18,8 @@ import '../../features/solicitudes/presentation/screens/seguimiento_solicitudes_
 import '../../features/solicitudes/presentation/screens/solicitud_cancelada_screen.dart';
 import '../../features/solicitudes/presentation/screens/solicitud_enviada_screen.dart';
 import '../../features/solicitudes/presentation/screens/solicitudes_screen.dart';
+import '../../features/trazabilidad/presentation/screens/trazabilidad_screen.dart';
+import '../../features/trazabilidad/presentation/screens/seguimiento_recolector_screen.dart';
 
 class AppRoutes {
   static const String onboarding = '/';
@@ -38,6 +40,8 @@ class AppRoutes {
   static const String seguimientoSolicitudes = '/seguimiento-solicitudes';
   static const String solicitudCancelada = '/solicitud-cancelada';
   static const String solicitudEnviada = '/solicitud-enviada';
+  static const String trazabilidad = '/trazabilidad';
+  static const String seguimientoRecolector = '/seguimiento-recolector';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -145,6 +149,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.solicitudEnviada,
         builder: (context, state) => const SolicitudEnviadaScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.trazabilidad,
+        builder: (context, state) => const TrazabilidadScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.seguimientoRecolector,
+        builder: (context, state) => const SeguimientoRecolectorScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
