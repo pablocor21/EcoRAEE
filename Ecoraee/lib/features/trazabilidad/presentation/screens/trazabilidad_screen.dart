@@ -329,7 +329,9 @@ class _TrazabilidadScreenState extends State<TrazabilidadScreen>
           width: 180,
           height: 46,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              context.push('/seguimiento-recolector');
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: CicloxColors.dark,
               shape: RoundedRectangleBorder(
