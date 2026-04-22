@@ -26,7 +26,6 @@ import '../../features/puntos/presentation/screens/canje_exitoso_screen.dart';
 import '../../features/puntos/presentation/screens/canje_status_screen.dart';
 import '../../features/puntos/presentation/providers/puntos_provider.dart';
 
-
 class AppRoutes {
   static const String onboarding = '/';
   static const String login = '/login';
@@ -58,6 +57,7 @@ class AppRoutes {
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.onboarding,
+
     /// initialLocation: AppRoutes.dashboardCiudadano, // TODO: Cambiar a AppRoutes.onboarding para producción
     routes: [
       GoRoute(
@@ -182,7 +182,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '${AppRoutes.recompensaDetalle}/:id',
         builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-          final puntosState = ProviderScope.containerOf(context).read(puntosProvider);
+          final puntosState = ProviderScope.containerOf(
+            context,
+          ).read(puntosProvider);
           final recompensa = puntosState.recompensas.firstWhere(
             (r) => r.id == id,
             orElse: () => puntosState.recompensas.first,
@@ -194,7 +196,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '${AppRoutes.canjeExitoso}/:id',
         builder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
-          final puntosState = ProviderScope.containerOf(context).read(puntosProvider);
+          final puntosState = ProviderScope.containerOf(
+            context,
+          ).read(puntosProvider);
           final recompensa = puntosState.recompensas.firstWhere(
             (r) => r.id == id,
             orElse: () => puntosState.recompensas.first,
