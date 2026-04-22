@@ -311,7 +311,9 @@ class _RegistroDispositivoScreenState extends State<RegistroDispositivoScreen> {
 
               // Botón Registrar dispositivo
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push('/dispositivo-registrado');
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CicloxColors.dark,
                   foregroundColor: CicloxColors.white,

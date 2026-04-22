@@ -10,6 +10,7 @@ import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/auth/presentation/screens/dashboard_screen.dart';
 import '../../features/auth/presentation/screens/dashboard_colab_screen.dart';
 import '../../features/devices/presentation/screens/registro_dispositivo_screen.dart';
+import '../../features/devices/presentation/screens/dispositivo_registrado_screen.dart';
 import '../../features/auth/presentation/screens/politicas_prevencion_screen.dart';
 import '../../features/solicitudes/presentation/screens/crear_solicitud_screen.dart';
 import '../../features/solicitudes/presentation/screens/crear_solicitud_paso2_screen.dart';
@@ -37,6 +38,7 @@ class AppRoutes {
   static const String perfilCiudadano = '/perfil';
   static const String dashboardColaborador = '/dashboard-colaborador';
   static const String registroDispositivo = '/registro-dispositivo';
+  static const String dispositivoRegistrado = '/dispositivo-registrado';
   static const String politicasPrevencion = '/politicas-prevencion';
   static const String solicitudes = '/solicitudes';
   static const String crearSolicitud = '/crear-solicitud';
@@ -56,6 +58,7 @@ class AppRoutes {
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.onboarding,
+    /// initialLocation: AppRoutes.dashboardCiudadano, // TODO: Cambiar a AppRoutes.onboarding para producción
     routes: [
       GoRoute(
         name: 'onboarding',
@@ -126,6 +129,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.registroDispositivo,
         builder: (context, state) => const RegistroDispositivoScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.dispositivoRegistrado,
+        builder: (context, state) => const DispositivoRegistradoScreen(),
       ),
       GoRoute(
         path: AppRoutes.politicasPrevencion,
