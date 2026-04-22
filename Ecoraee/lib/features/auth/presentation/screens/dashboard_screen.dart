@@ -340,7 +340,11 @@ class _QuickActionsGrid extends StatelessWidget {
             label: 'Solicitudes',
             onTap: () => context.push(AppRoutes.solicitudes),
           ),
-          _ActionButton(icon: Icons.inventory_2, label: 'Recolección'),
+          _ActionButton(
+            icon: Icons.inventory_2,
+            label: 'Recolección',
+            onTap: () => context.push(AppRoutes.recoleccion),
+          ),
         ],
       ),
     );

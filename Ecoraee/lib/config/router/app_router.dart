@@ -14,6 +14,7 @@ import '../../features/auth/presentation/screens/registros_screen.dart';
 import '../../features/auth/presentation/screens/historial_screen.dart';
 import '../../features/auth/presentation/screens/solicitudes_screen.dart';
 import '../../features/auth/presentation/screens/detalles_solicitud_screen.dart';
+import '../../features/recoleccion/presentation/screens/recoleccion_screen.dart';
 
 class AppRoutes {
   static const String onboarding = '/';
@@ -29,6 +30,7 @@ class AppRoutes {
   static const String historial = '/historial';
   static const String solicitudes = '/solicitudes';
   static const String detallesSolicitud = '/detalles-solicitud';
+  static const String recoleccion = '/recoleccion';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -116,6 +118,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.detallesSolicitud,
         builder: (context, state) => const DetallesSolicitudScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.recoleccion,
+        builder: (context, state) => const RecoleccionScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
