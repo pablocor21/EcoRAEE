@@ -111,7 +111,7 @@ class _ActionGrid extends StatelessWidget {
             Expanded(
               child: _MapActionCard(
                 height: cardHeight,
-                onTap: () {},
+                onTap: () => context.push('/trazabilidad'),
               ),
             ),
           ],

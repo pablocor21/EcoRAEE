@@ -396,64 +396,69 @@ class _SeguimientoSolicitudesScreenState extends State<SeguimientoSolicitudesScr
   Widget _buildCard(Map<String, String> solicitud) {
     final hasImage = solicitud['imagen']!.isNotEmpty;
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Imagen
-          Container(
-            width: 140,
-            height: 140,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: CicloxColors.dark, // Fondo negro/oscuro por defecto
-              image: hasImage
-                  ? DecorationImage(
-                      image: NetworkImage(solicitud['imagen']!),
-                      fit: BoxFit.cover,
-                    )
-                  : null,
+    return GestureDetector(
+      onTap: () {
+        context.push('/trazabilidad');
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 24),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Imagen
+            Container(
+              width: 140,
+              height: 140,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: CicloxColors.dark, // Fondo negro/oscuro por defecto
+                image: hasImage
+                    ? DecorationImage(
+                        image: NetworkImage(solicitud['imagen']!),
+                        fit: BoxFit.cover,
+                      )
+                    : null,
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
+            const SizedBox(width: 16),
 
-          // Información
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildRichText('Tipo de residuo: ', solicitud['tipo']!),
-                _buildRichText('Cantidad: ', solicitud['cantidad']!),
-                _buildRichText('Dirección: ', solicitud['direccion']!),
-                _buildRichText('Teléfono: ', solicitud['telefono']!),
-                _buildRichText('Fecha de solicitud: ', solicitud['fecha']!),
-                if (solicitud.containsKey('fechaRecoleccion'))
-                  _buildRichText('Fecha de recolección: ', solicitud['fechaRecoleccion']!),
-                if (solicitud.containsKey('horaEstimada'))
-                  _buildRichText('Hora estimada: ', solicitud['horaEstimada']!),
-                if (solicitud.containsKey('motivoRechazo')) ...[
-                  const SizedBox(height: 2),
-                  const Text(
-                    'Motivo del rechazo',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
-                      color: CicloxColors.dark,
+            // Información
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildRichText('Tipo de residuo: ', solicitud['tipo']!),
+                  _buildRichText('Cantidad: ', solicitud['cantidad']!),
+                  _buildRichText('Dirección: ', solicitud['direccion']!),
+                  _buildRichText('Teléfono: ', solicitud['telefono']!),
+                  _buildRichText('Fecha de solicitud: ', solicitud['fecha']!),
+                  if (solicitud.containsKey('fechaRecoleccion'))
+                    _buildRichText('Fecha de recolección: ', solicitud['fechaRecoleccion']!),
+                  if (solicitud.containsKey('horaEstimada'))
+                    _buildRichText('Hora estimada: ', solicitud['horaEstimada']!),
+                  if (solicitud.containsKey('motivoRechazo')) ...[
+                    const SizedBox(height: 2),
+                    const Text(
+                      'Motivo del rechazo',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: CicloxColors.dark,
+                      ),
                     ),
-                  ),
-                  Text(
-                    solicitud['motivoRechazo']!,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: CicloxColors.grey.withOpacity(0.9),
+                    Text(
+                      solicitud['motivoRechazo']!,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: CicloxColors.grey.withOpacity(0.9),
+                      ),
                     ),
-                  ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
