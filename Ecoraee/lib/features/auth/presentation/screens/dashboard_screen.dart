@@ -3,13 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../config/theme/app_theme.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../puntos/presentation/screens/puntos_tab.dart';
 import 'profile_screen.dart';
 
 // ─────────────────────────────────────────────
 // HOME TAB
 // ─────────────────────────────────────────────
 class _HomeTab extends ConsumerWidget {
-  const _HomeTab();
+  final VoidCallback? onNavigateToPuntos;
+  const _HomeTab({this.onNavigateToPuntos});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,7 +56,7 @@ class _HomeTab extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // ── Grid de acciones ─────────────────────
-            _ActionGrid(context: context),
+            _ActionGrid(context: context, onNavigateToPuntos: onNavigateToPuntos),
           ],
         ),
       ),
@@ -67,7 +69,8 @@ class _HomeTab extends ConsumerWidget {
 // ─────────────────────────────────────────────
 class _ActionGrid extends StatelessWidget {
   final BuildContext context;
-  const _ActionGrid({required this.context});
+  final VoidCallback? onNavigateToPuntos;
+  const _ActionGrid({required this.context, this.onNavigateToPuntos});
 
   @override
   Widget build(BuildContext ctx) {
@@ -81,7 +84,7 @@ class _ActionGrid extends StatelessWidget {
           children: [
             // Tus Puntos (oscuro - izquierda)
             Expanded(
-              child: _DarkPointsCard(height: cardHeight),
+              child: _DarkPointsCard(height: cardHeight, onTap: onNavigateToPuntos),
             ),
             const SizedBox(width: spacing),
             // Registrar Dispositivo (blanco - derecha)
@@ -126,12 +129,13 @@ class _ActionGrid extends StatelessWidget {
 // ─────────────────────────────────────────────
 class _DarkPointsCard extends StatelessWidget {
   final double height;
-  const _DarkPointsCard({required this.height});
+  final VoidCallback? onTap;
+  const _DarkPointsCard({required this.height, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         height: height,
         decoration: BoxDecoration(
@@ -443,10 +447,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     _selectedIndex = widget.initialIndex;
   }
 
-  final List<Widget> _tabs = const [
-    ProfileScreen(),
-    _HomeTab(),
-    _PlaceholderTab(label: 'Recompensas', icon: Icons.star_border_rounded),
+  List<Widget> get _tabs => [
+    const ProfileScreen(),
+    _HomeTab(onNavigateToPuntos: () => setState(() => _selectedIndex = 2)),
+    const PuntosTab(),
   ];
 
   @override
@@ -456,8 +460,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ── Top Bar ──────────────────────────────
-            if (_selectedIndex == 1)
+            // ── Top Bar (visible en Home y Puntos) ────
+            if (_selectedIndex == 1 || _selectedIndex == 2)
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
                 child: Row(
@@ -500,22 +504,30 @@ class _CicloxLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RichText(
-      text: const TextSpan(
-        style: TextStyle(
-          fontSize: 26,
+      text: TextSpan(
+        style: const TextStyle(
+          fontSize: 28,
           fontWeight: FontWeight.w900,
-          letterSpacing: -0.5,
+          letterSpacing: -1,
         ),
         children: [
-          TextSpan(
-            text: 'ci',
+          const TextSpan(
+            text: 'cl',
             style: TextStyle(color: CicloxColors.dark),
           ),
-          TextSpan(
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Icon(
+              Icons.bolt_rounded,
+              color: CicloxColors.primary,
+              size: 24,
+            ),
+          ),
+          const TextSpan(
             text: 'cl',
             style: TextStyle(color: CicloxColors.primary),
           ),
-          TextSpan(
+          const TextSpan(
             text: 'ox',
             style: TextStyle(color: CicloxColors.dark),
           ),
@@ -537,20 +549,18 @@ class _BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 70,
-      decoration: BoxDecoration(
-        color: CicloxColors.white,
-        border: Border(
-          top: BorderSide(
-            color: CicloxColors.dark.withValues(alpha: 0.08),
-            width: 1,
-          ),
+      decoration: const BoxDecoration(
+        color: Color(0xFFE9F1E1),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
         ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _NavItem(
-            icon: Icons.settings_outlined,
+            icon: Icons.settings_rounded,
             index: 0,
             selectedIndex: selectedIndex,
             onTap: onTap,
@@ -562,7 +572,7 @@ class _BottomNavBar extends StatelessWidget {
             onTap: onTap,
           ),
           _NavItem(
-            icon: Icons.star_border_rounded,
+            icon: Icons.stars_rounded,
             index: 2,
             selectedIndex: selectedIndex,
             onTap: onTap,
@@ -598,8 +608,10 @@ class _NavItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         child: Icon(
           icon,
-          size: 28,
-          color: isSelected ? CicloxColors.dark : CicloxColors.dark.withValues(alpha: 0.45),
+          size: 30,
+          color: isSelected
+              ? const Color(0xFF1E1E3F)
+              : const Color(0xFF1E1E3F).withValues(alpha: 0.5),
         ),
       ),
     );

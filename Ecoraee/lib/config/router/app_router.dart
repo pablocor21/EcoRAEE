@@ -20,6 +20,11 @@ import '../../features/solicitudes/presentation/screens/solicitud_enviada_screen
 import '../../features/solicitudes/presentation/screens/solicitudes_screen.dart';
 import '../../features/trazabilidad/presentation/screens/trazabilidad_screen.dart';
 import '../../features/trazabilidad/presentation/screens/seguimiento_recolector_screen.dart';
+import '../../features/puntos/presentation/screens/recompensa_detalle_screen.dart';
+import '../../features/puntos/presentation/screens/canje_exitoso_screen.dart';
+import '../../features/puntos/presentation/screens/canje_status_screen.dart';
+import '../../features/puntos/presentation/providers/puntos_provider.dart';
+
 
 class AppRoutes {
   static const String onboarding = '/';
@@ -42,6 +47,10 @@ class AppRoutes {
   static const String solicitudEnviada = '/solicitud-enviada';
   static const String trazabilidad = '/trazabilidad';
   static const String seguimientoRecolector = '/seguimiento-recolector';
+  static const String puntos = '/puntos';
+  static const String recompensaDetalle = '/recompensa-detalle';
+  static const String canjeExitoso = '/canje-exitoso';
+  static const String canjeStatus = '/canje-status';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -157,6 +166,41 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.seguimientoRecolector,
         builder: (context, state) => const SeguimientoRecolectorScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.puntos,
+        builder: (context, state) => const DashboardScreen(initialIndex: 2),
+      ),
+      GoRoute(
+        path: '${AppRoutes.recompensaDetalle}/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          final puntosState = ProviderScope.containerOf(context).read(puntosProvider);
+          final recompensa = puntosState.recompensas.firstWhere(
+            (r) => r.id == id,
+            orElse: () => puntosState.recompensas.first,
+          );
+          return RecompensaDetalleScreen(recompensa: recompensa);
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.canjeExitoso}/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          final puntosState = ProviderScope.containerOf(context).read(puntosProvider);
+          final recompensa = puntosState.recompensas.firstWhere(
+            (r) => r.id == id,
+            orElse: () => puntosState.recompensas.first,
+          );
+          return CanjeExitosoScreen(recompensa: recompensa);
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.canjeStatus}/:success',
+        builder: (context, state) {
+          final isSuccess = state.pathParameters['success'] == 'true';
+          return CanjeStatusScreen(isSuccess: isSuccess);
+        },
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
