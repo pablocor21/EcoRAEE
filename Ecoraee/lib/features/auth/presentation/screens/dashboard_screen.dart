@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../config/theme/app_theme.dart';
 import '../../../../config/router/app_router.dart';
 
 class DashboardScreen extends ConsumerWidget {

@@ -71,9 +71,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   void _showChangePassword() {
-    final _actualCtrl = TextEditingController();
-    final _nuevaCtrl = TextEditingController();
-    final _formKey2 = GlobalKey<FormState>();
+    final actualCtrl = TextEditingController();
+    final nuevaCtrl = TextEditingController();
+    final formKey2 = GlobalKey<FormState>();
 
     showModalBottomSheet(
       context: context,
@@ -90,7 +90,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           bottom: MediaQuery.of(context).viewInsets.bottom + 24,
         ),
         child: Form(
-          key: _formKey2,
+          key: formKey2,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,13 +117,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               const SizedBox(height: 20),
               _EditField(
                 label: 'Contraseña actual',
-                controller: _actualCtrl,
+                controller: actualCtrl,
                 isPassword: true,
               ),
               const SizedBox(height: 14),
               _EditField(
                 label: 'Nueva contraseña',
-                controller: _nuevaCtrl,
+                controller: nuevaCtrl,
                 isPassword: true,
               ),
               const SizedBox(height: 24),
@@ -146,14 +146,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (_formKey2.currentState!.validate()) {
+                        if (formKey2.currentState!.validate()) {
                           final auth = ref.read(authProvider);
                           final success = await ref
                               .read(authProvider.notifier)
                               .cambiarContrasena(
                                 email: auth.email!,
-                                contrasenaActual: _actualCtrl.text,
-                                contrasenaNueva: _nuevaCtrl.text,
+                                contrasenaActual: actualCtrl.text,
+                                contrasenaNueva: nuevaCtrl.text,
                               );
                           if (success) {
                             Navigator.pop(context);

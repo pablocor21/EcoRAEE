@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../config/theme/app_theme.dart';
 
 class RegistrosScreen extends StatelessWidget {
   const RegistrosScreen({super.key});
@@ -294,11 +293,7 @@ class _RegistroCard extends StatelessWidget {
               // Detalle inferior izquierdo
               Row(
                 children: [
-                  const Icon(
-                    Icons.bolt,
-                    color: Color(0xFFB2F333),
-                    size: 20,
-                  ),
+                  const Icon(Icons.bolt, color: Color(0xFFB2F333), size: 20),
                   const SizedBox(width: 5),
                   Text(
                     detail,
