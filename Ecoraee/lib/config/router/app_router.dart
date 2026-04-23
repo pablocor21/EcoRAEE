@@ -10,6 +10,11 @@ import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/auth/presentation/screens/dashboard_screen.dart';
 import '../../features/auth/presentation/screens/dashboard_colab_screen.dart';
 import '../../features/devices/presentation/screens/registro_dispositivo_screen.dart';
+import '../../features/auth/presentation/screens/registros_screen.dart';
+import '../../features/auth/presentation/screens/historial_screen.dart';
+import '../../features/auth/presentation/screens/solicitudes_screen.dart';
+import '../../features/auth/presentation/screens/detalles_solicitud_screen.dart';
+import '../../features/recoleccion/presentation/screens/recoleccion_screen.dart';
 
 class AppRoutes {
   static const String onboarding = '/';
@@ -21,6 +26,11 @@ class AppRoutes {
   static const String dashboardCiudadano = '/dashboard';
   static const String dashboardColaborador = '/dashboard-colaborador';
   static const String registroDispositivo = '/registro-dispositivo';
+  static const String registros = '/registros';
+  static const String historial = '/historial';
+  static const String solicitudes = '/solicitudes';
+  static const String detallesSolicitud = '/detalles-solicitud';
+  static const String recoleccion = '/recoleccion';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -92,6 +102,26 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.registroDispositivo,
         builder: (context, state) => const RegistroDispositivoScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.registros,
+        builder: (context, state) => const RegistrosScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.historial,
+        builder: (context, state) => const HistorialScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.solicitudes,
+        builder: (context, state) => const SolicitudesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.detallesSolicitud,
+        builder: (context, state) => const DetallesSolicitudScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.recoleccion,
+        builder: (context, state) => const RecoleccionScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(
