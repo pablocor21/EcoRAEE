@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'preparar_ruta_screen.dart';
 
 class RecoleccionScreen extends ConsumerWidget {
   const RecoleccionScreen({super.key});
@@ -12,7 +13,8 @@ class RecoleccionScreen extends ConsumerWidget {
         children: [
           // 1. FONDO CON GRADIENTE (Efecto espacial/oscuro de la imagen)
           Container(
-            height: 250, // Altura para cubrir la parte superior detrás del contenido
+            height:
+                250, // Altura para cubrir la parte superior detrás del contenido
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -127,7 +129,9 @@ class _HeaderRow extends StatelessWidget {
               ),
               child: const Center(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 6.0), // Ajuste visual del icono
+                  padding: EdgeInsets.only(
+                    left: 6.0,
+                  ), // Ajuste visual del icono
                   child: Icon(
                     Icons.arrow_back_ios,
                     color: Colors.black,
@@ -229,7 +233,8 @@ class _TabsSection extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: Colors.transparent, // Fondo transparente para el inactivo
+                color:
+                    Colors.transparent, // Fondo transparente para el inactivo
                 borderRadius: BorderRadius.circular(25),
               ),
               child: const Center(
@@ -326,7 +331,7 @@ class _LocationCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          
+
           // Fila del contenido con la línea conectora
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +342,9 @@ class _LocationCard extends StatelessWidget {
                 height: 60, // Alto aproximado de las dos filas
                 alignment: Alignment.topLeft,
                 child: Container(
-                  margin: const EdgeInsets.only(left: 13), // Centrado bajo el pin
+                  margin: const EdgeInsets.only(
+                    left: 13,
+                  ), // Centrado bajo el pin
                   width: 18,
                   height: 48, // Baja y gira a la derecha
                   decoration: const BoxDecoration(
@@ -349,14 +356,18 @@ class _LocationCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              
+
               // Datos de dirección y hora
               Expanded(
                 child: Column(
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.store, color: Color(0xFF19133B), size: 20),
+                        const Icon(
+                          Icons.store,
+                          color: Color(0xFF19133B),
+                          size: 20,
+                        ),
                         const SizedBox(width: 10),
                         Text(
                           address,
@@ -370,7 +381,11 @@ class _LocationCard extends StatelessWidget {
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        const Icon(Icons.access_time_filled, color: Color(0xFF19133B), size: 20),
+                        const Icon(
+                          Icons.access_time_filled,
+                          color: Color(0xFF19133B),
+                          size: 20,
+                        ),
                         const SizedBox(width: 10),
                         Text(
                           time,
@@ -421,15 +436,18 @@ class _SlideToPrepareRouteState extends State<_SlideToPrepareRoute> {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final maxDrag = constraints.maxWidth - 70; // Ancho máximo restando el thumb
-          
+          final maxDrag =
+              constraints.maxWidth - 70; // Ancho máximo restando el thumb
+
           return Stack(
             alignment: Alignment.centerLeft,
             children: [
               // Texto de fondo centrado
               const Center(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 30), // Empujar un poco a la derecha
+                  padding: EdgeInsets.only(
+                    left: 30,
+                  ), // Empujar un poco a la derecha
                   child: Text(
                     'PREPARAR RUTA',
                     style: TextStyle(
@@ -441,7 +459,7 @@ class _SlideToPrepareRouteState extends State<_SlideToPrepareRoute> {
                   ),
                 ),
               ),
-              
+
               // Botón deslizable (thumb)
               Positioned(
                 left: _dragValue,
@@ -456,8 +474,23 @@ class _SlideToPrepareRouteState extends State<_SlideToPrepareRoute> {
                   onHorizontalDragEnd: (details) {
                     setState(() {
                       if (_dragValue > maxDrag * 0.8) {
-                        // Acción completada (aquí iría la lógica en el futuro)
+                        // Acción completada
                         _dragValue = maxDrag;
+
+                        // Navegar a la pantalla de preparar ruta
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PrepararRutaScreen(),
+                          ),
+                        ).then((_) {
+                          // Restablecer el slider al volver de la pantalla
+                          if (mounted) {
+                            setState(() {
+                              _dragValue = 0;
+                            });
+                          }
+                        });
                       } else {
                         // Regresar al inicio
                         _dragValue = 0;
@@ -484,7 +517,7 @@ class _SlideToPrepareRouteState extends State<_SlideToPrepareRoute> {
               ),
             ],
           );
-        }
+        },
       ),
     );
   }

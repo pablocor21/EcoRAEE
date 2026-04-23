@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'iniciar_ruta_screen.dart';
 
 /// Pantalla para visualizar y preparar la ruta de recolección.
 /// Implementación puramente visual (SIN LÓGICA) como solicitado.
@@ -67,7 +68,14 @@ class PrepararRutaScreen extends StatelessWidget {
 
                       // BOTÓN INICIAR
                       ElevatedButton(
-                        onPressed: () {}, // Acción sin lógica
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const IniciarRutaScreen(),
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(
                             0xFF19133B,
