@@ -47,7 +47,7 @@ class AuthState {
       telefono: telefono ?? this.telefono,
       direccion: direccion ?? this.direccion,
       isLoading: isLoading ?? this.isLoading,
-      isInitialized: isInitialized ?? this._isInitialized ?? false, // ← NUEVO
+      isInitialized: isInitialized ?? _isInitialized ?? false, // ← NUEVO
       error: error,
     );
   }

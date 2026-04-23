@@ -42,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      context.go(AppRoutes.login);
+      context.go(AppRoutes.seleccionRol);
     }
   }
 
@@ -57,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () => context.go(AppRoutes.login),
+                onPressed: () => context.go(AppRoutes.seleccionRol),
                 child: const Text(
                   'Omitir',
                   style: TextStyle(color: CicloxColors.grey),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// ── Auth screens ──────────────────────────────────
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
@@ -9,25 +11,42 @@ import '../../features/auth/presentation/screens/verify_code_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/auth/presentation/screens/dashboard_screen.dart';
 import '../../features/auth/presentation/screens/dashboard_colab_screen.dart';
+import '../../features/auth/presentation/screens/registros_screen.dart';
+import '../../features/auth/presentation/screens/historial_screen.dart';
+import '../../features/auth/presentation/screens/detalles_solicitud_screen.dart';
+import '../../features/auth/presentation/screens/politicas_prevencion_screen.dart';
+import '../../features/auth/presentation/screens/seleccion_rol_screen.dart';
+
+// ── Devices screens ───────────────────────────────
 import '../../features/devices/presentation/screens/registro_dispositivo_screen.dart';
 import '../../features/devices/presentation/screens/dispositivo_registrado_screen.dart';
-import '../../features/auth/presentation/screens/politicas_prevencion_screen.dart';
+
+// ── Solicitudes screens ───────────────────────────
+import '../../features/solicitudes/presentation/screens/solicitudes_screen.dart';
 import '../../features/solicitudes/presentation/screens/crear_solicitud_screen.dart';
 import '../../features/solicitudes/presentation/screens/crear_solicitud_paso2_screen.dart';
 import '../../features/solicitudes/presentation/screens/crear_solicitud_resumen_screen.dart';
 import '../../features/solicitudes/presentation/screens/seguimiento_solicitudes_screen.dart';
 import '../../features/solicitudes/presentation/screens/solicitud_cancelada_screen.dart';
 import '../../features/solicitudes/presentation/screens/solicitud_enviada_screen.dart';
-import '../../features/solicitudes/presentation/screens/solicitudes_screen.dart';
+
+// ── Recoleccion screens ───────────────────────────
+import '../../features/recoleccion/presentation/screens/recoleccion_screen.dart';
+
+// ── Trazabilidad screens ──────────────────────────
 import '../../features/trazabilidad/presentation/screens/trazabilidad_screen.dart';
 import '../../features/trazabilidad/presentation/screens/seguimiento_recolector_screen.dart';
+
+// ── Puntos screens ────────────────────────────────
+import '../../features/puntos/presentation/screens/puntos_screen.dart';
 import '../../features/puntos/presentation/screens/recompensa_detalle_screen.dart';
 import '../../features/puntos/presentation/screens/canje_exitoso_screen.dart';
 import '../../features/puntos/presentation/screens/canje_status_screen.dart';
-import '../../features/puntos/presentation/providers/puntos_provider.dart';
+import '../../features/puntos/domain/entities/puntos_entity.dart';
 
 class AppRoutes {
   static const String onboarding = '/';
+  static const String seleccionRol = '/seleccion-rol';
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
@@ -38,14 +57,18 @@ class AppRoutes {
   static const String dashboardColaborador = '/dashboard-colaborador';
   static const String registroDispositivo = '/registro-dispositivo';
   static const String dispositivoRegistrado = '/dispositivo-registrado';
-  static const String politicasPrevencion = '/politicas-prevencion';
+  static const String registros = '/registros';
+  static const String historial = '/historial';
   static const String solicitudes = '/solicitudes';
+  static const String detallesSolicitud = '/detalles-solicitud';
   static const String crearSolicitud = '/crear-solicitud';
   static const String crearSolicitudPaso2 = '/crear-solicitud-paso2';
   static const String crearSolicitudResumen = '/crear-solicitud-resumen';
   static const String seguimientoSolicitudes = '/seguimiento-solicitudes';
   static const String solicitudCancelada = '/solicitud-cancelada';
   static const String solicitudEnviada = '/solicitud-enviada';
+  static const String recoleccion = '/recoleccion';
+  static const String politicasPrevencion = '/politicas-prevencion';
   static const String trazabilidad = '/trazabilidad';
   static const String seguimientoRecolector = '/seguimiento-recolector';
   static const String puntos = '/puntos';
@@ -53,17 +76,23 @@ class AppRoutes {
   static const String canjeExitoso = '/canje-exitoso';
   static const String canjeStatus = '/canje-status';
 }
-//sas//
+
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.onboarding,
 
     /// initialLocation: AppRoutes.dashboardCiudadano, // TODO: Cambiar a AppRoutes.onboarding para producción
     routes: [
+      // ── Auth ──────────────────────────────────────
       GoRoute(
         name: 'onboarding',
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        name: 'seleccionRol',
+        path: AppRoutes.seleccionRol,
+        builder: (context, state) => const SeleccionRolScreen(),
       ),
       GoRoute(
         name: 'login',
@@ -114,18 +143,22 @@ final routerProvider = Provider<GoRouter>((ref) {
           return ResetPasswordScreen(email: email, codigo: codigo);
         },
       ),
+
+      // ── Dashboard ─────────────────────────────────
       GoRoute(
         path: AppRoutes.dashboardCiudadano,
-        builder: (context, state) => const DashboardScreen(initialIndex: 1),
+        builder: (context, state) => const DashboardScreen(),
       ),
       GoRoute(
         path: AppRoutes.perfilCiudadano,
-        builder: (context, state) => const DashboardScreen(initialIndex: 0),
+        builder: (context, state) => const DashboardScreen(),
       ),
       GoRoute(
         path: AppRoutes.dashboardColaborador,
         builder: (context, state) => const DashboardColabScreen(),
       ),
+
+      // ── Devices ───────────────────────────────────
       GoRoute(
         path: AppRoutes.registroDispositivo,
         builder: (context, state) => const RegistroDispositivoScreen(),
@@ -134,13 +167,25 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.dispositivoRegistrado,
         builder: (context, state) => const DispositivoRegistradoScreen(),
       ),
+
+      // ── Registros / Historial ─────────────────────
       GoRoute(
-        path: AppRoutes.politicasPrevencion,
-        builder: (context, state) => const PoliticasPrevencionScreen(),
+        path: AppRoutes.registros,
+        builder: (context, state) => const RegistrosScreen(),
       ),
+      GoRoute(
+        path: AppRoutes.historial,
+        builder: (context, state) => const HistorialScreen(),
+      ),
+
+      // ── Solicitudes ───────────────────────────────
       GoRoute(
         path: AppRoutes.solicitudes,
         builder: (context, state) => const SolicitudesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.detallesSolicitud,
+        builder: (context, state) => const DetallesSolicitudScreen(),
       ),
       GoRoute(
         path: AppRoutes.crearSolicitud,
@@ -166,6 +211,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.solicitudEnviada,
         builder: (context, state) => const SolicitudEnviadaScreen(),
       ),
+
+      // ── Recoleccion ───────────────────────────────
+      GoRoute(
+        path: AppRoutes.recoleccion,
+        builder: (context, state) => const RecoleccionScreen(),
+      ),
+
+      // ── Políticas ─────────────────────────────────
+      GoRoute(
+        path: AppRoutes.politicasPrevencion,
+        builder: (context, state) => const PoliticasPrevencionScreen(),
+      ),
+
+      // ── Trazabilidad ──────────────────────────────
       GoRoute(
         path: AppRoutes.trazabilidad,
         builder: (context, state) => const TrazabilidadScreen(),
@@ -174,43 +233,43 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.seguimientoRecolector,
         builder: (context, state) => const SeguimientoRecolectorScreen(),
       ),
+
+      // ── Puntos ────────────────────────────────────
       GoRoute(
         path: AppRoutes.puntos,
-        builder: (context, state) => const DashboardScreen(initialIndex: 2),
+        builder: (context, state) => const PuntosScreen(),
       ),
       GoRoute(
         path: '${AppRoutes.recompensaDetalle}/:id',
         builder: (context, state) {
-          final id = state.pathParameters['id'] ?? '';
-          final puntosState = ProviderScope.containerOf(
-            context,
-          ).read(puntosProvider);
-          final recompensa = puntosState.recompensas.firstWhere(
-            (r) => r.id == id,
-            orElse: () => puntosState.recompensas.first,
+          // Se espera que la recompensa se pase vía extra
+          final recompensa = state.extra;
+          if (recompensa is RecompensaEntity) {
+            return RecompensaDetalleScreen(recompensa: recompensa);
+          }
+          return const Scaffold(
+            body: Center(child: Text('Recompensa no encontrada')),
           );
-          return RecompensaDetalleScreen(recompensa: recompensa);
-        },
-      ),
-      GoRoute(
-        path: '${AppRoutes.canjeExitoso}/:id',
-        builder: (context, state) {
-          final id = state.pathParameters['id'] ?? '';
-          final puntosState = ProviderScope.containerOf(
-            context,
-          ).read(puntosProvider);
-          final recompensa = puntosState.recompensas.firstWhere(
-            (r) => r.id == id,
-            orElse: () => puntosState.recompensas.first,
-          );
-          return CanjeExitosoScreen(recompensa: recompensa);
         },
       ),
       GoRoute(
         path: '${AppRoutes.canjeStatus}/:success',
         builder: (context, state) {
-          final isSuccess = state.pathParameters['success'] == 'true';
-          return CanjeStatusScreen(isSuccess: isSuccess);
+          final success = state.pathParameters['success'] == 'true';
+          return CanjeStatusScreen(isSuccess: success);
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.canjeExitoso}/:id',
+        builder: (context, state) {
+          // Se espera que la recompensa se pase vía extra
+          final recompensa = state.extra;
+          if (recompensa is RecompensaEntity) {
+            return CanjeExitosoScreen(recompensa: recompensa);
+          }
+          return const Scaffold(
+            body: Center(child: Text('Datos de canje no encontrados')),
+          );
         },
       ),
     ],
