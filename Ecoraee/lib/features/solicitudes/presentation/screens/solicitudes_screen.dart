@@ -1,3 +1,4 @@
+import '../../../../config/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../config/theme/app_theme.dart';
@@ -72,7 +73,7 @@ class SolicitudesScreen extends StatelessWidget {
                           color: CicloxColors.dark,
                           borderRadius: BorderRadius.circular(32),
                         ),
-                        child: const Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -109,7 +110,7 @@ class SolicitudesScreen extends StatelessWidget {
                             width: 1.2,
                           ),
                         ),
-                        child: const Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -139,9 +140,7 @@ class SolicitudesScreen extends StatelessWidget {
       bottomNavigationBar: _BottomNavBar(
         selectedIndex: 1, // Marcar 'Home' como seleccionado, o dejar en -1
         onTap: (i) {
-          if (i == 0) {
-            context.go('/perfil');
-          } else if (i == 1) {
+          if (i == 0) { context.push(AppRoutes.ajustesColaborador); } else if (i == 1) {
             context.go('/dashboard');
           }
         },

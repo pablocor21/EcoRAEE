@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_theme.dart';
 import '../../domain/entities/movimiento_entity.dart';
-import '../../domain/entities/tipo_movimiento.dart';
 
 /// Widget de timeline individual para cada movimiento de trazabilidad.
 /// Muestra un círculo de color + línea vertical a la izquierda,
@@ -37,7 +36,11 @@ class TimelineTileWidget extends StatelessWidget {
               children: [
                 // Línea superior
                 if (!isFirst)
-                  Container(width: 2, height: 12, color: CicloxColors.grey.withOpacity(0.3))
+                  Container(
+                    width: 2,
+                    height: 12,
+                    color: CicloxColors.grey.withOpacity(0.3),
+                  )
                 else
                   const SizedBox(height: 12),
 
@@ -46,11 +49,19 @@ class TimelineTileWidget extends StatelessWidget {
                   width: 36,
                   height: 36,
                   decoration: BoxDecoration(
-                    color: isActive ? color.withOpacity(0.2) : color.withOpacity(0.15),
+                    color: isActive
+                        ? color.withOpacity(0.2)
+                        : color.withOpacity(0.15),
                     shape: BoxShape.circle,
                     border: Border.all(color: color, width: 2),
                     boxShadow: isActive
-                        ? [BoxShadow(color: color.withOpacity(0.4), blurRadius: 10, spreadRadius: 1)]
+                        ? [
+                            BoxShadow(
+                              color: color.withOpacity(0.4),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                            ),
+                          ]
                         : null,
                   ),
                   child: Center(
@@ -64,7 +75,10 @@ class TimelineTileWidget extends StatelessWidget {
                 // Línea inferior
                 if (!isLast)
                   Expanded(
-                    child: Container(width: 2, color: CicloxColors.grey.withOpacity(0.3)),
+                    child: Container(
+                      width: 2,
+                      color: CicloxColors.grey.withOpacity(0.3),
+                    ),
                   )
                 else
                   const Expanded(child: SizedBox()),
@@ -80,7 +94,9 @@ class TimelineTileWidget extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: isActive ? color.withOpacity(0.08) : CicloxColors.greyLight,
+                color: isActive
+                    ? color.withOpacity(0.08)
+                    : CicloxColors.greyLight,
                 borderRadius: BorderRadius.circular(16),
                 border: isActive
                     ? Border(left: BorderSide(color: color, width: 3))
@@ -94,7 +110,9 @@ class TimelineTileWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
-                      color: isActive ? const Color(0xFFE65100) : CicloxColors.dark,
+                      color: isActive
+                          ? const Color(0xFFE65100)
+                          : CicloxColors.dark,
                     ),
                   ),
                   if (movimiento.descripcion != null) ...[
@@ -110,18 +128,32 @@ class TimelineTileWidget extends StatelessWidget {
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      Icon(Icons.person_outline, size: 14, color: CicloxColors.grey.withOpacity(0.7)),
+                      Icon(
+                        Icons.person_outline,
+                        size: 14,
+                        color: CicloxColors.grey.withOpacity(0.7),
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         movimiento.responsableNombre,
-                        style: TextStyle(fontSize: 12, color: CicloxColors.grey.withOpacity(0.8)),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: CicloxColors.grey.withOpacity(0.8),
+                        ),
                       ),
                       const Spacer(),
-                      Icon(Icons.access_time, size: 14, color: CicloxColors.grey.withOpacity(0.7)),
+                      Icon(
+                        Icons.access_time,
+                        size: 14,
+                        color: CicloxColors.grey.withOpacity(0.7),
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         _formatFecha(movimiento.fecha),
-                        style: TextStyle(fontSize: 12, color: CicloxColors.grey.withOpacity(0.8)),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: CicloxColors.grey.withOpacity(0.8),
+                        ),
                       ),
                     ],
                   ),
@@ -136,10 +168,22 @@ class TimelineTileWidget extends StatelessWidget {
 
   String _formatFecha(DateTime fecha) {
     final meses = [
-      '', 'ene', 'feb', 'mar', 'abr', 'may', 'jun',
-      'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+      '',
+      'ene',
+      'feb',
+      'mar',
+      'abr',
+      'may',
+      'jun',
+      'jul',
+      'ago',
+      'sep',
+      'oct',
+      'nov',
+      'dic',
     ];
-    final hora = '${fecha.hour.toString().padLeft(2, '0')}:${fecha.minute.toString().padLeft(2, '0')}';
+    final hora =
+        '${fecha.hour.toString().padLeft(2, '0')}:${fecha.minute.toString().padLeft(2, '0')}';
     return '${fecha.day} ${meses[fecha.month]} · $hora';
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../config/theme/app_theme.dart';
 import '../../domain/entities/puntos_entity.dart';
 
 /// Ítem individual del historial de puntos
@@ -12,7 +11,9 @@ class HistorialPuntosItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final esPositivo = item.esPositivo;
     final signo = esPositivo ? '+' : '';
-    final color = esPositivo ? const Color(0xFF2E7D32) : const Color(0xFFD32F2F);
+    final color = esPositivo
+        ? const Color(0xFF2E7D32)
+        : const Color(0xFFD32F2F);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),

@@ -145,7 +145,7 @@ class _HeaderSection extends StatelessWidget {
             ),
           ),
           Column(
-            children: const [
+            children: [
               Text(
                 'SOLICITUDES',
                 style: TextStyle(
@@ -236,7 +236,7 @@ class _FilterChips extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        children: const [
+        children: [
           _ChipItem(label: 'Todas', isActive: false),
           _ChipItem(label: 'Pendientes', isActive: false),
           _ChipItem(label: 'En proceso', isActive: true),
@@ -484,14 +484,17 @@ class _CustomBottomNavBar extends StatelessWidget {
           ),
         ],
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
           Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
-          Icon(Icons.store_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.solicitudes),
+            child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+          ),
           Icon(Icons.notifications_none_rounded, color: Color(0xFF19133B), size: 28),
-          Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28),
+          GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28)),
         ],
       ),
     );

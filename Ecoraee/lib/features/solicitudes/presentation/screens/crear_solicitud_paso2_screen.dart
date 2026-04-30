@@ -1,3 +1,4 @@
+import '../../../../config/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../config/theme/app_theme.dart';
@@ -149,9 +150,7 @@ class CrearSolicitudPaso2Screen extends StatelessWidget {
       bottomNavigationBar: _BottomNavBar(
         selectedIndex: 1,
         onTap: (i) {
-          if (i == 0) {
-            context.go('/perfil');
-          } else if (i == 1) {
+          if (i == 0) { context.push(AppRoutes.ajustesColaborador); } else if (i == 1) {
             context.go('/dashboard');
           }
         },

@@ -1,3 +1,5 @@
+import '../../../../config/router/app_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 class HistorialScreen extends StatelessWidget {
@@ -68,7 +70,7 @@ class HistorialScreen extends StatelessWidget {
                           child: ListView(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             physics: const BouncingScrollPhysics(),
-                            children: const [
+                            children: [
                               // 5. ESTADÍSTICAS MEDIAS
                               _MidStatsRow(),
                               SizedBox(height: 25),
@@ -178,7 +180,7 @@ class _TopStatsRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
-        children: const [
+        children: [
           _TopStatCard(
             value: '120',
             label: 'Dispositivos\nreciclados',
@@ -289,7 +291,7 @@ class _MidStatsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
+      children: [
         _MidStatCard(value: '120', label: 'Portátiles\nreciclados'),
         SizedBox(width: 10),
         _MidStatCard(value: '40', label: 'Monitores\nreciclados'),
@@ -451,14 +453,17 @@ class _CustomBottomNavBar extends StatelessWidget {
           ),
         ],
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
           Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
-          Icon(Icons.store_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.solicitudes),
+            child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+          ),
           Icon(Icons.notifications_none_rounded, color: Color(0xFF19133B), size: 28),
-          Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28),
+          GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28)),
         ],
       ),
     );

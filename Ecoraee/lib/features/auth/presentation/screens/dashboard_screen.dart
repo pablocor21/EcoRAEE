@@ -172,7 +172,10 @@ class _HeaderSection extends StatelessWidget {
           // Botones Notificación y Configuración
           const _HeaderActionBtn(icon: Icons.notifications),
           const SizedBox(width: 10),
-          const _HeaderActionBtn(icon: Icons.settings),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.ajustesColaborador),
+            child: const _HeaderActionBtn(icon: Icons.settings),
+          ),
         ],
       ),
     );
@@ -580,18 +583,32 @@ class _CustomBottomNavBar extends StatelessWidget {
           ),
         ],
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
           Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
-          Icon(Icons.store_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.solicitudes),
+            child: const Icon(
+              Icons.local_shipping,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
           Icon(
             Icons.notifications_none_rounded,
             color: Color(0xFF19133B),
             size: 28,
           ),
-          Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.ajustesColaborador),
+            child: Icon(
+              Icons.settings_outlined,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
         ],
       ),
     );

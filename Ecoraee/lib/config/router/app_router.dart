@@ -16,13 +16,18 @@ import '../../features/auth/presentation/screens/historial_screen.dart';
 import '../../features/auth/presentation/screens/detalles_solicitud_screen.dart';
 import '../../features/auth/presentation/screens/politicas_prevencion_screen.dart';
 import '../../features/auth/presentation/screens/seleccion_rol_screen.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/ajustes_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/ajustes_de_perfil_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/datos_de_la_empresa_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/ajustes_notificaciones_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/accesibilidad_colab.dart';
 
 // ── Devices screens ───────────────────────────────
 import '../../features/devices/presentation/screens/registro_dispositivo_screen.dart';
 import '../../features/devices/presentation/screens/dispositivo_registrado_screen.dart';
 
 // ── Solicitudes screens ───────────────────────────
-import '../../features/solicitudes/presentation/screens/solicitudes_screen.dart';
+import '../../features/auth/presentation/screens/solicitudes_screen.dart';
 import '../../features/solicitudes/presentation/screens/crear_solicitud_screen.dart';
 import '../../features/solicitudes/presentation/screens/crear_solicitud_paso2_screen.dart';
 import '../../features/solicitudes/presentation/screens/crear_solicitud_resumen_screen.dart';
@@ -75,6 +80,11 @@ class AppRoutes {
   static const String recompensaDetalle = '/recompensa-detalle';
   static const String canjeExitoso = '/canje-exitoso';
   static const String canjeStatus = '/canje-status';
+  static const String ajustesColaborador = '/ajustes-colaborador';
+  static const String ajustesPerfilColaborador = '/ajustes-perfil-colaborador';
+  static const String datosEmpresaColaborador = '/datos-empresa-colaborador';
+  static const String ajustesNotificacionesColaborador = '/ajustes-notificaciones-colaborador';
+  static const String accesibilidadColaborador = '/accesibilidad-colaborador';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -156,6 +166,26 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.dashboardColaborador,
         builder: (context, state) => const DashboardColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.ajustesColaborador,
+        builder: (context, state) => const AjustesColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.ajustesPerfilColaborador,
+        builder: (context, state) => const AjustesDePerfilColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.datosEmpresaColaborador,
+        builder: (context, state) => const DatosDeLaEmpresaColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.ajustesNotificacionesColaborador,
+        builder: (context, state) => const AjustesNotificacionesColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.accesibilidadColaborador,
+        builder: (context, state) => const AccesibilidadColabScreen(),
       ),
 
       // ── Devices ───────────────────────────────────
