@@ -1,3 +1,4 @@
+import '../../../../config/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../config/theme/app_theme.dart';
@@ -339,10 +340,10 @@ class _RegistroDispositivoScreenState extends State<RegistroDispositivoScreen> {
           borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(Icons.settings_outlined, color: CicloxColors.dark, size: 28),
+            GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings_outlined, color: CicloxColors.dark, size: 28)),
             Icon(Icons.home_filled, color: CicloxColors.dark, size: 32),
             Icon(
               Icons.star_outline_rounded,

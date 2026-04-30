@@ -67,8 +67,8 @@ class PrepararRutaScreen extends StatelessWidget {
                       const SizedBox(height: 30),
 
                       // BOTÓN INICIAR
-                      ElevatedButton(
-                        onPressed: () {
+                      _SwipeToStartButton(
+                        onSwipeCompleted: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -76,28 +76,6 @@ class PrepararRutaScreen extends StatelessWidget {
                             ),
                           );
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(
-                            0xFF19133B,
-                          ), // Azul Oscuro (Dark blue)
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 50,
-                            vertical: 16,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          elevation: 5, // Sombra para resaltar
-                        ),
-                        child: const Text(
-                          'INICIAR',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -446,4 +424,111 @@ class _MapRoutePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _SwipeToStartButton extends StatefulWidget {
+  final VoidCallback onSwipeCompleted;
+
+  const _SwipeToStartButton({required this.onSwipeCompleted});
+
+  @override
+  State<_SwipeToStartButton> createState() => _SwipeToStartButtonState();
+}
+
+class _SwipeToStartButtonState extends State<_SwipeToStartButton> {
+  double _dragPosition = 0;
+  bool _isFinished = false;
+  final double _buttonHeight = 60.0;
+  final double _thumbSize = 50.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: _buttonHeight,
+      decoration: BoxDecoration(
+        color: const Color(0xFF2A3143), // Fondo oscuro gris azulado
+        borderRadius: BorderRadius.circular(_buttonHeight / 2),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final buttonWidth = constraints.maxWidth;
+          final maxDrag = buttonWidth - _thumbSize - 10;
+
+          return Stack(
+            alignment: Alignment.centerLeft,
+            children: [
+              // Texto centrado
+              const Center(
+                child: Text(
+                  'INICIAR RUTA',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+              // Thumb desplazable
+              Positioned(
+                left: _dragPosition,
+                child: GestureDetector(
+                  onHorizontalDragUpdate: (details) {
+                    if (_isFinished) return;
+                    setState(() {
+                      _dragPosition += details.delta.dx;
+                      if (_dragPosition < 0) _dragPosition = 0;
+                      if (_dragPosition > maxDrag) {
+                        _dragPosition = maxDrag;
+                      }
+                    });
+                  },
+                  onHorizontalDragEnd: (details) {
+                    if (_isFinished) return;
+                    if (_dragPosition > maxDrag * 0.8) {
+                      setState(() {
+                        _dragPosition = maxDrag;
+                        _isFinished = true;
+                      });
+                      // Pequeño delay visual antes de navegar
+                      Future.delayed(const Duration(milliseconds: 200), () {
+                        widget.onSwipeCompleted();
+                        // Resetear para cuando vuelva
+                        setState(() {
+                          _dragPosition = 0;
+                          _isFinished = false;
+                        });
+                      });
+                    } else {
+                      // Vuelve a la posición inicial
+                      setState(() {
+                        _dragPosition = 0;
+                      });
+                    }
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    width: _thumbSize,
+                    height: _thumbSize,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
+                          offset: Offset(2, 0),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

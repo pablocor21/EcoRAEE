@@ -1,3 +1,5 @@
+import '../../../../config/router/app_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 /// Pantalla para iniciar la ruta de recolección.
@@ -299,7 +301,7 @@ class _RecomendacionesCard extends StatelessWidget {
           // Texto "Ver más >"
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
+            children: [
               Text(
                 'Ver más',
                 style: TextStyle(
@@ -419,12 +421,12 @@ class _CustomBottomNavigationBar extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
+        children: [
           Icon(Icons.home, color: Color(0xFF19133B), size: 30),
           Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 30),
           Icon(Icons.inbox, color: Color(0xFF19133B), size: 30),
           Icon(Icons.notifications, color: Color(0xFF19133B), size: 30),
-          Icon(Icons.settings, color: Color(0xFF19133B), size: 30),
+          GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings, color: Color(0xFF19133B), size: 30)),
         ],
       ),
     );

@@ -150,7 +150,7 @@ class DispositivoRegistradoScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              onPressed: () => context.go(AppRoutes.perfilCiudadano),
+              onPressed: () => context.push(AppRoutes.ajustesColaborador),
               icon: const Icon(
                 Icons.settings_outlined,
                 color: CicloxColors.dark,

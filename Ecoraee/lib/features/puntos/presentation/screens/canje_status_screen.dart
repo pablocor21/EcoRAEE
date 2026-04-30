@@ -1,3 +1,4 @@
+import '../../../../config/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../config/theme/app_theme.dart';
@@ -195,7 +196,7 @@ class _BottomNavBar extends StatelessWidget {
         children: [
           _NavItem(
             icon: Icons.settings_rounded,
-            onTap: () => context.go('/perfil'),
+            onTap: () => context.push(AppRoutes.ajustesColaborador),
           ),
           _NavItem(
             icon: Icons.home_rounded,
