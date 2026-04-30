@@ -146,46 +146,12 @@ class _HeaderRow extends StatelessWidget {
           ),
 
           // Logo placeholder (Basado en recoleccion_screen para consistencia)
-          SizedBox(
+          // Logo Ciclox derecha
+          Image.asset(
+            'assets/iconos/logo-icono VERDE-8.png',
             width: 40,
             height: 40,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Positioned(
-                  left: 4,
-                  top: 10,
-                  child: Container(
-                    width: 16,
-                    height: 16,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFB2F333),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 4,
-                  bottom: 10,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFB2F333),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 14,
-                  height: 14,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ],
-            ),
+            fit: BoxFit.contain,
           ),
         ],
       ),

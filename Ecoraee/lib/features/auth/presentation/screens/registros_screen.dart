@@ -128,17 +128,8 @@ class _HeaderSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Logo 'C'
-          const _CircularLogo(
-            child: Text(
-              'C',
-              style: TextStyle(
-                color: Color(0xFF19133B),
-                fontSize: 28,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
+          // Espacio para mantener el título centrado (reemplaza al logo 'C')
+          const SizedBox(width: 50),
           // Título Central
           const Text(
             'REGISTRO',
@@ -150,8 +141,11 @@ class _HeaderSection extends StatelessWidget {
             ),
           ),
           // Logo Ciclox derecha
-          const _CircularLogo(
-            child: Icon(Icons.bolt, color: Color(0xFFB2F333), size: 30),
+          Image.asset(
+            'assets/iconos/logo-icono VERDE-8.png',
+            width: 50,
+            height: 50,
+            fit: BoxFit.contain,
           ),
         ],
       ),
@@ -422,34 +416,46 @@ class _CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
       height: 70,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            blurRadius: 10,
+            offset: const Offset(0, -2), // Sombra hacia arriba
           ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.go(AppRoutes.dashboardCiudadano),
+            child: Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+          ),
           Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
           GestureDetector(
             onTap: () => context.push(AppRoutes.solicitudes),
-            child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+            child: const Icon(
+              Icons.local_shipping,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
           ),
           Icon(
             Icons.notifications_none_rounded,
             color: Color(0xFF19133B),
             size: 28,
           ),
-          GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28)),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.ajustesColaborador),
+            child: Icon(
+              Icons.settings_outlined,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
         ],
       ),
     );

@@ -187,7 +187,7 @@ class DatosDeLaEmpresaColabScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
-              onTap: () => context.go(AppRoutes.dashboardColaborador),
+              onTap: () => context.go(AppRoutes.dashboardCiudadano),
               child: const Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
             ),
             const Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),

@@ -168,46 +168,12 @@ class _HeaderRow extends StatelessWidget {
           ),
 
           // Logo placeholder (Símil al isotipo de Ciclox)
-          SizedBox(
+          // Logo Ciclox derecha
+          Image.asset(
+            'assets/iconos/logo-icono VERDE-8.png',
             width: 40,
             height: 40,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Positioned(
-                  left: 4,
-                  top: 10,
-                  child: Container(
-                    width: 16,
-                    height: 16,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFB2F333),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 4,
-                  bottom: 10,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFB2F333),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 14,
-                  height: 14,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ],
-            ),
+            fit: BoxFit.contain,
           ),
         ],
       ),
@@ -215,8 +181,15 @@ class _HeaderRow extends StatelessWidget {
   }
 }
 
-class _TabsSection extends StatelessWidget {
+class _TabsSection extends StatefulWidget {
   const _TabsSection();
+
+  @override
+  State<_TabsSection> createState() => _TabsSectionState();
+}
+
+class _TabsSectionState extends State<_TabsSection> {
+  String activeTab = 'En proceso';
 
   @override
   Widget build(BuildContext context) {
@@ -224,60 +197,69 @@ class _TabsSection extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 40),
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: const Color(0xFFE4E7EB), // Gris claro del contenedor
+        color: const Color(0xFFE4E7EB),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
         children: [
-          // Tab 1: Pendientes
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color:
-                    Colors.transparent, // Fondo transparente para el inactivo
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: const Center(
-                child: Text(
-                  'Pendientes',
-                  style: TextStyle(
-                    color: Color(0xFF19133B), // Dark blue
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
+          _TabItem(
+            label: 'Pendientes',
+            isActive: activeTab == 'Pendientes',
+            onTap: () => setState(() => activeTab = 'Pendientes'),
           ),
-          // Tab 2: En proceso
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFF19133B), // Fondo oscuro para el activo
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: const Center(
-                child: Text(
-                  'En proceso',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            ),
+          _TabItem(
+            label: 'En proceso',
+            isActive: activeTab == 'En proceso',
+            onTap: () => setState(() => activeTab = 'En proceso'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _TabItem extends StatelessWidget {
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const _TabItem({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            color: isActive ? const Color(0xFF19133B) : Colors.transparent,
+            borderRadius: BorderRadius.circular(25),
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                color: isActive ? Colors.white : const Color(0xFF19133B),
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -544,18 +526,32 @@ class _CustomBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.go(AppRoutes.dashboardCiudadano),
+            child: Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+          ),
           Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
           GestureDetector(
             onTap: () => context.push(AppRoutes.solicitudes),
-            child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+            child: const Icon(
+              Icons.local_shipping,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
           ),
           Icon(
             Icons.notifications_none_rounded,
             color: Color(0xFF19133B),
             size: 28,
           ),
-          GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28)),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.ajustesColaborador),
+            child: Icon(
+              Icons.settings_outlined,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
         ],
       ),
     );

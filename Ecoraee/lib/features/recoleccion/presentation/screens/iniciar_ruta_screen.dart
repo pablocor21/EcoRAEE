@@ -111,65 +111,18 @@ class _LogoHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Representación de la 'C'
-        const Text(
-          'C',
-          style: TextStyle(
-            color: Color(0xFFE2E8F0),
-            fontSize: 70,
-            fontWeight: FontWeight.w900,
-            height: 1,
-            letterSpacing: -5,
-          ),
-        ),
-        // Representación abstracta de la 'X' / Logo
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            const Text(
-              'X',
-              style: TextStyle(
-                color: Color(0xFFE2E8F0),
-                fontSize: 70,
-                fontWeight: FontWeight.w900,
-                height: 1,
-              ),
-            ),
-            // Detalles verdes del logo
-            Positioned(
-              top: 10,
-              left: 10,
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFB2F333),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.flash_on,
-                  size: 14,
-                  color: Color(0xFF0F172A),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 10,
-              right: 5,
-              child: Container(
-                width: 14,
-                height: 14,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFB2F333),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+    return Center(
+      child: Image.asset(
+        'assets/imagenes/VARIACION 3 VERDE.png',
+        height: 80,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) {
+          return const Text(
+            'Logo no encontrado',
+            style: TextStyle(color: Colors.white54),
+          );
+        },
+      ),
     );
   }
 }
@@ -298,25 +251,7 @@ class _RecomendacionesCard extends StatelessWidget {
           
           const SizedBox(height: 15),
           
-          // Texto "Ver más >"
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                'Ver más',
-                style: TextStyle(
-                  color: Color(0xFF1E1E2C),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-              Icon(
-                Icons.chevron_right,
-                color: Color(0xFF1E1E2C),
-                size: 20,
-              ),
-            ],
-          ),
+          const SizedBox(height: 10),
         ],
       ),
     );
@@ -355,51 +290,115 @@ class _RecomendacionesCard extends StatelessWidget {
 }
 
 /// Slider interactivo falso para iniciar la ruta
-class _IniciarRutaSlider extends StatelessWidget {
+class _IniciarRutaSlider extends StatefulWidget {
   const _IniciarRutaSlider();
 
   @override
+  State<_IniciarRutaSlider> createState() => _IniciarRutaSliderState();
+}
+
+class _IniciarRutaSliderState extends State<_IniciarRutaSlider> {
+  double _position = 0;
+  bool _isFinished = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 65,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.white.withOpacity(0.2),
-            Colors.white.withOpacity(0.05),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-        borderRadius: BorderRadius.circular(35),
-      ),
-      child: Row(
-        children: [
-          // Círculo blanco que simula el botón deslizable
-          Container(
-            width: 65,
-            height: 65,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double maxPosition = constraints.maxWidth - 65;
+
+        return Container(
+          height: 65,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.white.withOpacity(0.2),
+                Colors.white.withOpacity(0.05),
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
             ),
+            borderRadius: BorderRadius.circular(35),
           ),
-          // Texto central
-          const Expanded(
-            child: Text(
-              'INICIAR RUTA',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white70,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.5,
-                fontSize: 14,
+          child: Stack(
+            children: [
+              // Texto central
+              Center(
+                child: Opacity(
+                  opacity: 1 - (_position / maxPosition).clamp(0.0, 1.0),
+                  child: const Text(
+                    'INICIAR RUTA',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.5,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
               ),
-            ),
+              // Círculo deslizable
+              Positioned(
+                left: _position,
+                child: GestureDetector(
+                  onPanUpdate: (details) {
+                    if (_isFinished) return;
+                    setState(() {
+                      _position += details.delta.dx;
+                      if (_position < 0) _position = 0;
+                      if (_position > maxPosition) _position = maxPosition;
+                    });
+                  },
+                  onPanEnd: (details) {
+                    if (_isFinished) return;
+                    if (_position > maxPosition * 0.8) {
+                      setState(() {
+                        _position = maxPosition;
+                        _isFinished = true;
+                      });
+                      // Acción al completar el slider
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Ruta Iniciada con éxito',
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          backgroundColor: Color(0xFFB2F333),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } else {
+                      setState(() {
+                        _position = 0;
+                      });
+                    }
+                  },
+                  child: Container(
+                    width: 65,
+                    height: 65,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          offset: const Offset(2, 0),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      _isFinished ? Icons.check : Icons.chevron_right,
+                      color: const Color(0xFF19133B),
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 65), // Balance visual por el círculo de la izquierda
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -412,21 +411,41 @@ class _CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 70,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, -2), // Sombra hacia arriba
+          ),
+        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(Icons.home, color: Color(0xFF19133B), size: 30),
-          Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 30),
-          Icon(Icons.inbox, color: Color(0xFF19133B), size: 30),
-          Icon(Icons.notifications, color: Color(0xFF19133B), size: 30),
-          GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings, color: Color(0xFF19133B), size: 30)),
+          GestureDetector(
+            onTap: () => context.go(AppRoutes.dashboardCiudadano),
+            child: const Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+          ),
+          const Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.solicitudes),
+            child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+          ),
+          const Icon(
+            Icons.notifications_none_rounded,
+            color: Color(0xFF19133B),
+            size: 28,
+          ),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.ajustesColaborador),
+            child: const Icon(
+              Icons.settings_outlined,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
         ],
       ),
     );

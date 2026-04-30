@@ -21,6 +21,8 @@ import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/a
 import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/datos_de_la_empresa_colab.dart';
 import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/ajustes_notificaciones_colab.dart';
 import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/accesibilidad_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/politicas_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/terminos_y_condiciones_colab.dart';
 
 // ── Devices screens ───────────────────────────────
 import '../../features/devices/presentation/screens/registro_dispositivo_screen.dart';
@@ -85,6 +87,8 @@ class AppRoutes {
   static const String datosEmpresaColaborador = '/datos-empresa-colaborador';
   static const String ajustesNotificacionesColaborador = '/ajustes-notificaciones-colaborador';
   static const String accesibilidadColaborador = '/accesibilidad-colaborador';
+  static const String politicasColaborador = '/politicas-colaborador';
+  static const String terminosCondicionesColaborador = '/terminos-condiciones-colaborador';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -186,6 +190,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.accesibilidadColaborador,
         builder: (context, state) => const AccesibilidadColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.politicasColaborador,
+        builder: (context, state) => const PoliticasColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.terminosCondicionesColaborador,
+        builder: (context, state) => const TerminosCondicionesColabScreen(),
       ),
 
       // ── Devices ───────────────────────────────────
