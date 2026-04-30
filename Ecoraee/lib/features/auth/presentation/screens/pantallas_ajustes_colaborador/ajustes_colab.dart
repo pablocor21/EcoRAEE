@@ -68,18 +68,14 @@ class AjustesColabScreen extends StatelessWidget {
                   _SettingsItem(
                     icon: Icons.warning_amber_rounded,
                     label: 'Soporte',
-                    onTap: () {},
+                    onTap: () => context.push(AppRoutes.soporteColaborador),
                   ),
                   _SettingsItem(
                     icon: Icons.lock,
                     label: 'Políticas',
                     onTap: () => context.push(AppRoutes.politicasColaborador),
                   ),
-                  _SettingsItem(
-                    icon: Icons.build,
-                    label: 'Manual de usuario app',
-                    onTap: () {},
-                  ),
+
                   const SizedBox(height: 30),
 
                   // Accessibility button

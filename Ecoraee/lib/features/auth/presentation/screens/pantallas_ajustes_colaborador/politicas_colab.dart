@@ -83,17 +83,17 @@ class PoliticasColabScreen extends StatelessWidget {
                         const Divider(height: 1, color: Colors.black12),
                         _PolicyItem(
                           label: 'Políticas de privacidad',
-                          onTap: () {},
+                          onTap: () => context.push(AppRoutes.politicasPrivacidadColaborador),
                         ),
                         const Divider(height: 1, color: Colors.black12),
                         _PolicyItem(
                           label: 'Política de reciclaje',
-                          onTap: () {},
+                          onTap: () => context.push(AppRoutes.politicaReciclajeColaborador),
                         ),
                         const Divider(height: 1, color: Colors.black12),
                         _PolicyItem(
                           label: 'Uso de la plataforma',
-                          onTap: () {},
+                          onTap: () => context.push(AppRoutes.usoPlataformaColaborador),
                         ),
                         const Divider(height: 1, color: Colors.black12),
 

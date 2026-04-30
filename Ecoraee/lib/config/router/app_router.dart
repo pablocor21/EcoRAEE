@@ -23,6 +23,10 @@ import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/a
 import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/accesibilidad_colab.dart';
 import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/politicas_colab.dart';
 import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/terminos_y_condiciones_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/politicas_of_privacidad_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/politica_reciclaje_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/uso_plataforma_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/soporte_colab.dart';
 
 // ── Devices screens ───────────────────────────────
 import '../../features/devices/presentation/screens/registro_dispositivo_screen.dart';
@@ -89,6 +93,10 @@ class AppRoutes {
   static const String accesibilidadColaborador = '/accesibilidad-colaborador';
   static const String politicasColaborador = '/politicas-colaborador';
   static const String terminosCondicionesColaborador = '/terminos-condiciones-colaborador';
+  static const String politicasPrivacidadColaborador = '/politicas-privacidad-colaborador';
+  static const String politicaReciclajeColaborador = '/politica-reciclaje-colaborador';
+  static const String usoPlataformaColaborador = '/uso-plataforma-colaborador';
+  static const String soporteColaborador = '/soporte-colaborador';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -198,6 +206,22 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.terminosCondicionesColaborador,
         builder: (context, state) => const TerminosCondicionesColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.politicasPrivacidadColaborador,
+        builder: (context, state) => const PoliticasPrivacidadColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.politicaReciclajeColaborador,
+        builder: (context, state) => const PoliticaReciclajeColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.usoPlataformaColaborador,
+        builder: (context, state) => const UsoPlataformaColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.soporteColaborador,
+        builder: (context, state) => const SoporteColabScreen(),
       ),
 
       // ── Devices ───────────────────────────────────
