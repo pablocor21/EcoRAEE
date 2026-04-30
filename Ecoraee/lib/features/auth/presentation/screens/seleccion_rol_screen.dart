@@ -62,7 +62,7 @@ class SeleccionRolScreen extends StatelessWidget {
 
                 // ── Tarjeta Usuarios ─────────────────────
                 _RoleCard(
-                  onTap: () => context.go(AppRoutes.dashboardCiudadano),
+                  onTap: () => context.go(AppRoutes.loginUsuario),
                   icon: Container(
                     width: 40,
                     height: 40,

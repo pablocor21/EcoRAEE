@@ -1,6 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+// ── Bloc Imports ──────────────────────────────────
+import '../../features/auth/presentation/pages/login_page.dart';
+import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../injection_container.dart';
+
+// ── Core Imports ──
+import 'dart:convert';
+import '../../core/storage/secure_storage.dart';
+import '../../core/router/app_routes.dart' as CoreRoutes;
+import '../../features/auth/presentation/pages/register_page.dart';
+import '../../features/auth/presentation/pages/recuperar_contrasena_page.dart';
+import '../../features/auth/presentation/pages/verificar_codigo_page.dart';
+import '../../features/auth/presentation/pages/cambiar_contrasena_page.dart';
+import '../../features/home/presentation/pages/home_usuario_page.dart';
+import '../../features/home/presentation/pages/home_empresa_page.dart';
+import '../../features/empresas/presentation/pages/empresa_solicitudes_page.dart';
+import '../../features/empresas/presentation/pages/empresa_recolectores_page.dart';
+import '../../features/empresas/presentation/pages/empresa_reciclajes_page.dart';
+import '../../features/empresas/presentation/pages/empresa_reportes_page.dart';
+import '../../features/empresas/solicitudes/presentation/bloc/empresa_solicitudes_bloc.dart';
+import '../../features/empresas/recolectores/presentation/bloc/recolectores_bloc.dart';
+import '../../features/dispositivos/presentation/pages/dispositivos_list_page.dart';
+import '../../features/dispositivos/presentation/pages/registro_dispositivo_page.dart';
+import '../../features/dispositivos/presentation/pages/registro_exito_page.dart';
+import '../../features/solicitudes/presentation/pages/crear_solicitud_page.dart';
+import '../../features/solicitudes/presentation/pages/solicitud_enviada_page.dart';
+import '../../features/solicitudes/presentation/pages/solicitud_cancelada_page.dart';
+import '../../features/solicitudes/presentation/pages/solicitudes_menu_page.dart';
+import '../../features/solicitudes/presentation/pages/solicitudes_page.dart';
+import '../../features/solicitudes/presentation/bloc/solicitudes_bloc.dart';
+import '../../features/puntos/presentation/bloc/puntos_bloc.dart';
+import '../../features/puntos/presentation/pages/tus_puntos_page.dart';
+import '../../features/notificaciones/presentation/bloc/notificaciones_bloc.dart';
+import '../../features/notificaciones/presentation/pages/notificaciones_page.dart';
+import '../../features/trazabilidad/presentation/bloc/trazabilidad_bloc.dart';
+import '../../features/trazabilidad/presentation/pages/trazabilidad_lista_page.dart';
+import '../../features/trazabilidad/presentation/pages/trazabilidad_detalle_page.dart';
+import '../../features/trazabilidad/presentation/pages/trazabilidad_mapa_page.dart';
+import '../../features/recompensas/presentation/bloc/recompensas_bloc.dart';
+import '../../features/recompensas/presentation/pages/bono_ciclox_page.dart';
+import '../../features/recompensas/presentation/pages/mercaditos_page.dart';
+import '../../features/recompensas/domain/entities/recompensa_entity.dart' as IngRecompensa;
+import '../../features/canjes/presentation/bloc/canjes_bloc.dart';
+import '../../features/canjes/presentation/pages/qr_bono_ciclox_page.dart';
+import '../../features/canjes/presentation/pages/qr_mercaditos_page.dart';
+import '../../features/canjes/presentation/pages/canje_exitoso_page.dart';
+import '../../features/canjes/presentation/pages/canje_rechazado_page.dart';
+
 
 // ── Auth screens ──────────────────────────────────
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
@@ -57,6 +107,7 @@ class AppRoutes {
   static const String forgotPassword = '/forgot-password';
   static const String verifyCode = '/verify-code';
   static const String resetPassword = '/reset-password';
+  static const String loginUsuario = '/login-usuario';
   static const String dashboardCiudadano = '/dashboard';
   static const String perfilCiudadano = '/perfil';
   static const String dashboardColaborador = '/dashboard-colaborador';
@@ -64,7 +115,7 @@ class AppRoutes {
   static const String dispositivoRegistrado = '/dispositivo-registrado';
   static const String registros = '/registros';
   static const String historial = '/historial';
-  static const String solicitudes = '/solicitudes';
+  static const String solicitudes = '/solicitudes-colaborador';
   static const String detallesSolicitud = '/detalles-solicitud';
   static const String crearSolicitud = '/crear-solicitud';
   static const String crearSolicitudPaso2 = '/crear-solicitud-paso2';
@@ -74,9 +125,9 @@ class AppRoutes {
   static const String solicitudEnviada = '/solicitud-enviada';
   static const String recoleccion = '/recoleccion';
   static const String politicasPrevencion = '/politicas-prevencion';
-  static const String trazabilidad = '/trazabilidad';
+  static const String trazabilidad = '/trazabilidad-colaborador';
   static const String seguimientoRecolector = '/seguimiento-recolector';
-  static const String puntos = '/puntos';
+  static const String puntos = '/puntos-colaborador';
   static const String recompensaDetalle = '/recompensa-detalle';
   static const String canjeExitoso = '/canje-exitoso';
   static const String canjeStatus = '/canje-status';
@@ -109,6 +160,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
       ),
+      GoRoute(
+        name: 'loginUsuario',
+        path: AppRoutes.loginUsuario,
+        builder: (context, state) => BlocProvider(
+          create: (_) => sl<AuthBloc>(),
+          child: const LoginPage(),
+        ),
+      ),
+
       GoRoute(
         name: 'register',
         path: AppRoutes.register,
@@ -302,9 +362,284 @@ final routerProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
-    ],
+    
+      // ── Core Routes ──
+
+
+
+
+      // ── AUTH ────────────────────────────────────────────────────
+      GoRoute(
+        path: CoreRoutes.AppRoutes.login,
+        builder: (ctx, _) => BlocProvider(
+          create: (_) => sl<AuthBloc>(),
+          child: const LoginPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.registro,
+        builder: (ctx, _) => BlocProvider(
+          create: (_) => sl<AuthBloc>(),
+          child: const RegisterPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.recuperarContrasena,
+        builder: (ctx, _) => BlocProvider(
+          create: (_) => sl<AuthBloc>(),
+          child: const RecuperarContrasenaPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.verificarCodigo,
+        builder: (ctx, state) {
+          final email = state.extra as String? ?? '';
+          return BlocProvider(
+            create: (_) => sl<AuthBloc>(),
+            child: VerificarCodigoPage(email: email),
+          );
+        },
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.cambiarContrasena,
+        builder: (ctx, state) {
+          final extra =
+              (state.extra as Map?)?.cast<String, String>() ?? {};
+          return BlocProvider(
+            create: (_) => sl<AuthBloc>(),
+            child: CambiarContrasenaPage(
+              email: extra['email'] ?? '',
+              codigo: extra['codigo'] ?? '',
+            ),
+          );
+        },
+      ),
+
+      // ── HOME ─────────────────────────────────────────────────────
+      GoRoute(
+        path: CoreRoutes.AppRoutes.homeUsuario,
+        builder: (ctx, _) => _HomeUsuarioWrapper(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.homeEmpresa,
+        builder: (_, __) => const HomeEmpresaPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.empresaSolicitudes,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<EmpresaSolicitudesBloc>(),
+          child: const EmpresaSolicitudesPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.empresaRecolectores,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<RecolectoresBloc>(),
+          child: const EmpresaRecolectoresPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.empresaReciclajes,
+        builder: (_, __) => const EmpresaReciclajesPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.empresaReportes,
+        builder: (_, __) => const EmpresaReportesPage(),
+      ),
+
+      // ── DISPOSITIVOS ─────────────────────────────────────────────
+      GoRoute(
+        path: CoreRoutes.AppRoutes.dispositivos,
+        builder: (_, __) => const DispositivosListPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.registroDispositivo,
+        builder: (_, __) => const RegistroDispositivoPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.registroDispositivoExito,
+        builder: (_, __) => const RegistroExitoPage(),
+      ),
+
+      // ── SOLICITUDES ──────────────────────────────────────────────
+      GoRoute(
+        path: CoreRoutes.AppRoutes.solicitudes,
+        builder: (_, __) => const SolicitudesMenuPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.misSolicitudes,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<SolicitudesBloc>(),
+          child: const SolicitudesPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.crearSolicitud,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<SolicitudesBloc>(),
+          child: const CrearSolicitudPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.solicitudEnviada,
+        builder: (_, __) => const SolicitudEnviadaPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.solicitudCancelada,
+        builder: (_, __) => const SolicitudCanceladaPage(),
+      ),
+
+      // ── PUNTOS ───────────────────────────────────────────────────
+      GoRoute(
+        path: CoreRoutes.AppRoutes.tusPuntos,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<PuntosBloc>(),
+          child: const TusPuntosPage(),
+        ),
+      ),
+
+      // ── RECOMPENSAS ──────────────────────────────────────────────
+      GoRoute(
+        path: CoreRoutes.AppRoutes.bonoCiclox,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<RecompensasBloc>(),
+          child: const BonoCicloxPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.mercaditos,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<RecompensasBloc>(),
+          child: const MercaditosPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.qrBonoCiclox,
+        builder: (_, state) {
+          final recompensa = state.extra as IngRecompensa.RecompensaEntity?;
+          if (recompensa == null) return const CanjeRechazadoPage();
+          return BlocProvider(
+            create: (_) => sl<CanjesBloc>(),
+            child: QrBonoCicloxPage(recompensa: recompensa),
+          );
+        },
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.qrMercaditos,
+        builder: (_, state) {
+          final recompensa = state.extra as IngRecompensa.RecompensaEntity?;
+          if (recompensa == null) return const CanjeRechazadoPage();
+          return BlocProvider(
+            create: (_) => sl<CanjesBloc>(),
+            child: QrMercaditosPage(recompensa: recompensa),
+          );
+        },
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.canjeExitoso,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<CanjesBloc>(),
+          child: const CanjeExitosoPage(),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.canjeRechazado,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<CanjesBloc>(),
+          child: const CanjeRechazadoPage(),
+        ),
+      ),
+
+      // ── TRAZABILIDAD ─────────────────────────────────────────────
+      GoRoute(
+        path: CoreRoutes.AppRoutes.trazabilidad,
+        builder: (_, __) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => sl<SolicitudesBloc>()),
+            BlocProvider(create: (_) => sl<TrazabilidadBloc>()),
+          ],
+          child: const TrazabilidadListaPage(),
+        ),
+      ),
+      GoRoute(
+        path: '/trazabilidad/detalle',
+        builder: (_, state) => BlocProvider(
+          create: (_) => sl<TrazabilidadBloc>(),
+          child: TrazabilidadDetallePage(
+            dispositivoId: (state.extra as int?) ?? 0,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.trazabilidadMapa,
+        builder: (_, state) => BlocProvider(
+          create: (_) => sl<TrazabilidadBloc>(),
+          child: TrazabilidadMapaPage(
+            solicitudId: (state.extra as int?) ?? 0,
+          ),
+        ),
+      ),
+
+      // ── NOTIFICACIONES ───────────────────────────────────────────
+      GoRoute(
+        path: CoreRoutes.AppRoutes.notificaciones,
+        builder: (_, __) => BlocProvider(
+          create: (_) => sl<NotificacionesBloc>(),
+          child: const NotificacionesPage(),
+        ),
+      ),
+    
+],
     errorBuilder: (context, state) => Scaffold(
       body: Center(child: Text('Página no encontrada: ${state.error}')),
     ),
   );
 });
+
+class _HomeUsuarioWrapper extends StatefulWidget {
+  @override
+  State<_HomeUsuarioWrapper> createState() => _HomeUsuarioWrapperState();
+}
+
+class _HomeUsuarioWrapperState extends State<_HomeUsuarioWrapper> {
+  String _nombre = 'Usuario';
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNombre();
+  }
+
+  Future<void> _loadNombre() async {
+    try {
+      final data = await sl<SecureStorage>().getUserData();
+      if (data != null) {
+        final map = jsonDecode(data) as Map<String, dynamic>;
+        if (mounted) {
+          setState(() {
+            _nombre = map['nombre'] as String? ?? 'Usuario';
+            _loaded = true;
+          });
+          return;
+        }
+      }
+    } catch (_) {}
+    if (mounted) setState(() => _loaded = true);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_loaded) {
+      return const Scaffold(
+        backgroundColor: Color(0xFF1A1F3C),
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFFB4E614),
+          ),
+        ),
+      );
+    }
+    return HomeUsuarioPage(nombreUsuario: _nombre);
+  }
+}
