@@ -42,7 +42,7 @@ class HistorialScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 // 2. HEADER
                 const _HeaderSection(),
-                const SizedBox(height: 25),
+                const SizedBox(height: 55),
 
                 // 3. TARJETAS DE ESTADÍSTICAS SUPERIORES
                 const _TopStatsRow(),
@@ -128,16 +128,8 @@ class _HeaderSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const _CircularLogo(
-            child: Text(
-              'C',
-              style: TextStyle(
-                color: Color(0xFF19133B),
-                fontSize: 28,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
+          // Espacio para mantener el título centrado (reemplaza al logo 'C')
+          const SizedBox(width: 40),
           const Text(
             'HISTORIAL',
             style: TextStyle(
@@ -147,8 +139,12 @@ class _HeaderSection extends StatelessWidget {
               letterSpacing: 2,
             ),
           ),
-          const _CircularLogo(
-            child: Icon(Icons.bolt, color: Color(0xFFB2F333), size: 30),
+          // Logo Ciclox derecha
+          Image.asset(
+            'assets/iconos/logo-icono VERDE-8.png',
+            width: 40,
+            height: 40,
+            fit: BoxFit.contain,
           ),
         ],
       ),
@@ -165,7 +161,10 @@ class _CircularLogo extends StatelessWidget {
     return Container(
       width: 50,
       height: 50,
-      decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+      ),
       alignment: Alignment.center,
       child: child,
     );
@@ -237,7 +236,7 @@ class _TopStatCard extends StatelessWidget {
               value,
               style: TextStyle(
                 color: textColor,
-                fontSize: 32,
+                fontSize: 42,
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -323,7 +322,7 @@ class _MidStatCard extends StatelessWidget {
               value,
               style: const TextStyle(
                 color: Color(0xFF19133B),
-                fontSize: 26,
+                fontSize: 36,
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -410,11 +409,17 @@ class _ActivityItem extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   location,
-                  style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 12),
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(0.5),
+                    fontSize: 12,
+                  ),
                 ),
                 Text(
                   condition,
-                  style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 12),
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(0.5),
+                    fontSize: 12,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -440,30 +445,52 @@ class _CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
       height: 70,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            blurRadius: 10,
+            offset: const Offset(0, -2), // Sombra hacia arriba
           ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
-          Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.go(AppRoutes.dashboardCiudadano),
+            child: Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+          ),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.soporteColaborador),
+            child: Icon(Icons.warning_rounded, color: Color(0xFF19133B), size: 28),
+          ),
           GestureDetector(
             onTap: () => context.push(AppRoutes.solicitudes),
-            child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+            child: const Icon(
+              Icons.local_shipping,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
           ),
-          Icon(Icons.notifications_none_rounded, color: Color(0xFF19133B), size: 28),
-          GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28)),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.notificacionesColaborador),
+            child: const Icon(
+              Icons.notifications_rounded,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.ajustesColaborador),
+            child: Icon(
+              Icons.settings_rounded,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
         ],
       ),
     );

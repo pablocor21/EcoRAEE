@@ -73,12 +73,14 @@ class SolicitudesScreen extends StatelessWidget {
                             physics: const BouncingScrollPhysics(),
                             children: [
                               GestureDetector(
-                                onTap: () => context.push(AppRoutes.detallesSolicitud),
+                                onTap: () =>
+                                    context.push(AppRoutes.detallesSolicitud),
                                 child: const _SolicitudCardProgress(
                                   title: 'Laptop Asus ROG',
                                   date: '12 de marzo 2026',
                                   time: '3:00 pm',
-                                  currentStep: 2, // 0: Solicitud, 1: Aprobación, 2: En camino, 3: Recolectado
+                                  currentStep:
+                                      2, // 0: Solicitud, 1: Aprobación, 2: En camino, 3: Recolectado
                                   imageUrl:
                                       'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=200',
                                 ),
@@ -90,7 +92,8 @@ class SolicitudesScreen extends StatelessWidget {
                                 time: '4:00 pm',
                                 imageUrl:
                                     'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=200',
-                                onTap: () => context.push(AppRoutes.detallesSolicitud),
+                                onTap: () =>
+                                    context.push(AppRoutes.detallesSolicitud),
                               ),
                               SizedBox(height: 15),
                               _SolicitudCardSimple(
@@ -99,7 +102,8 @@ class SolicitudesScreen extends StatelessWidget {
                                 time: '6:00 pm',
                                 imageUrl:
                                     'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=200',
-                                onTap: () => context.push(AppRoutes.detallesSolicitud),
+                                onTap: () =>
+                                    context.push(AppRoutes.detallesSolicitud),
                               ),
                               SizedBox(height: 100),
                             ],
@@ -134,16 +138,8 @@ class _HeaderSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const _CircularLogo(
-            child: Text(
-              'C',
-              style: TextStyle(
-                color: Color(0xFF19133B),
-                fontSize: 28,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
+          // Espacio para mantener el título centrado (reemplaza al logo 'C')
+          const SizedBox(width: 50),
           Column(
             children: [
               Text(
@@ -165,8 +161,12 @@ class _HeaderSection extends StatelessWidget {
               ),
             ],
           ),
-          const _CircularLogo(
-            child: Icon(Icons.bolt, color: Color(0xFFB2F333), size: 30),
+          // Logo Ciclox derecha
+          Image.asset(
+            'assets/iconos/logo-icono VERDE-8.png',
+            width: 50,
+            height: 50,
+            fit: BoxFit.contain,
           ),
         ],
       ),
@@ -183,7 +183,10 @@ class _CircularLogo extends StatelessWidget {
     return Container(
       width: 50,
       height: 50,
-      decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+      ),
       alignment: Alignment.center,
       child: child,
     );
@@ -226,8 +229,15 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-class _FilterChips extends StatelessWidget {
+class _FilterChips extends StatefulWidget {
   const _FilterChips();
+
+  @override
+  State<_FilterChips> createState() => _FilterChipsState();
+}
+
+class _FilterChipsState extends State<_FilterChips> {
+  String selectedFilter = 'En proceso';
 
   @override
   Widget build(BuildContext context) {
@@ -237,10 +247,26 @@ class _FilterChips extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
-          _ChipItem(label: 'Todas', isActive: false),
-          _ChipItem(label: 'Pendientes', isActive: false),
-          _ChipItem(label: 'En proceso', isActive: true),
-          _ChipItem(label: 'Finalizadas', isActive: false),
+          _ChipItem(
+            label: 'Todas',
+            isActive: selectedFilter == 'Todas',
+            onTap: () => setState(() => selectedFilter = 'Todas'),
+          ),
+          _ChipItem(
+            label: 'Pendientes',
+            isActive: selectedFilter == 'Pendientes',
+            onTap: () => setState(() => selectedFilter = 'Pendientes'),
+          ),
+          _ChipItem(
+            label: 'En proceso',
+            isActive: selectedFilter == 'En proceso',
+            onTap: () => setState(() => selectedFilter = 'En proceso'),
+          ),
+          _ChipItem(
+            label: 'Finalizadas',
+            isActive: selectedFilter == 'Finalizadas',
+            onTap: () => setState(() => selectedFilter = 'Finalizadas'),
+          ),
         ],
       ),
     );
@@ -250,24 +276,33 @@ class _FilterChips extends StatelessWidget {
 class _ChipItem extends StatelessWidget {
   final String label;
   final bool isActive;
-  const _ChipItem({required this.label, required this.isActive});
+  final VoidCallback onTap;
+
+  const _ChipItem({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-      decoration: BoxDecoration(
-        color: isActive ? const Color(0xFF19133B) : const Color(0xFFDDE1E4),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isActive ? Colors.white : const Color(0xFF19133B),
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(right: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF19133B) : const Color(0xFFDDE1E4),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isActive ? Colors.white : const Color(0xFF19133B),
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
         ),
       ),
     );
@@ -326,11 +361,17 @@ class _SolicitudCardProgress extends StatelessWidget {
                     const SizedBox(height: 5),
                     Text(
                       date,
-                      style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 13),
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.6),
+                        fontSize: 13,
+                      ),
                     ),
                     Text(
                       time,
-                      style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 13),
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(0.6),
+                        fontSize: 13,
+                      ),
                     ),
                   ],
                 ),
@@ -357,7 +398,11 @@ class _StepProgress extends StatelessWidget {
         Stack(
           alignment: Alignment.center,
           children: [
-            Container(height: 2, color: Colors.grey.withOpacity(0.3), width: double.infinity),
+            Container(
+              height: 2,
+              color: Colors.grey.withOpacity(0.3),
+              width: double.infinity,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: List.generate(4, (index) {
@@ -367,7 +412,11 @@ class _StepProgress extends StatelessWidget {
                   width: 12,
                   height: 12,
                   decoration: BoxDecoration(
-                    color: isCurrent ? const Color(0xFF19133B) : (isActive ? const Color(0xFF19133B) : Colors.grey.withOpacity(0.3)),
+                    color: isCurrent
+                        ? const Color(0xFF19133B)
+                        : (isActive
+                              ? const Color(0xFF19133B)
+                              : Colors.grey.withOpacity(0.3)),
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 2),
                   ),
@@ -446,18 +495,28 @@ class _SolicitudCardSimple extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   date,
-                  style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 13),
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(0.6),
+                    fontSize: 13,
+                  ),
                 ),
                 Text(
                   time,
-                  style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 13),
+                  style: TextStyle(
+                    color: Colors.black.withOpacity(0.6),
+                    fontSize: 13,
+                  ),
                 ),
               ],
             ),
           ),
           GestureDetector(
             onTap: onTap,
-            child: const Icon(Icons.chevron_right, color: Color(0xFF19133B), size: 30),
+            child: const Icon(
+              Icons.chevron_right,
+              color: Color(0xFF19133B),
+              size: 30,
+            ),
           ),
         ],
       ),
@@ -471,30 +530,52 @@ class _CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
       height: 70,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            blurRadius: 10,
+            offset: const Offset(0, -2), // Sombra hacia arriba
           ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
-          Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.go(AppRoutes.dashboardCiudadano),
+            child: Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+          ),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.soporteColaborador),
+            child: Icon(Icons.warning_rounded, color: Color(0xFF19133B), size: 28),
+          ),
           GestureDetector(
             onTap: () => context.push(AppRoutes.solicitudes),
-            child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+            child: const Icon(
+              Icons.local_shipping,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
           ),
-          Icon(Icons.notifications_none_rounded, color: Color(0xFF19133B), size: 28),
-          GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28)),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.notificacionesColaborador),
+            child: const Icon(
+              Icons.notifications_rounded,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.ajustesColaborador),
+            child: Icon(
+              Icons.settings_rounded,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
         ],
       ),
     );

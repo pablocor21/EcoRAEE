@@ -66,34 +66,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
 
             // Logo
+            // Logo
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Column(
-                children: [
-                  Container(
-                    width: 64,
-                    height: 64,
-                    decoration: BoxDecoration(
-                      color: CicloxColors.primary,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.bolt_rounded,
-                      color: CicloxColors.dark,
-                      size: 40,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'ciclox',
-                    style: TextStyle(
-                      color: CicloxColors.primary,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                ],
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Image.asset(
+                'assets/imagenes/LOGO PRINCIPAL VERDE.png',
+                height: 80,
               ),
             ),
 
@@ -152,9 +130,9 @@ class _OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
+    return Center(
       child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

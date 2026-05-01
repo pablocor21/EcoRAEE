@@ -73,7 +73,10 @@ class DashboardScreen extends ConsumerWidget {
                         const SizedBox(height: 30),
 
                         // 8. SOLICITUDES RECIENTES
-                        const _SectionHeader(title: 'SOLICITUDES RECIENTES'),
+                        _SectionHeader(
+                          title: 'SOLICITUDES RECIENTES',
+                          onTap: () => context.push(AppRoutes.solicitudes),
+                        ),
                         const SizedBox(height: 15),
                         const _RecentRequestItem(
                           title: 'Monitor LG',
@@ -94,7 +97,10 @@ class DashboardScreen extends ConsumerWidget {
                         const SizedBox(height: 35),
 
                         // 9. RECOLECTAS
-                        const _SectionHeader(title: 'RECOLECTAS'),
+                        _SectionHeader(
+                          title: 'RECOLECTAS',
+                          onTap: () => context.push(AppRoutes.historial),
+                        ),
                         const SizedBox(height: 15),
                         const _CollectionItem(date: '12 de marzo', count: 3),
                         const _CollectionItem(date: '10 de marzo', count: 1),
@@ -170,7 +176,10 @@ class _HeaderSection extends StatelessWidget {
             ),
           ),
           // Botones Notificación y Configuración
-          const _HeaderActionBtn(icon: Icons.notifications),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.notificacionesColaborador),
+            child: const _HeaderActionBtn(icon: Icons.notifications),
+          ),
           const SizedBox(width: 10),
           GestureDetector(
             onTap: () => context.push(AppRoutes.ajustesColaborador),
@@ -224,10 +233,11 @@ class _StatsSummaryCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.bolt_rounded,
-                color: Color(0xFFB2F333),
-                size: 28,
+              // Reemplaza 'assets/logo_reciclaje.png' con la ruta de tu imagen
+              Image.asset(
+                'assets/iconos/logo-icono VERDE-8.png', // <-- PON AQUÍ TU IMAGEN
+                width: 50,
+                height: 50,
               ),
               const SizedBox(width: 10),
               Text(
@@ -281,7 +291,7 @@ class _StatItem extends StatelessWidget {
             value,
             style: TextStyle(
               color: valueColor ?? Colors.white,
-              fontSize: 28,
+              fontSize: 50,
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -371,14 +381,14 @@ class _ActionButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: const Color(0xFF19133B), size: 28),
+            Icon(icon, color: const Color(0xFF19133B), size: 50),
             const SizedBox(width: 12),
             Text(
               label,
               style: const TextStyle(
                 color: Color(0xFF19133B),
                 fontWeight: FontWeight.bold,
-                fontSize: 15,
+                fontSize: 25,
               ),
             ),
           ],
@@ -426,7 +436,8 @@ class _AlertBanner extends StatelessWidget {
 
 class _SectionHeader extends StatelessWidget {
   final String title;
-  const _SectionHeader({required this.title});
+  final VoidCallback? onTap;
+  const _SectionHeader({required this.title, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -442,15 +453,18 @@ class _SectionHeader extends StatelessWidget {
             letterSpacing: 0.5,
           ),
         ),
-        Row(
-          children: [
-            Text(
-              'Ver todas',
-              style: TextStyle(color: Colors.grey[600], fontSize: 13),
-            ),
-            const SizedBox(width: 5),
-            Icon(Icons.chevron_right, color: Colors.grey[600], size: 18),
-          ],
+        GestureDetector(
+          onTap: onTap,
+          child: Row(
+            children: [
+              Text(
+                'Ver todas',
+                style: TextStyle(color: Colors.grey[600], fontSize: 13),
+              ),
+              const SizedBox(width: 5),
+              Icon(Icons.chevron_right, color: Colors.grey[600], size: 18),
+            ],
+          ),
         ),
       ],
     );
@@ -586,8 +600,14 @@ class _CustomBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
-          Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.go(AppRoutes.dashboardCiudadano),
+            child: Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+          ),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.soporteColaborador),
+            child: Icon(Icons.warning_rounded, color: Color(0xFF19133B), size: 28),
+          ),
           GestureDetector(
             onTap: () => context.push(AppRoutes.solicitudes),
             child: const Icon(
@@ -596,15 +616,18 @@ class _CustomBottomNavBar extends StatelessWidget {
               size: 28,
             ),
           ),
-          Icon(
-            Icons.notifications_none_rounded,
-            color: Color(0xFF19133B),
-            size: 28,
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.notificacionesColaborador),
+            child: const Icon(
+              Icons.notifications_rounded,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
           ),
           GestureDetector(
             onTap: () => context.push(AppRoutes.ajustesColaborador),
             child: Icon(
-              Icons.settings_outlined,
+              Icons.settings_rounded,
               color: Color(0xFF19133B),
               size: 28,
             ),

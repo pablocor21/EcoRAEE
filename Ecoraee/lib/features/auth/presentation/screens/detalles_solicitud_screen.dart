@@ -79,7 +79,10 @@ class DetallesSolicitudScreen extends StatelessWidget {
                         topRight: Radius.circular(40),
                       ),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 25,
+                      vertical: 30,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -162,7 +165,11 @@ class _HeaderImageSection extends StatelessWidget {
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 20),
+              child: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.black,
+                size: 20,
+              ),
             ),
           ),
         ),
@@ -217,12 +224,22 @@ class _InfoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const _InfoRow(icon: Icons.location_on, text: 'Carrera 55 # 86 - 120'),
+          const _InfoRow(
+            icon: Icons.location_on,
+            text: 'Carrera 55 # 86 - 120',
+          ),
           const SizedBox(height: 15),
           const Row(
             children: [
-              Expanded(child: _InfoRow(icon: Icons.calendar_today, text: '14 de marzo 2026')),
-              Expanded(child: _InfoRow(icon: Icons.access_time, text: '10:00 am')),
+              Expanded(
+                child: _InfoRow(
+                  icon: Icons.calendar_today,
+                  text: '14 de marzo 2026',
+                ),
+              ),
+              Expanded(
+                child: _InfoRow(icon: Icons.access_time, text: '10:00 am'),
+              ),
             ],
           ),
           const Padding(
@@ -296,10 +313,17 @@ class _DescriptionCard extends StatelessWidget {
         children: [
           Text(
             'Portátil gamer Asus ROG Strix RTX 5070 Ti, ideal para alto rendimiento y tareas exigentes.',
-            style: TextStyle(color: Colors.black.withOpacity(0.7), fontSize: 13, height: 1.4),
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.7),
+              fontSize: 13,
+              height: 1.4,
+            ),
           ),
           const SizedBox(height: 15),
-          const Text('Cuenta con:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+          const Text(
+            'Cuenta con:',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+          ),
           const SizedBox(height: 10),
           const _BulletPoint(text: '32 GB de RAM'),
           const _BulletPoint(text: 'SSD de alta velocidad'),
@@ -307,7 +331,11 @@ class _DescriptionCard extends StatelessWidget {
           const SizedBox(height: 15),
           Text(
             'Estado: funcional, en buen estado general\nIncluye: cargador original y mouse',
-            style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 12, height: 1.4),
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.5),
+              fontSize: 12,
+              height: 1.4,
+            ),
           ),
         ],
       ),
@@ -329,7 +357,10 @@ class _BulletPoint extends StatelessWidget {
           const SizedBox(width: 5),
           Text(
             text,
-            style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 12),
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.6),
+              fontSize: 12,
+            ),
           ),
         ],
       ),
@@ -389,7 +420,8 @@ class _InteractiveAcceptSlider extends StatefulWidget {
   const _InteractiveAcceptSlider();
 
   @override
-  State<_InteractiveAcceptSlider> createState() => _InteractiveAcceptSliderState();
+  State<_InteractiveAcceptSlider> createState() =>
+      _InteractiveAcceptSliderState();
 }
 
 class _InteractiveAcceptSliderState extends State<_InteractiveAcceptSlider> {
@@ -431,8 +463,14 @@ class _InteractiveAcceptSliderState extends State<_InteractiveAcceptSlider> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Aceptar', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                  Text('Rechazar', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                  Text(
+                    'Aceptar',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
+                  Text(
+                    'Rechazar',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
                 ],
               ),
             ),
@@ -463,30 +501,52 @@ class _CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
       height: 70,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            blurRadius: 10,
+            offset: const Offset(0, -2), // Sombra hacia arriba
           ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
-          Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.go(AppRoutes.dashboardCiudadano),
+            child: Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+          ),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.soporteColaborador),
+            child: Icon(Icons.warning_rounded, color: Color(0xFF19133B), size: 28),
+          ),
           GestureDetector(
             onTap: () => context.push(AppRoutes.solicitudes),
-            child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+            child: const Icon(
+              Icons.local_shipping,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
           ),
-          Icon(Icons.notifications_none_rounded, color: Color(0xFF19133B), size: 28),
-          GestureDetector(onTap: () => context.push(AppRoutes.ajustesColaborador), child: Icon(Icons.settings_outlined, color: Color(0xFF19133B), size: 28)),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.notificacionesColaborador),
+            child: const Icon(
+              Icons.notifications_rounded,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.ajustesColaborador),
+            child: Icon(
+              Icons.settings_rounded,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
+          ),
         ],
       ),
     );

@@ -7,7 +7,8 @@ class AccesibilidadColabScreen extends StatefulWidget {
   const AccesibilidadColabScreen({super.key});
 
   @override
-  State<AccesibilidadColabScreen> createState() => _AccesibilidadColabScreenState();
+  State<AccesibilidadColabScreen> createState() =>
+      _AccesibilidadColabScreenState();
 }
 
 class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
@@ -30,7 +31,11 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
                 children: [
                   GestureDetector(
                     onTap: () => context.pop(),
-                    child: const Icon(Icons.arrow_back_ios, color: CicloxColors.dark, size: 20),
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: CicloxColors.dark,
+                      size: 20,
+                    ),
                   ),
                   const Expanded(
                     child: Text(
@@ -48,9 +53,9 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 10),
-            
+
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -74,21 +79,24 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _buildOptionButton(
-                                label: 'Pequeño', 
-                                isSelected: _tamaNoTexto == 'Pequeño', 
-                                onTap: () => setState(() => _tamaNoTexto = 'Pequeño')
+                                label: 'Pequeño',
+                                isSelected: _tamaNoTexto == 'Pequeño',
+                                onTap: () =>
+                                    setState(() => _tamaNoTexto = 'Pequeño'),
                               ),
                               const SizedBox(width: 10),
                               _buildOptionButton(
-                                label: 'Mediano', 
-                                isSelected: _tamaNoTexto == 'Mediano', 
-                                onTap: () => setState(() => _tamaNoTexto = 'Mediano')
+                                label: 'Mediano',
+                                isSelected: _tamaNoTexto == 'Mediano',
+                                onTap: () =>
+                                    setState(() => _tamaNoTexto = 'Mediano'),
                               ),
                               const SizedBox(width: 10),
                               _buildOptionButton(
-                                label: 'Grande', 
-                                isSelected: _tamaNoTexto == 'Grande', 
-                                onTap: () => setState(() => _tamaNoTexto = 'Grande')
+                                label: 'Grande',
+                                isSelected: _tamaNoTexto == 'Grande',
+                                onTap: () =>
+                                    setState(() => _tamaNoTexto = 'Grande'),
                               ),
                             ],
                           ),
@@ -96,14 +104,15 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
                           const Divider(height: 1, color: Color(0xFFE0E0E0)),
                           const SizedBox(height: 10),
                           _buildSwitchRow(
-                            title: 'Modo alto de contraste', 
-                            value: _altoContraste, 
-                            onChanged: (val) => setState(() => _altoContraste = val)
+                            title: 'Modo alto de contraste',
+                            value: _altoContraste,
+                            onChanged: (val) =>
+                                setState(() => _altoContraste = val),
                           ),
                         ],
                       ),
                     ),
-                    
+
                     // Tarjeta Omitida: Lectura de pantalla (tal como se solicitó omitir)
 
                     // Tarjeta 2: Tamaño de botones
@@ -125,21 +134,24 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               _buildOptionButton(
-                                label: 'Pequeño', 
-                                isSelected: _tamaNoBotones == 'Pequeño', 
-                                onTap: () => setState(() => _tamaNoBotones = 'Pequeño')
+                                label: 'Pequeño',
+                                isSelected: _tamaNoBotones == 'Pequeño',
+                                onTap: () =>
+                                    setState(() => _tamaNoBotones = 'Pequeño'),
                               ),
                               const SizedBox(width: 10),
                               _buildOptionButton(
-                                label: 'Mediano', 
-                                isSelected: _tamaNoBotones == 'Mediano', 
-                                onTap: () => setState(() => _tamaNoBotones = 'Mediano')
+                                label: 'Mediano',
+                                isSelected: _tamaNoBotones == 'Mediano',
+                                onTap: () =>
+                                    setState(() => _tamaNoBotones = 'Mediano'),
                               ),
                               const SizedBox(width: 10),
                               _buildOptionButton(
-                                label: 'Grande', 
-                                isSelected: _tamaNoBotones == 'Grande', 
-                                onTap: () => setState(() => _tamaNoBotones = 'Grande')
+                                label: 'Grande',
+                                isSelected: _tamaNoBotones == 'Grande',
+                                onTap: () =>
+                                    setState(() => _tamaNoBotones = 'Grande'),
                               ),
                             ],
                           ),
@@ -150,12 +162,12 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
                     // Tarjeta 3: Modo oscuro
                     _buildContainerCard(
                       child: _buildSwitchRow(
-                        title: 'Modo oscuro', 
-                        value: _modoOscuro, 
-                        onChanged: (val) => setState(() => _modoOscuro = val)
+                        title: 'Modo oscuro',
+                        value: _modoOscuro,
+                        onChanged: (val) => setState(() => _modoOscuro = val),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -183,17 +195,43 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
           children: [
             GestureDetector(
               onTap: () => context.go(AppRoutes.dashboardColaborador),
-              child: const Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+              child: const Icon(
+                Icons.home_filled,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
-            const Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.soporteColaborador),
+              child: const Icon(
+                Icons.warning_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
+            ),
             GestureDetector(
               onTap: () => context.push(AppRoutes.solicitudes),
-              child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+              child: const Icon(
+                Icons.local_shipping,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
-            const Icon(Icons.notifications_none_rounded, color: Color(0xFF19133B), size: 28),
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.notificacionesColaborador),
+              child: const Icon(
+                Icons.notifications_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
+            ),
             GestureDetector(
               onTap: () => context.go(AppRoutes.ajustesColaborador),
-              child: const Icon(Icons.settings, color: Color(0xFF19133B), size: 28),
+              child: const Icon(
+                Icons.settings_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
           ],
         ),
@@ -228,7 +266,9 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF6584A8) : const Color(0xFFF2F0ED),
+            color: isSelected
+                ? const Color(0xFF6584A8)
+                : const Color(0xFFF2F0ED),
             borderRadius: BorderRadius.circular(8),
           ),
           alignment: Alignment.center,
@@ -265,7 +305,7 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
           scale: 0.9,
           child: Switch(
             value: value,
-            activeColor: Colors.white,
+            activeThumbColor: Colors.white,
             activeTrackColor: const Color(0xFF34C759), // Verde iOS activo
             inactiveThumbColor: const Color(0xFFC7C7CC),
             inactiveTrackColor: const Color(0xFFE5E5EA),

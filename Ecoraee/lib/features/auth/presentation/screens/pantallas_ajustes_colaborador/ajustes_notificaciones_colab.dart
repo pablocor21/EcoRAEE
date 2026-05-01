@@ -7,10 +7,12 @@ class AjustesNotificacionesColabScreen extends StatefulWidget {
   const AjustesNotificacionesColabScreen({super.key});
 
   @override
-  State<AjustesNotificacionesColabScreen> createState() => _AjustesNotificacionesColabScreenState();
+  State<AjustesNotificacionesColabScreen> createState() =>
+      _AjustesNotificacionesColabScreenState();
 }
 
-class _AjustesNotificacionesColabScreenState extends State<AjustesNotificacionesColabScreen> {
+class _AjustesNotificacionesColabScreenState
+    extends State<AjustesNotificacionesColabScreen> {
   bool _nuevasSolicitudes = true;
   bool _estadoRecoleccion = true;
   bool _problemasReportes = true;
@@ -30,7 +32,11 @@ class _AjustesNotificacionesColabScreenState extends State<AjustesNotificaciones
                 children: [
                   GestureDetector(
                     onTap: () => context.pop(),
-                    child: const Icon(Icons.arrow_back_ios, color: CicloxColors.dark, size: 20),
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: CicloxColors.dark,
+                      size: 20,
+                    ),
                   ),
                   const Expanded(
                     child: Text(
@@ -44,13 +50,15 @@ class _AjustesNotificacionesColabScreenState extends State<AjustesNotificaciones
                       ),
                     ),
                   ),
-                  const SizedBox(width: 20), // Balance para el icono de regresar
+                  const SizedBox(
+                    width: 20,
+                  ), // Balance para el icono de regresar
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Lista de configuraciones de notificaciones (Sliders interactivos)
             _buildNotificationSwitch(
               title: 'Nuevas solicitudes',
@@ -61,7 +69,7 @@ class _AjustesNotificacionesColabScreenState extends State<AjustesNotificaciones
                 });
               },
             ),
-            
+
             _buildNotificationSwitch(
               title: 'Estado de recolección',
               value: _estadoRecoleccion,
@@ -71,7 +79,7 @@ class _AjustesNotificacionesColabScreenState extends State<AjustesNotificaciones
                 });
               },
             ),
-            
+
             _buildNotificationSwitch(
               title: 'Problemas / reportes',
               value: _problemasReportes,
@@ -81,7 +89,7 @@ class _AjustesNotificacionesColabScreenState extends State<AjustesNotificaciones
                 });
               },
             ),
-            
+
             _buildNotificationSwitch(
               title: 'Vibrar',
               value: _vibrar,
@@ -91,7 +99,7 @@ class _AjustesNotificacionesColabScreenState extends State<AjustesNotificaciones
                 });
               },
             ),
-            
+
             const Spacer(),
           ],
         ),
@@ -114,18 +122,46 @@ class _AjustesNotificacionesColabScreenState extends State<AjustesNotificaciones
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
-              onTap: () => context.go(AppRoutes.dashboardColaborador),
-              child: const Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+              onTap: () => context.go(AppRoutes.dashboardCiudadano),
+              child: const Icon(
+                Icons.home_filled,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
-            const Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.soporteColaborador),
+              child: const Icon(
+                Icons.warning_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
+            ),
             GestureDetector(
               onTap: () => context.push(AppRoutes.solicitudes),
-              child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+              child: const Icon(
+                Icons.local_shipping,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
-            const Icon(Icons.notifications_none_rounded, color: Color(0xFF19133B), size: 28),
             GestureDetector(
-              onTap: () => context.go(AppRoutes.ajustesColaborador), // Llevando a Ajustes Colaborador
-              child: const Icon(Icons.settings, color: Color(0xFF19133B), size: 28),
+              onTap: () => context.push(AppRoutes.notificacionesColaborador),
+              child: const Icon(
+                Icons.notifications_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => context.go(
+                AppRoutes.ajustesColaborador,
+              ), // Llevando a Ajustes Colaborador
+              child: const Icon(
+                Icons.settings_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
           ],
         ),
@@ -160,7 +196,7 @@ class _AjustesNotificacionesColabScreenState extends State<AjustesNotificaciones
             scale: 0.9,
             child: Switch(
               value: value,
-              activeColor: Colors.white,
+              activeThumbColor: Colors.white,
               activeTrackColor: const Color(0xFF34C759), // Verde iOS
               inactiveThumbColor: Colors.white,
               inactiveTrackColor: const Color(0xFFD1D1D6),

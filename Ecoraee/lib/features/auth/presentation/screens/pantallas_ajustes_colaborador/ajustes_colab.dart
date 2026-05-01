@@ -16,69 +16,10 @@ class AjustesColabScreen extends StatelessWidget {
             const SizedBox(height: 20),
             // Logo area
             Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'c',
-                        style: TextStyle(
-                          color: CicloxColors.dark,
-                          fontSize: 48,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const Text(
-                        '!',
-                        style: TextStyle(
-                          color: CicloxColors.primary,
-                          fontSize: 48,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      const Text(
-                        'cl',
-                        style: TextStyle(
-                          color: CicloxColors.dark,
-                          fontSize: 48,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                      Container(
-                        width: 40,
-                        height: 40,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        decoration: const BoxDecoration(
-                          color: CicloxColors.primary,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.bolt,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      const Text(
-                        'x',
-                        style: TextStyle(
-                          color: CicloxColors.dark,
-                          fontSize: 48,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Text(
-                    'Transforma - Recupera - Reintegra',
-                    style: TextStyle(
-                      color: CicloxColors.dark,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ],
+              child: Image.asset(
+                'assets/imagenes/LOGO PRINCIPAL AZUL.png',
+                height: 120,
+                fit: BoxFit.contain,
               ),
             ),
             const SizedBox(height: 30),
@@ -125,20 +66,16 @@ class AjustesColabScreen extends StatelessWidget {
                     ),
                   ),
                   _SettingsItem(
-                    icon: Icons.warning_amber_rounded,
+                    icon: Icons.warning_rounded,
                     label: 'Soporte',
-                    onTap: () {},
+                    onTap: () => context.push(AppRoutes.soporteColaborador),
                   ),
                   _SettingsItem(
                     icon: Icons.lock,
                     label: 'Políticas',
-                    onTap: () {},
+                    onTap: () => context.push(AppRoutes.politicasColaborador),
                   ),
-                  _SettingsItem(
-                    icon: Icons.build,
-                    label: 'Manual de usuario app',
-                    onTap: () {},
-                  ),
+
                   const SizedBox(height: 30),
 
                   // Accessibility button
@@ -187,29 +124,39 @@ class AjustesColabScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
-              onTap: () => context.go(AppRoutes.dashboardColaborador),
+              onTap: () => context.go(AppRoutes.dashboardCiudadano),
               child: const Icon(
                 Icons.home_filled,
                 color: Color(0xFF19133B),
                 size: 28,
               ),
             ),
-            const Icon(
-              Icons.warning_amber_rounded,
-              color: Color(0xFF19133B),
-              size: 28,
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.soporteColaborador),
+              child: const Icon(
+                Icons.warning_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
             GestureDetector(
               onTap: () => context.push(AppRoutes.solicitudes),
-              child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+              child: const Icon(
+                Icons.local_shipping,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.notificacionesColaborador),
+              child: const Icon(
+                Icons.notifications_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
             const Icon(
-              Icons.notifications_none_rounded,
-              color: Color(0xFF19133B),
-              size: 28,
-            ),
-            const Icon(
-              Icons.settings,
+              Icons.settings_rounded,
               color: Color(0xFF19133B),
               size: 28,
             ), // active
