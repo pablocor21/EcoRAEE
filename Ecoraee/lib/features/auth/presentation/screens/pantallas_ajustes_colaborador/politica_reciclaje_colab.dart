@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../config/router/app_router.dart';
 
 class PoliticaReciclajeColabScreen extends StatelessWidget {
   const PoliticaReciclajeColabScreen({super.key});
@@ -77,38 +76,44 @@ class PoliticaReciclajeColabScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 25),
-                      
+
                       _buildSectionTitle('1. Compromiso ambiental'),
                       _buildSectionText(
-                        'El colaborador se compromete a realizar la gestión de residuos electrónicos de forma responsable y sostenible.'
+                        'El colaborador se compromete a realizar la gestión de residuos electrónicos de forma responsable y sostenible.',
                       ),
 
                       _buildSectionTitle('2. Manejo de RAEE'),
-                      _buildBulletPoint('Clasificación adecuada de los dispositivos'),
+                      _buildBulletPoint(
+                        'Clasificación adecuada de los dispositivos',
+                      ),
                       _buildBulletPoint('Separación de componentes'),
                       _buildBulletPoint('Disposición en centros autorizados'),
                       const SizedBox(height: 10),
                       _buildSectionText(
                         'Los residuos electrónicos deben ser tratados correctamente para evitar impactos negativos en el medio ambiente',
-                        isItalic: true
+                        isItalic: true,
                       ),
 
                       _buildSectionTitle('3. Trazabilidad'),
                       _buildBulletPoint('Cada solicitud debe ser registrada'),
                       _buildBulletPoint('El proceso debe ser verificable'),
-                      _buildBulletPoint('Se deben actualizar estados en la plataforma'),
+                      _buildBulletPoint(
+                        'Se deben actualizar estados en la plataforma',
+                      ),
 
                       _buildSectionTitle('4. Prohibiciones'),
                       _buildBulletPoint('Disposición inadecuada de residuos'),
                       _buildBulletPoint('Manipulación ilegal de componentes'),
-                      _buildBulletPoint('Desvío de materiales fuera del proceso autorizado'),
+                      _buildBulletPoint(
+                        'Desvío de materiales fuera del proceso autorizado',
+                      ),
 
                       _buildSectionTitle('5. Validación del proceso'),
                       _buildSectionText('CICLOX podrá:'),
                       _buildBulletPoint('Auditar procesos'),
                       _buildBulletPoint('Validar entregas'),
                       _buildBulletPoint('Solicitar evidencias'),
-                      
+
                       const SizedBox(height: 40),
                     ],
                   ),
@@ -156,7 +161,10 @@ class PoliticaReciclajeColabScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const Text(
+            '• ',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
           Expanded(
             child: Text(
               text,

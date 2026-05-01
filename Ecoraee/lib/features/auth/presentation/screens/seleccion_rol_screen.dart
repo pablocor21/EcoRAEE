@@ -20,7 +20,10 @@ class SeleccionRolScreen extends StatelessWidget {
                 const SizedBox(height: 40),
 
                 // ── Logo ciclox ──────────────────────────
-                _CicloxLogo(),
+                Image.asset(
+                  'assets/imagenes/VARIACION 2 COLOR.png',
+                  height: 180,
+                ),
                 const SizedBox(height: 12),
 
                 // ── Tagline ──────────────────────────────
@@ -93,18 +96,13 @@ class SeleccionRolScreen extends StatelessWidget {
 
                 // ── Tarjeta Colaboradores ─────────────────
                 _RoleCard(
-                  onTap: () => context.go(AppRoutes.login),
-                  icon: Container(
+                  onTap: () {},
+                  icon: SizedBox(
                     width: 40,
                     height: 40,
-                    decoration: BoxDecoration(
-                      color: CicloxColors.primary,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.bolt_rounded,
-                      color: CicloxColors.dark,
-                      size: 24,
+                    child: Image.asset(
+                      'assets/iconos/logo-icono VERDE-8.png',
+                      fit: BoxFit.contain,
                     ),
                   ),
                   title: 'Colaboradores',
@@ -126,78 +124,6 @@ class SeleccionRolScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-// LOGO CICLOX GRANDE
-// ─────────────────────────────────────────────
-class _CicloxLogo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Letras "ci" con el rayo
-        RichText(
-          text: const TextSpan(
-            style: TextStyle(
-              fontSize: 72,
-              fontWeight: FontWeight.w900,
-              height: 1.0,
-              letterSpacing: -2,
-            ),
-            children: [
-              TextSpan(
-                text: 'ci',
-                style: TextStyle(color: CicloxColors.dark),
-              ),
-            ],
-          ),
-        ),
-        // Letras "cl" + rayo + "ox"
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'cl',
-              style: TextStyle(
-                fontSize: 72,
-                fontWeight: FontWeight.w900,
-                color: CicloxColors.dark,
-                height: 0.85,
-                letterSpacing: -2,
-              ),
-            ),
-            // Ícono de rayo con fondo verde
-            Container(
-              width: 44,
-              height: 44,
-              margin: const EdgeInsets.only(bottom: 4),
-              decoration: const BoxDecoration(
-                color: CicloxColors.primary,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.bolt_rounded,
-                color: CicloxColors.dark,
-                size: 28,
-              ),
-            ),
-            const Text(
-              'x',
-              style: TextStyle(
-                fontSize: 72,
-                fontWeight: FontWeight.w900,
-                color: CicloxColors.dark,
-                height: 0.85,
-                letterSpacing: -2,
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
@@ -276,11 +202,7 @@ class _RoleCard extends StatelessWidget {
             // Subtítulo con ícono
             Row(
               children: [
-                Icon(
-                  subtitleIcon,
-                  size: 16,
-                  color: subtitleColor,
-                ),
+                Icon(subtitleIcon, size: 16, color: subtitleColor),
                 const SizedBox(width: 6),
                 Text(
                   subtitle,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../config/router/app_router.dart';
 
 class UsoPlataformaColabScreen extends StatelessWidget {
   const UsoPlataformaColabScreen({super.key});
@@ -77,10 +76,10 @@ class UsoPlataformaColabScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 25),
-                      
+
                       _buildSectionTitle('1. Acceso al sistema'),
                       _buildSectionText(
-                        'El colaborador accede mediante credenciales únicas y es responsable de su uso.'
+                        'El colaborador accede mediante credenciales únicas y es responsable de su uso.',
                       ),
 
                       _buildSectionTitle('2. Funcionalidades disponibles'),
@@ -93,7 +92,9 @@ class UsoPlataformaColabScreen extends StatelessWidget {
                       _buildSectionTitle('3. Buen uso'),
                       _buildSectionText('El colaborador debe:'),
                       _buildBulletPoint('Mantener información actualizada'),
-                      _buildBulletPoint('Usar correctamente las funciones del sistema'),
+                      _buildBulletPoint(
+                        'Usar correctamente las funciones del sistema',
+                      ),
                       _buildBulletPoint('Garantizar coherencia en los estados'),
 
                       _buildSectionTitle('4. Errores y fallos'),
@@ -105,7 +106,7 @@ class UsoPlataformaColabScreen extends StatelessWidget {
                       _buildBulletPoint('No compartir credenciales'),
                       _buildBulletPoint('Proteger el acceso al sistema'),
                       _buildBulletPoint('Reportar accesos sospechosos'),
-                      
+
                       const SizedBox(height: 40),
                     ],
                   ),
@@ -152,7 +153,10 @@ class UsoPlataformaColabScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const Text(
+            '• ',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
           Expanded(
             child: Text(
               text,

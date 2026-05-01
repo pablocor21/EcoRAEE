@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../config/router/app_router.dart';
 
 class TerminosCondicionesColabScreen extends StatelessWidget {
   const TerminosCondicionesColabScreen({super.key});
@@ -77,59 +76,83 @@ class TerminosCondicionesColabScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 25),
-                      
+
                       _buildSectionTitle('1. Aceptación de los términos'),
                       _buildSectionText(
-                        'Al registrarse y utilizar la plataforma CICLOX como colaborador, la empresa acepta cumplir con los presentes términos y condiciones. El uso de la plataforma implica la aceptación total de estas condiciones.'
+                        'Al registrarse y utilizar la plataforma CICLOX como colaborador, la empresa acepta cumplir con los presentes términos y condiciones. El uso de la plataforma implica la aceptación total de estas condiciones.',
                       ),
 
                       _buildSectionTitle('2. Rol del colaborador'),
                       _buildSectionText(
-                        'El colaborador es responsable de gestionar las solicitudes de recolección, transporte y disposición de residuos electrónicos (RAEE) dentro de la plataforma.'
+                        'El colaborador es responsable de gestionar las solicitudes de recolección, transporte y disposición de residuos electrónicos (RAEE) dentro de la plataforma.',
                       ),
 
                       _buildSectionTitle('3. Uso de la plataforma'),
                       _buildSectionText('El colaborador se compromete a:'),
-                      _buildBulletPoint('Gestionar las solicitudes de manera responsable'),
-                      _buildBulletPoint('Mantener actualizada la información operativa'),
-                      _buildBulletPoint('Utilizar la plataforma únicamente para fines relacionados con la gestión de RAEE'),
-                      
+                      _buildBulletPoint(
+                        'Gestionar las solicitudes de manera responsable',
+                      ),
+                      _buildBulletPoint(
+                        'Mantener actualizada la información operativa',
+                      ),
+                      _buildBulletPoint(
+                        'Utilizar la plataforma únicamente para fines relacionados con la gestión de RAEE',
+                      ),
+
                       const SizedBox(height: 15),
                       _buildSectionText('Está prohibido:', isBold: true),
                       _buildBulletPoint('Manipular información del sistema'),
-                      _buildBulletPoint('Aceptar solicitudes sin capacidad operativa'),
-                      _buildBulletPoint('Usar la plataforma con fines fraudulentos'),
+                      _buildBulletPoint(
+                        'Aceptar solicitudes sin capacidad operativa',
+                      ),
+                      _buildBulletPoint(
+                        'Usar la plataforma con fines fraudulentos',
+                      ),
 
                       _buildSectionTitle('4. Gestión de solicitudes'),
                       _buildSectionText('El colaborador podrá:'),
-                      _buildBulletPoint('Aceptar, rechazar o reprogramar solicitudes'),
+                      _buildBulletPoint(
+                        'Aceptar, rechazar o reprogramar solicitudes',
+                      ),
                       _buildBulletPoint('Actualizar el estado del servicio'),
-                      _buildBulletPoint('Cancelar solicitudes cuando sea necesario'),
+                      _buildBulletPoint(
+                        'Cancelar solicitudes cuando sea necesario',
+                      ),
                       const SizedBox(height: 10),
-                      _buildSectionText('Todas las acciones deben reflejar el estado real del proceso.'),
+                      _buildSectionText(
+                        'Todas las acciones deben reflejar el estado real del proceso.',
+                      ),
 
                       _buildSectionTitle('5. Responsabilidad operativa'),
                       _buildSectionText('El colaborador es responsable de:'),
-                      _buildBulletPoint('Cumplir con los tiempos de recolección'),
-                      _buildBulletPoint('Garantizar la correcta manipulación de los residuos'),
-                      _buildBulletPoint('Cumplir con normativas ambientales aplicables'),
+                      _buildBulletPoint(
+                        'Cumplir con los tiempos de recolección',
+                      ),
+                      _buildBulletPoint(
+                        'Garantizar la correcta manipulación de los residuos',
+                      ),
+                      _buildBulletPoint(
+                        'Cumplir con normativas ambientales aplicables',
+                      ),
                       const SizedBox(height: 10),
                       _buildSectionText(
                         'El manejo adecuado de RAEE es fundamental para reducir impactos ambientales negativos',
-                        isItalic: true
+                        isItalic: true,
                       ),
 
                       _buildSectionTitle('6. Suspensión o bloqueo'),
-                      _buildSectionText('CICLOX podrá suspender o bloquear el acceso del colaborador en caso de:'),
+                      _buildSectionText(
+                        'CICLOX podrá suspender o bloquear el acceso del colaborador en caso de:',
+                      ),
                       _buildBulletPoint('Incumplimiento de procesos'),
                       _buildBulletPoint('Reportes negativos reiterados'),
                       _buildBulletPoint('Uso indebido de la plataforma'),
 
                       _buildSectionTitle('7. Modificaciones'),
                       _buildSectionText(
-                        'CICLOX podrá modificar estos términos en cualquier momento. El uso continuo de la plataforma implica la aceptación de los cambios.'
+                        'CICLOX podrá modificar estos términos en cualquier momento. El uso continuo de la plataforma implica la aceptación de los cambios.',
                       ),
-                      
+
                       const SizedBox(height: 40),
                     ],
                   ),
@@ -156,7 +179,11 @@ class TerminosCondicionesColabScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionText(String text, {bool isBold = false, bool isItalic = false}) {
+  Widget _buildSectionText(
+    String text, {
+    bool isBold = false,
+    bool isItalic = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Text(
@@ -178,7 +205,10 @@ class TerminosCondicionesColabScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const Text(
+            '• ',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
           Expanded(
             child: Text(
               text,
