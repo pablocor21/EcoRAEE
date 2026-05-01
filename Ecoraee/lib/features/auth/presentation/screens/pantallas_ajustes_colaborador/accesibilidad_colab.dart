@@ -201,10 +201,13 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
                 size: 28,
               ),
             ),
-            const Icon(
-              Icons.warning_amber_rounded,
-              color: Color(0xFF19133B),
-              size: 28,
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.soporteColaborador),
+              child: const Icon(
+                Icons.warning_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
             GestureDetector(
               onTap: () => context.push(AppRoutes.solicitudes),
@@ -214,15 +217,18 @@ class _AccesibilidadColabScreenState extends State<AccesibilidadColabScreen> {
                 size: 28,
               ),
             ),
-            const Icon(
-              Icons.notifications_none_rounded,
-              color: Color(0xFF19133B),
-              size: 28,
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.notificacionesColaborador),
+              child: const Icon(
+                Icons.notifications_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
             GestureDetector(
               onTap: () => context.go(AppRoutes.ajustesColaborador),
               child: const Icon(
-                Icons.settings,
+                Icons.settings_rounded,
                 color: Color(0xFF19133B),
                 size: 28,
               ),

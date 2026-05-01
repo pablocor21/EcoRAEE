@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // ── Auth screens ──────────────────────────────────
+import '../../features/auth/presentation/screens/pantallas_login_colab/login_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_login_colab/recuperar_credenciales.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
@@ -27,6 +29,7 @@ import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/p
 import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/politica_reciclaje_colab.dart';
 import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/uso_plataforma_colab.dart';
 import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/soporte_colab.dart';
+import '../../features/auth/presentation/screens/pantallas_ajustes_colaborador/notificaciones_colab.dart';
 
 // ── Devices screens ───────────────────────────────
 import '../../features/devices/presentation/screens/registro_dispositivo_screen.dart';
@@ -97,6 +100,9 @@ class AppRoutes {
   static const String politicaReciclajeColaborador = '/politica-reciclaje-colaborador';
   static const String usoPlataformaColaborador = '/uso-plataforma-colaborador';
   static const String soporteColaborador = '/soporte-colaborador';
+  static const String loginColaborador = '/login-colaborador';
+  static const String recuperarCredencialesColaborador = '/recuperar-credenciales-colaborador';
+  static const String notificacionesColaborador = '/notificaciones-colaborador';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -115,6 +121,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'seleccionRol',
         path: AppRoutes.seleccionRol,
         builder: (context, state) => const SeleccionRolScreen(),
+      ),
+      GoRoute(
+        name: 'loginColaborador',
+        path: AppRoutes.loginColaborador,
+        builder: (context, state) => const LoginColabScreen(),
+      ),
+      GoRoute(
+        name: 'recuperarCredencialesColaborador',
+        path: AppRoutes.recuperarCredencialesColaborador,
+        builder: (context, state) => const RecuperarCredencialesScreen(),
       ),
       GoRoute(
         name: 'login',
@@ -222,6 +238,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.soporteColaborador,
         builder: (context, state) => const SoporteColabScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.notificacionesColaborador,
+        builder: (context, state) => const NotificacionesColabScreen(),
       ),
 
       // ── Devices ───────────────────────────────────

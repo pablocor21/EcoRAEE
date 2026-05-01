@@ -434,7 +434,10 @@ class _CustomBottomNavBar extends StatelessWidget {
             onTap: () => context.go(AppRoutes.dashboardCiudadano),
             child: Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
           ),
-          Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.soporteColaborador),
+            child: Icon(Icons.warning_rounded, color: Color(0xFF19133B), size: 28),
+          ),
           GestureDetector(
             onTap: () => context.push(AppRoutes.solicitudes),
             child: const Icon(
@@ -443,15 +446,18 @@ class _CustomBottomNavBar extends StatelessWidget {
               size: 28,
             ),
           ),
-          Icon(
-            Icons.notifications_none_rounded,
-            color: Color(0xFF19133B),
-            size: 28,
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.notificacionesColaborador),
+            child: const Icon(
+              Icons.notifications_rounded,
+              color: Color(0xFF19133B),
+              size: 28,
+            ),
           ),
           GestureDetector(
             onTap: () => context.push(AppRoutes.ajustesColaborador),
             child: Icon(
-              Icons.settings_outlined,
+              Icons.settings_rounded,
               color: Color(0xFF19133B),
               size: 28,
             ),

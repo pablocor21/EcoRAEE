@@ -96,7 +96,7 @@ class SeleccionRolScreen extends StatelessWidget {
 
                 // ── Tarjeta Colaboradores ─────────────────
                 _RoleCard(
-                  onTap: () {},
+                  onTap: () => context.go(AppRoutes.loginColaborador),
                   icon: SizedBox(
                     width: 40,
                     height: 40,

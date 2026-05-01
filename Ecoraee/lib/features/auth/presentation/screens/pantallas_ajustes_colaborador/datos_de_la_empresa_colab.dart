@@ -20,7 +20,11 @@ class DatosDeLaEmpresaColabScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () => context.pop(),
-                    child: const Icon(Icons.arrow_back_ios, color: CicloxColors.dark, size: 20),
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: CicloxColors.dark,
+                      size: 20,
+                    ),
                   ),
                   const Expanded(
                     child: Text(
@@ -34,19 +38,27 @@ class DatosDeLaEmpresaColabScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 20), // Balance para el icono de regresar
+                  const SizedBox(
+                    width: 20,
+                  ), // Balance para el icono de regresar
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 10),
-            
+
             // Contenedor principal estilo tarjeta
             Expanded(
               child: Container(
                 width: double.infinity,
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 30,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
@@ -62,100 +74,39 @@ class DatosDeLaEmpresaColabScreen extends StatelessWidget {
                   children: [
                     // Logo de la empresa
                     Center(
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'c',
-                                style: TextStyle(
-                                  color: CicloxColors.dark,
-                                  fontSize: 60,
-                                  fontWeight: FontWeight.w900,
-                                  height: 1.0,
-                                ),
-                              ),
-                              const Text(
-                                '!',
-                                style: TextStyle(
-                                  color: CicloxColors.primary,
-                                  fontSize: 60,
-                                  fontWeight: FontWeight.w900,
-                                  height: 1.0,
-                                ),
-                              ),
-                              const Text(
-                                'cl',
-                                style: TextStyle(
-                                  color: CicloxColors.dark,
-                                  fontSize: 60,
-                                  fontWeight: FontWeight.w900,
-                                  height: 1.0,
-                                ),
-                              ),
-                              Container(
-                                width: 45,
-                                height: 45,
-                                margin: const EdgeInsets.symmetric(horizontal: 6),
-                                decoration: const BoxDecoration(
-                                  color: CicloxColors.primary,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(Icons.bolt, color: Colors.white, size: 35),
-                              ),
-                              const Text(
-                                'x',
-                                style: TextStyle(
-                                  color: CicloxColors.dark,
-                                  fontSize: 60,
-                                  fontWeight: FontWeight.w900,
-                                  height: 1.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('Transforma ', style: TextStyle(color: CicloxColors.dark, fontSize: 13, fontWeight: FontWeight.w900)),
-                              Text('-', style: TextStyle(color: CicloxColors.primary, fontSize: 13, fontWeight: FontWeight.w900)),
-                              Text(' Recupera ', style: TextStyle(color: CicloxColors.dark, fontSize: 13, fontWeight: FontWeight.w900)),
-                              Text('-', style: TextStyle(color: CicloxColors.primary, fontSize: 13, fontWeight: FontWeight.w900)),
-                              Text(' Reintegra', style: TextStyle(color: CicloxColors.dark, fontSize: 13, fontWeight: FontWeight.w900)),
-                            ],
-                          )
-                        ],
+                      child: Image.asset(
+                        'assets/imagenes/LOGO PRINCIPAL COLOR.png',
+                        height: 100, // Ajustado para que se vea bien
                       ),
                     ),
-                    
+
                     const SizedBox(height: 50),
-                    
+
                     // Lista de Información de la Empresa
                     const _CompanyInfoRow(
                       icon: Icons.account_circle,
                       text: 'Razón social: Ciclox',
                     ),
                     const Divider(height: 1, color: Color(0xFFE5E5E5)),
-                    
+
                     const _CompanyInfoRow(
                       icon: Icons.hub, // o Icons.tag
                       text: 'NIT: 2466658789-2',
                     ),
                     const Divider(height: 1, color: Color(0xFFE5E5E5)),
-                    
+
                     const _CompanyInfoRow(
                       icon: Icons.location_on,
                       text: 'Dirección: Av 80 # 2a - 31',
                     ),
                     const Divider(height: 1, color: Color(0xFFE5E5E5)),
-                    
+
                     const _CompanyInfoRow(
                       icon: Icons.smartphone,
                       text: '3125894102 - 604-2568745',
                     ),
                     const Divider(height: 1, color: Color(0xFFE5E5E5)),
-                    
+
                     const _CompanyInfoRow(
                       icon: Icons.alternate_email,
                       text: 'bienestarcx@ciclox.co',
@@ -164,7 +115,7 @@ class DatosDeLaEmpresaColabScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 10),
           ],
         ),
@@ -188,17 +139,45 @@ class DatosDeLaEmpresaColabScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () => context.go(AppRoutes.dashboardCiudadano),
-              child: const Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
+              child: const Icon(
+                Icons.home_filled,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
-            const Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.soporteColaborador),
+              child: const Icon(
+                Icons.warning_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
+            ),
             GestureDetector(
               onTap: () => context.push(AppRoutes.solicitudes),
-              child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
+              child: const Icon(
+                Icons.local_shipping,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
-            const Icon(Icons.notifications_none_rounded, color: Color(0xFF19133B), size: 28),
             GestureDetector(
-              onTap: () => context.go(AppRoutes.ajustesColaborador), // Llevando a Ajustes Colaborador
-              child: const Icon(Icons.settings, color: Color(0xFF19133B), size: 28),
+              onTap: () => context.push(AppRoutes.notificacionesColaborador),
+              child: const Icon(
+                Icons.notifications_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => context.go(
+                AppRoutes.ajustesColaborador,
+              ), // Llevando a Ajustes Colaborador
+              child: const Icon(
+                Icons.settings_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
             ),
           ],
         ),
@@ -211,10 +190,7 @@ class _CompanyInfoRow extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const _CompanyInfoRow({
-    required this.icon,
-    required this.text,
-  });
+  const _CompanyInfoRow({required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {

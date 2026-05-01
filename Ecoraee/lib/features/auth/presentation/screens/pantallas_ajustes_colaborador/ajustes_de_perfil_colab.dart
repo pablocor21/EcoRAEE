@@ -192,13 +192,23 @@ class AjustesDePerfilColabScreen extends StatelessWidget {
               onTap: () => context.go(AppRoutes.dashboardCiudadano),
               child: const Icon(Icons.home_filled, color: Color(0xFF19133B), size: 28),
             ),
-            const Icon(Icons.warning_amber_rounded, color: Color(0xFF19133B), size: 28),
+          GestureDetector(
+            onTap: () => context.push(AppRoutes.soporteColaborador),
+            child: const Icon(Icons.warning_rounded, color: Color(0xFF19133B), size: 28),
+          ),
             GestureDetector(
               onTap: () => context.push(AppRoutes.solicitudes),
               child: const Icon(Icons.local_shipping, color: Color(0xFF19133B), size: 28),
             ),
-            const Icon(Icons.notifications_none_rounded, color: Color(0xFF19133B), size: 28),
-            const Icon(Icons.settings, color: Color(0xFF19133B), size: 28), // active
+            GestureDetector(
+              onTap: () => context.push(AppRoutes.notificacionesColaborador),
+              child: const Icon(
+                Icons.notifications_rounded,
+                color: Color(0xFF19133B),
+                size: 28,
+              ),
+            ),
+            const Icon(Icons.settings_rounded, color: Color(0xFF19133B), size: 28), // active
           ],
         ),
       ),
