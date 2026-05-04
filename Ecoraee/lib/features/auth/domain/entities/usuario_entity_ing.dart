@@ -15,7 +15,7 @@ class UsuarioEntityIng extends Equatable {
     required this.activo,
   });
 
-  bool get esEmpresa => rol == 'EMPRESA';
+  bool get esEmpresa => rol == 'EMPRESA' || rol == 'COLABORADOR';
 
   @override
   List<Object?> get props => [id, email, rol];

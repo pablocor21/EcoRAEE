@@ -176,6 +176,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         name: 'loginColaborador',
         path: AppRoutes.loginColaborador,
+        // LoginColabScreen gestiona su propio BlocProvider internamente
         builder: (context, state) => const LoginColabScreen(),
       ),
       GoRoute(
