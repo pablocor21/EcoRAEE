@@ -8,11 +8,7 @@ class ApiConstants {
   // - Android emulador: 10.0.2.2 apunta al localhost del host
   // - Web / Windows desktop: usa localhost directamente
   static String get baseUrl {
-    if (kIsWeb || defaultTargetPlatform == TargetPlatform.windows) {
-      return 'http://54.173.222.249:3000/api';
-    }
-    // Android emulador
-    return 'http://10.0.2.2:3000/api';
+    return 'http://54.173.222.249:3000/api';
   }
 
   // ── Auth ──────────────────────────────────────────────────
