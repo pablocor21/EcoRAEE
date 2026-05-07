@@ -378,7 +378,7 @@ class _BottomNav extends StatelessWidget {
               if (context.canPop()) {
                 context.pop();
               } else {
-                context.go(AppRoutes.login);
+                context.go(AppRoutes.homeUsuario);
               }
             },
             icon: const Icon(Icons.home, color: _darkBlue, size: 36),
