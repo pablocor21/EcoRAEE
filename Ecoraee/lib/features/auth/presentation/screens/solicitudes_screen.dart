@@ -301,7 +301,7 @@ class _ChipItem extends StatelessWidget {
           style: TextStyle(
             color: isActive ? Colors.white : const Color(0xFF19133B),
             fontWeight: FontWeight.bold,
-            fontSize: 14,
+            fontSize: 16,
           ),
         ),
       ),
@@ -363,14 +363,14 @@ class _SolicitudCardProgress extends StatelessWidget {
                       date,
                       style: TextStyle(
                         color: Colors.black.withOpacity(0.6),
-                        fontSize: 13,
+                        fontSize: 15,
                       ),
                     ),
                     Text(
                       time,
                       style: TextStyle(
                         color: Colors.black.withOpacity(0.6),
-                        fontSize: 13,
+                        fontSize: 15,
                       ),
                     ),
                   ],
@@ -434,7 +434,7 @@ class _StepProgress extends StatelessWidget {
               steps[index],
               style: TextStyle(
                 color: isCurrent ? const Color(0xFF19133B) : Colors.grey,
-                fontSize: 10,
+                fontSize: 12,
                 fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
               ),
             );
@@ -497,14 +497,14 @@ class _SolicitudCardSimple extends StatelessWidget {
                   date,
                   style: TextStyle(
                     color: Colors.black.withOpacity(0.6),
-                    fontSize: 13,
+                    fontSize: 15,
                   ),
                 ),
                 Text(
                   time,
                   style: TextStyle(
                     color: Colors.black.withOpacity(0.6),
-                    fontSize: 13,
+                    fontSize: 15,
                   ),
                 ),
               ],

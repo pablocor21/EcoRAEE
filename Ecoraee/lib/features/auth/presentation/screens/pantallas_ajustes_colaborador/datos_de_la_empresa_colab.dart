@@ -32,7 +32,7 @@ class DatosDeLaEmpresaColabScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: CicloxColors.dark,
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 0.5,
                       ),

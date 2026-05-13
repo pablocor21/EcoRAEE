@@ -238,7 +238,7 @@ class _ProfileInfoRow extends StatelessWidget {
               text,
               style: const TextStyle(
                 color: Colors.black87,
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
               ),
             ),

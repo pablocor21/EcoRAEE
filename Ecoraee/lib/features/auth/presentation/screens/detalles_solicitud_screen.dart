@@ -188,7 +188,7 @@ class _StatusPill extends StatelessWidget {
       children: [
         const Text(
           'Estado: ',
-          style: TextStyle(color: Colors.white70, fontSize: 16),
+          style: TextStyle(color: Colors.white70, fontSize: 18),
         ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -201,7 +201,7 @@ class _StatusPill extends StatelessWidget {
             'en proceso',
             style: TextStyle(
               color: const Color(0xFFE9C46A).withAlpha(255),
-              fontSize: 14,
+              fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -288,7 +288,7 @@ class _InfoRow extends StatelessWidget {
           text,
           style: TextStyle(
             color: Colors.black.withOpacity(0.6),
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -315,14 +315,14 @@ class _DescriptionCard extends StatelessWidget {
             'Portátil gamer Asus ROG Strix RTX 5070 Ti, ideal para alto rendimiento y tareas exigentes.',
             style: TextStyle(
               color: Colors.black.withOpacity(0.7),
-              fontSize: 13,
-              height: 1.4,
+              fontSize: 16,
+              height: 1.5,
             ),
           ),
           const SizedBox(height: 15),
           const Text(
             'Cuenta con:',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 10),
           const _BulletPoint(text: '32 GB de RAM'),
@@ -333,8 +333,8 @@ class _DescriptionCard extends StatelessWidget {
             'Estado: funcional, en buen estado general\nIncluye: cargador original y mouse',
             style: TextStyle(
               color: Colors.black.withOpacity(0.5),
-              fontSize: 12,
-              height: 1.4,
+              fontSize: 14,
+              height: 1.5,
             ),
           ),
         ],
@@ -353,13 +353,13 @@ class _BulletPoint extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         children: [
-          const Icon(Icons.bolt, color: Color(0xFFB2F333), size: 14),
+          const Icon(Icons.bolt, color: Color(0xFFB2F333), size: 18),
           const SizedBox(width: 5),
           Text(
             text,
             style: TextStyle(
               color: Colors.black.withOpacity(0.6),
-              fontSize: 12,
+              fontSize: 15,
             ),
           ),
         ],
@@ -407,7 +407,7 @@ class _DeviceRow extends StatelessWidget {
             style: const TextStyle(
               color: Color(0xFF19133B),
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: 16,
             ),
           ),
         ],
@@ -465,11 +465,11 @@ class _InteractiveAcceptSliderState extends State<_InteractiveAcceptSlider> {
                 children: [
                   Text(
                     'Aceptar',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   Text(
                     'Rechazar',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                 ],
               ),

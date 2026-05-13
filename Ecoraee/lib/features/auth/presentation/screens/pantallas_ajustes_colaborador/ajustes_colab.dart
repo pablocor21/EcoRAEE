@@ -29,7 +29,7 @@ class AjustesColabScreen extends StatelessWidget {
               'CONFIGURACIÓN',
               style: TextStyle(
                 color: CicloxColors.dark,
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.0,
               ),
@@ -192,7 +192,7 @@ class _SettingsItem extends StatelessWidget {
             label,
             style: const TextStyle(
               color: CicloxColors.dark,
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),
