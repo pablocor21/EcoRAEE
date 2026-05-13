@@ -133,7 +133,7 @@ class HomeUsuarioPage extends StatelessWidget {
 
       // ── Bottom Navigation ─────────────────────────────────
       bottomNavigationBar: _BottomNav(
-        onSettings: () {},
+        onSettings: () => context.push(AppRoutes.configuracion),
         onHome: () {},
         onRewards: () => context.push(AppRoutes.tusPuntos),
       ),

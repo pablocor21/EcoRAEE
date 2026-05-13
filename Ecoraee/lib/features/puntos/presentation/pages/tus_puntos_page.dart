@@ -7,6 +7,7 @@ import '../bloc/puntos_event.dart';
 import '../bloc/puntos_state.dart';
 import '../../domain/entities/puntos_entity_ing.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../profile/presentation/widgets/profile_bottom_nav.dart';
 
 const Color _darkBlue = Color(0xFF151532);
 const Color _lightGreen = Color(0xFFEBF2E4);
@@ -72,7 +73,7 @@ class _TusPuntosPageState extends State<TusPuntosPage> {
           ),
         ),
       ),
-      bottomNavigationBar: _BottomNav(),
+      bottomNavigationBar: const ProfileBottomNav(currentIndex: 2),
     );
   }
 }
@@ -351,48 +352,6 @@ class _MovimientoItem extends StatelessWidget {
   }
 }
 
-// ─── Bottom Navigation ─────────────────────────────────────────
-class _BottomNav extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 80,
-      decoration: const BoxDecoration(
-        color: _lightGreen,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          // Configuración
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.settings, color: _darkBlue, size: 32),
-          ),
-          // Home
-          IconButton(
-            onPressed: () {
-              if (context.canPop()) {
-                context.pop();
-              } else {
-                context.go(AppRoutes.homeUsuario);
-              }
-            },
-            icon: const Icon(Icons.home, color: _darkBlue, size: 36),
-          ),
-          // Recompensas/Puntos
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.stars, color: _darkBlue, size: 32),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 // ─── Shared helpers ───────────────────────────────────────────
 class _CardSkeleton extends StatelessWidget {

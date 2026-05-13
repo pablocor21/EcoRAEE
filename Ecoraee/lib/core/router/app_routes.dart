@@ -39,4 +39,11 @@ class AppRoutes {
   static const trazabilidadMapa    = '/trazabilidad/mapa';
 
   static const notificaciones      = '/notificaciones';
+
+  // Perfil / Configuracion
+  static const configuracion       = '/configuracion';
+  static const editarPerfil        = '/configuracion/perfil';
+  static const accesibilidad       = '/configuracion/accesibilidad';
+  static const terminosCondiciones = '/configuracion/terminos';
+  static const politicasPrevencion = '/configuracion/politicas';
 }

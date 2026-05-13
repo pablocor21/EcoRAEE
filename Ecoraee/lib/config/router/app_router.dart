@@ -50,6 +50,11 @@ import '../../features/canjes/presentation/pages/qr_bono_ciclox_page.dart';
 import '../../features/canjes/presentation/pages/qr_mercaditos_page.dart';
 import '../../features/canjes/presentation/pages/canje_exitoso_page.dart';
 import '../../features/canjes/presentation/pages/canje_rechazado_page.dart';
+import '../../features/profile/presentation/pages/configuracion_page.dart';
+import '../../features/profile/presentation/pages/editar_perfil_page.dart';
+import '../../features/profile/presentation/pages/accesibilidad_page.dart';
+import '../../features/profile/presentation/pages/politicas_prevencion_page.dart';
+import '../../features/profile/presentation/pages/terminos_condiciones_page.dart';
 
 
 // ── Auth screens ──────────────────────────────────
@@ -644,6 +649,28 @@ final routerProvider = Provider<GoRouter>((ref) {
           create: (_) => sl<NotificacionesBloc>(),
           child: const NotificacionesPage(),
         ),
+      ),
+
+      // ── PERFIL / CONFIGURACION ─────────────────────────────────
+      GoRoute(
+        path: CoreRoutes.AppRoutes.configuracion,
+        builder: (_, __) => const ConfiguracionPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.editarPerfil,
+        builder: (_, __) => const EditarPerfilPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.accesibilidad,
+        builder: (_, __) => const AccesibilidadPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.politicasPrevencion,
+        builder: (_, __) => const PoliticasPrevencionPage(),
+      ),
+      GoRoute(
+        path: CoreRoutes.AppRoutes.terminosCondiciones,
+        builder: (_, __) => const TerminosCondicionesPage(),
       ),
     
 ],
