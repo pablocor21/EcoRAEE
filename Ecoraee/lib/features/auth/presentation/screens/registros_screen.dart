@@ -2,114 +2,228 @@ import '../../../../config/router/app_router.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
-class RegistrosScreen extends StatelessWidget {
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../injection_container.dart';
+import '../../../empresas/solicitudes/domain/entities/empresa_solicitud_entity.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_bloc.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_event.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_state.dart';
+
+class RegistrosScreen extends StatefulWidget {
   const RegistrosScreen({super.key});
 
   @override
+  State<RegistrosScreen> createState() => _RegistrosScreenState();
+}
+
+class _RegistrosScreenState extends State<RegistrosScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Use Future.microtask or read the bloc directly if it's provided higher up
+    // But since it's a new screen, we might need to provide it if not provided globally.
+    // Assuming it's provided in main or via router, we can just call it:
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // 1. FONDO CON GRADIENTE (Siguiendo el estilo de Dashboard)
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF0D0B21), // Azul muy oscuro
-                  Color(0xFF19133B), // CicloxColors.dark
-                  Color(0xFF25214D), // Azul un poco más claro
+    return BlocProvider(
+      create: (_) => sl<EmpresaSolicitudesBloc>()..add(const LoadEmpresaSolicitudes()),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            // 1. FONDO CON GRADIENTE (Siguiendo el estilo de Dashboard)
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF0D0B21), // Azul muy oscuro
+                    Color(0xFF19133B), // CicloxColors.dark
+                    Color(0xFF25214D), // Azul un poco más claro
+                  ],
+                ),
+              ),
+            ),
+
+            // Patrón de puntos sutil (opcional, para mayor fidelidad a la imagen)
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.05,
+                child: Image.network(
+                  'https://www.transparenttextures.com/patterns/stardust.png',
+                  repeat: ImageRepeat.repeat,
+                ),
+              ),
+            ),
+
+            SafeArea(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  // 2. HEADER
+                  const _HeaderSection(),
+                  const SizedBox(height: 20),
+
+                  // 3. CUERPO (Contenedor Gris Claro)
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFE9EDF0), // Gris claro de la imagen
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40),
+                          topRight: Radius.circular(40),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 25),
+                          // 4. BARRA DE BÚSQUEDA
+                          const _SearchBar(),
+                          const SizedBox(height: 20),
+
+                          // 5. LISTA DE REGISTROS DÍNAMICA
+                          Expanded(
+                            child: BlocConsumer<EmpresaSolicitudesBloc, EmpresaSolicitudesState>(
+                              listener: (context, state) {
+                                if (state is EmpresaSolicitudesActionSuccess) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(state.message)),
+                                  );
+                                  context.read<EmpresaSolicitudesBloc>().add(const LoadEmpresaSolicitudes());
+                                } else if (state is EmpresaSolicitudesError) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(state.message)),
+                                  );
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is EmpresaSolicitudesLoading) {
+                                  return const Center(child: CircularProgressIndicator());
+                                }
+                                
+                                List<EmpresaSolicitudEntity> solicitudes = [];
+                                if (state is EmpresaSolicitudesLoaded) {
+                                  solicitudes = state.solicitudes.where((s) => s.estado == 'PENDIENTE').toList();
+                                }
+
+                                if (solicitudes.isEmpty) {
+                                  return const Center(child: Text('No hay registros pendientes.'));
+                                }
+
+                                return ListView.builder(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: solicitudes.length + 1,
+                                  itemBuilder: (context, index) {
+                                    if (index == solicitudes.length) {
+                                      return const SizedBox(height: 100); // Espacio para el nav bar
+                                    }
+                                    final sol = solicitudes[index];
+                                    
+                                    // Datos de ejemplo mapeados desde la solicitud
+                                    final deviceName = 'Dispositivo E-Waste';
+                                    final detail = 'Varios items';
+                                    
+                                    return Padding(
+                                      padding: const EdgeInsets.only(bottom: 20),
+                                      child: _RegistroCard(
+                                        solicitudId: sol.id,
+                                        title: deviceName,
+                                        description: sol.direccionRecoleccion,
+                                        detail: detail,
+                                        imageUrl: 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=200',
+                                        onAprobar: () {
+                                          _mostrarDialogoAprobar(context, sol.id);
+                                        },
+                                        onRechazar: () {
+                                          _mostrarDialogoRechazar(context, sol.id);
+                                        },
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
+          ],
+        ),
+        // 6. BOTTOM NAVIGATION BAR
+        bottomNavigationBar: const _CustomBottomNavBar(),
+        extendBody: true, // Para que el cuerpo se extienda detrás del nav bar
+      ),
+    );
+  }
 
-          // Patrón de puntos sutil (opcional, para mayor fidelidad a la imagen)
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.05,
-              child: Image.network(
-                'https://www.transparenttextures.com/patterns/stardust.png',
-                repeat: ImageRepeat.repeat,
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                // 2. HEADER
-                const _HeaderSection(),
-                const SizedBox(height: 20),
-
-                // 3. CUERPO (Contenedor Gris Claro)
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFE9EDF0), // Gris claro de la imagen
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 25),
-                        // 4. BARRA DE BÚSQUEDA
-                        const _SearchBar(),
-                        const SizedBox(height: 20),
-
-                        // 5. LISTA DE REGISTROS
-                        Expanded(
-                          child: ListView(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              _RegistroCard(
-                                title: 'Laptop Asus ROG',
-                                description:
-                                    'Portátil gamer Asus ROG Strix RTX 5070 Ti, ideal para alto rendimiento y tareas exigentes.',
-                                detail: '32 GB de RAM',
-                                imageUrl:
-                                    'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=200',
-                              ),
-                              SizedBox(height: 20),
-                              _RegistroCard(
-                                title: 'Monitor LG',
-                                description:
-                                    'Portátil gamer Asus ROG Strix RTX 5070 Ti, ideal para alto rendimiento y tareas exigentes.',
-                                detail: 'Flex led',
-                                imageUrl:
-                                    'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=200',
-                              ),
-                              SizedBox(height: 20),
-                              _RegistroCard(
-                                title: 'Tarjeta gráfica 9060 RTX',
-                                description:
-                                    'Portátil gamer Asus ROG Strix RTX 5070 Ti, ideal para alto rendimiento y tareas exigentes.',
-                                detail: 'Adaptable',
-                                imageUrl:
-                                    'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=200',
-                              ),
-                              SizedBox(height: 100), // Espacio para el nav bar
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+  void _mostrarDialogoAprobar(BuildContext context, int solicitudId) {
+    final inicioCtrl = TextEditingController(text: '09:00');
+    final finCtrl = TextEditingController(text: '12:00');
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Aprobar Solicitud'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(controller: inicioCtrl, decoration: const InputDecoration(labelText: 'Hora inicio (HH:MM)')),
+            TextField(controller: finCtrl, decoration: const InputDecoration(labelText: 'Hora fin (HH:MM)')),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              context.read<EmpresaSolicitudesBloc>().add(
+                AceptarEmpresaSolicitud(
+                  solicitudId: solicitudId,
+                  horaEstimadaInicio: inicioCtrl.text.trim(),
+                  horaEstimadaFin: finCtrl.text.trim(),
+                )
+              );
+            },
+            child: const Text('Aprobar'),
           ),
         ],
       ),
-      // 6. BOTTOM NAVIGATION BAR
-      bottomNavigationBar: const _CustomBottomNavBar(),
-      extendBody: true, // Para que el cuerpo se extienda detrás del nav bar
+    );
+  }
+
+  void _mostrarDialogoRechazar(BuildContext context, int solicitudId) {
+    final motivoCtrl = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Rechazar Solicitud'),
+        content: TextField(
+          controller: motivoCtrl,
+          decoration: const InputDecoration(labelText: 'Motivo de rechazo'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              context.read<EmpresaSolicitudesBloc>().add(
+                RechazarEmpresaSolicitud(
+                  solicitudId: solicitudId,
+                  motivo: motivoCtrl.text.trim().isEmpty ? 'Sin motivo' : motivoCtrl.text.trim(),
+                )
+              );
+            },
+            child: const Text('Rechazar'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -209,16 +323,22 @@ class _SearchBar extends StatelessWidget {
 }
 
 class _RegistroCard extends StatelessWidget {
+  final int solicitudId;
   final String title;
   final String description;
   final String detail;
   final String imageUrl;
+  final VoidCallback onAprobar;
+  final VoidCallback onRechazar;
 
   const _RegistroCard({
+    required this.solicitudId,
     required this.title,
     required this.description,
     required this.detail,
     required this.imageUrl,
+    required this.onAprobar,
+    required this.onRechazar,
   });
 
   @override
@@ -302,7 +422,10 @@ class _RegistroCard extends StatelessWidget {
                 ],
               ),
               // Slider interactivo
-              const _InteractiveSlider(),
+              _InteractiveSlider(
+                onAprobar: onAprobar,
+                onRechazar: onRechazar,
+              ),
             ],
           ),
         ],
@@ -312,7 +435,13 @@ class _RegistroCard extends StatelessWidget {
 }
 
 class _InteractiveSlider extends StatefulWidget {
-  const _InteractiveSlider();
+  final VoidCallback onAprobar;
+  final VoidCallback onRechazar;
+
+  const _InteractiveSlider({
+    required this.onAprobar,
+    required this.onRechazar,
+  });
 
   @override
   State<_InteractiveSlider> createState() => _InteractiveSliderState();
@@ -331,14 +460,16 @@ class _InteractiveSliderState extends State<_InteractiveSlider> {
         });
       },
       onHorizontalDragEnd: (details) {
-        // Snap al centro o a los extremos si se desea (opcional)
-        /*
-        setState(() {
-          if (_position < 0.3) _position = 0.0;
-          else if (_position > 0.7) _position = 1.0;
-          else _position = 0.5;
-        });
-        */
+        if (_position < 0.2) {
+          widget.onAprobar();
+          setState(() => _position = 0.5);
+        } else if (_position > 0.8) {
+          widget.onRechazar();
+          setState(() => _position = 0.5);
+        } else {
+          // Snap al centro
+          setState(() => _position = 0.5);
+        }
       },
       child: Container(
         width: 160,

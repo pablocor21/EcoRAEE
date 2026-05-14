@@ -62,7 +62,7 @@ class _LoginColabBodyState extends State<_LoginColabBody> {
         if (state is AuthAuthenticated) {
           if (state.usuario.esEmpresa) {
             // ✅ Colaborador autenticado → ir al Dashboard de colaborador
-            ctx.go(AppRoutes.dashboardCiudadano);
+            ctx.go(AppRoutes.dashboardColaborador);
           } else {
             // Usuario ciudadano intentando entrar como colaborador
             ctx.read<AuthBloc>().add(LogoutRequested());

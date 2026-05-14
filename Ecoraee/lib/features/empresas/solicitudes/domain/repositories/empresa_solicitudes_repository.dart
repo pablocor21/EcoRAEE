@@ -7,7 +7,7 @@ abstract class EmpresaSolicitudesRepository {
   Future<Either<Failure, List<EmpresaSolicitudEntity>>> getSolicitudes({String? estado});
   Future<Either<Failure, void>> aceptarSolicitud({
     required int id,
-    required int recolectorId,
+    int? colaboradorId,
     required String horaEstimadaInicio,
     required String horaEstimadaFin,
     String? comentarioEmpresa,
@@ -18,8 +18,8 @@ abstract class EmpresaSolicitudesRepository {
   });
   Future<Either<Failure, void>> marcarEnTransito({
     required int id,
-    double? latitudRecolector,
-    double? longitudRecolector,
+    double? latitudColaborador,
+    double? longitudColaborador,
     int? tiempoEstimadoMinutos,
   });
   Future<Either<Failure, void>> marcarRecolectada({

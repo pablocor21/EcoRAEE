@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../config/router/app_router.dart';
+import 'package:intl/intl.dart';
 
-class SolicitudesScreen extends StatelessWidget {
+import '../../../../config/router/app_router.dart';
+import '../../../../injection_container.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_bloc.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_event.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_state.dart';
+
+class SolicitudesScreen extends StatefulWidget {
   const SolicitudesScreen({super.key});
 
   @override
+  State<SolicitudesScreen> createState() => _SolicitudesScreenState();
+}
+
+class _SolicitudesScreenState extends State<SolicitudesScreen> {
+  String selectedFilter = 'Todas';
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocProvider(
+      create: (_) => sl<EmpresaSolicitudesBloc>()..add(const LoadEmpresaSolicitudes()),
+      child: Scaffold(
       body: Stack(
         children: [
           // 1. FONDO CON GRADIENTE
@@ -41,7 +57,15 @@ class SolicitudesScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 10),
                 // 2. HEADER
-                const _HeaderSection(),
+                BlocBuilder<EmpresaSolicitudesBloc, EmpresaSolicitudesState>(
+                  builder: (context, state) {
+                    int activas = 0;
+                    if (state is EmpresaSolicitudesLoaded) {
+                      activas = state.solicitudes.where((s) => s.estado == 'ACEPTADA' || s.estado == 'EN_TRANSITO').length;
+                    }
+                    return _HeaderSection(activas: activas);
+                  },
+                ),
                 const SizedBox(height: 20),
 
                 // 3. CUERPO PRINCIPAL
@@ -63,50 +87,86 @@ class SolicitudesScreen extends StatelessWidget {
                         const SizedBox(height: 15),
 
                         // 5. FILTROS (Chips)
-                        const _FilterChips(),
+                        _FilterChips(
+                          selectedFilter: selectedFilter,
+                          onFilterChanged: (filter) => setState(() => selectedFilter = filter),
+                        ),
                         const SizedBox(height: 20),
 
                         // 6. LISTA DE SOLICITUDES
                         Expanded(
-                          child: ListView(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              GestureDetector(
-                                onTap: () =>
-                                    context.push(AppRoutes.detallesSolicitud),
-                                child: const _SolicitudCardProgress(
-                                  title: 'Laptop Asus ROG',
-                                  date: '12 de marzo 2026',
-                                  time: '3:00 pm',
-                                  currentStep:
-                                      2, // 0: Solicitud, 1: Aprobación, 2: En camino, 3: Recolectado
-                                  imageUrl:
-                                      'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=200',
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              _SolicitudCardSimple(
-                                title: 'Monitor LG',
-                                date: '12 de marzo 2026',
-                                time: '4:00 pm',
-                                imageUrl:
-                                    'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=200',
-                                onTap: () =>
-                                    context.push(AppRoutes.detallesSolicitud),
-                              ),
-                              SizedBox(height: 15),
-                              _SolicitudCardSimple(
-                                title: 'Tarjeta gráfica 9060 RTX',
-                                date: '12 de marzo 2026',
-                                time: '6:00 pm',
-                                imageUrl:
-                                    'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=200',
-                                onTap: () =>
-                                    context.push(AppRoutes.detallesSolicitud),
-                              ),
-                              SizedBox(height: 100),
-                            ],
+                          child: BlocBuilder<EmpresaSolicitudesBloc, EmpresaSolicitudesState>(
+                            builder: (context, state) {
+                              if (state is EmpresaSolicitudesLoading) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
+                              
+                              if (state is EmpresaSolicitudesLoaded) {
+                                final allSolicitudes = state.solicitudes;
+                                final filtered = allSolicitudes.where((s) {
+                                  if (selectedFilter == 'Todas') return true;
+                                  if (selectedFilter == 'Pendientes' && s.estado == 'PENDIENTE') return true;
+                                  if (selectedFilter == 'En proceso' && (s.estado == 'ACEPTADA' || s.estado == 'EN_TRANSITO')) return true;
+                                  if (selectedFilter == 'Finalizadas' && s.estado == 'RECOLECTADA') return true;
+                                  return false;
+                                }).toList();
+
+                                if (filtered.isEmpty) {
+                                  return const Center(child: Text('No hay solicitudes para mostrar.'));
+                                }
+
+                                return ListView.builder(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: filtered.length + 1,
+                                  itemBuilder: (context, index) {
+                                    if (index == filtered.length) {
+                                      return const SizedBox(height: 100);
+                                    }
+                                    
+                                    final sol = filtered[index];
+                                    final date = DateFormat('dd MMM yyyy').format(sol.fechaPreferida);
+                                    final time = DateFormat('hh:mm a').format(sol.fechaPreferida);
+                                    
+                                    // Calcular step progress
+                                    int step = 0;
+                                    if (sol.estado == 'PENDIENTE') step = 0;
+                                    if (sol.estado == 'ACEPTADA') step = 1;
+                                    if (sol.estado == 'EN_TRANSITO') step = 2;
+                                    if (sol.estado == 'RECOLECTADA' || sol.estado == 'COMPLETADA') step = 3;
+
+                                    if (selectedFilter == 'En proceso' || sol.estado == 'ACEPTADA' || sol.estado == 'EN_TRANSITO') {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(bottom: 15),
+                                        child: GestureDetector(
+                                          onTap: () => context.push(AppRoutes.detallesSolicitud, extra: sol),
+                                          child: _SolicitudCardProgress(
+                                            title: 'Dispositivos #${sol.id}',
+                                            date: date,
+                                            time: time,
+                                            currentStep: step,
+                                            imageUrl: 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=200',
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(bottom: 15),
+                                        child: _SolicitudCardSimple(
+                                          title: 'Dispositivos #${sol.id}',
+                                          date: date,
+                                          time: time,
+                                          imageUrl: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=200',
+                                          onTap: () => context.push(AppRoutes.detallesSolicitud, extra: sol),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                );
+                              }
+
+                              return const Center(child: Text('Error cargando solicitudes.'));
+                            },
                           ),
                         ),
                       ],
@@ -129,7 +189,8 @@ class SolicitudesScreen extends StatelessWidget {
 // ──────────────────────────────────────────────────────────────────────────────
 
 class _HeaderSection extends StatelessWidget {
-  const _HeaderSection();
+  final int activas;
+  const _HeaderSection({required this.activas});
 
   @override
   Widget build(BuildContext context) {
@@ -152,8 +213,8 @@ class _HeaderSection extends StatelessWidget {
                 ),
               ),
               Text(
-                'Tienes 3 activas',
-                style: TextStyle(
+                'Tienes $activas activas',
+                style: const TextStyle(
                   color: Color(0xFFB2F333),
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -229,15 +290,14 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-class _FilterChips extends StatefulWidget {
-  const _FilterChips();
-
-  @override
-  State<_FilterChips> createState() => _FilterChipsState();
-}
-
-class _FilterChipsState extends State<_FilterChips> {
-  String selectedFilter = 'En proceso';
+class _FilterChips extends StatelessWidget {
+  final String selectedFilter;
+  final Function(String) onFilterChanged;
+  
+  const _FilterChips({
+    required this.selectedFilter,
+    required this.onFilterChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -250,22 +310,22 @@ class _FilterChipsState extends State<_FilterChips> {
           _ChipItem(
             label: 'Todas',
             isActive: selectedFilter == 'Todas',
-            onTap: () => setState(() => selectedFilter = 'Todas'),
+            onTap: () => onFilterChanged('Todas'),
           ),
           _ChipItem(
             label: 'Pendientes',
             isActive: selectedFilter == 'Pendientes',
-            onTap: () => setState(() => selectedFilter = 'Pendientes'),
+            onTap: () => onFilterChanged('Pendientes'),
           ),
           _ChipItem(
             label: 'En proceso',
             isActive: selectedFilter == 'En proceso',
-            onTap: () => setState(() => selectedFilter = 'En proceso'),
+            onTap: () => onFilterChanged('En proceso'),
           ),
           _ChipItem(
             label: 'Finalizadas',
             isActive: selectedFilter == 'Finalizadas',
-            onTap: () => setState(() => selectedFilter = 'Finalizadas'),
+            onTap: () => onFilterChanged('Finalizadas'),
           ),
         ],
       ),

@@ -10,14 +10,14 @@ class MarcarEnTransitoEmpresaSolicitudUsecase {
 
   Future<Either<Failure, void>> call({
     required int id,
-    double? latitudRecolector,
-    double? longitudRecolector,
+    double? latitudColaborador,
+    double? longitudColaborador,
     int? tiempoEstimadoMinutos,
   }) {
     return _repository.marcarEnTransito(
       id: id,
-      latitudRecolector: latitudRecolector,
-      longitudRecolector: longitudRecolector,
+      latitudColaborador: latitudColaborador,
+      longitudColaborador: longitudColaborador,
       tiempoEstimadoMinutos: tiempoEstimadoMinutos,
     );
   }

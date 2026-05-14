@@ -10,14 +10,14 @@ class AceptarEmpresaSolicitudUsecase {
 
   Future<Either<Failure, void>> call({
     required int id,
-    required int recolectorId,
+    int? colaboradorId,
     required String horaEstimadaInicio,
     required String horaEstimadaFin,
     String? comentarioEmpresa,
   }) {
     return _repository.aceptarSolicitud(
       id: id,
-      recolectorId: recolectorId,
+      colaboradorId: colaboradorId,
       horaEstimadaInicio: horaEstimadaInicio,
       horaEstimadaFin: horaEstimadaFin,
       comentarioEmpresa: comentarioEmpresa,

@@ -62,7 +62,7 @@ class EmpresaSolicitudesBloc
     emit(EmpresaSolicitudesLoading());
     final result = await _aceptarSolicitud(
       id: event.solicitudId,
-      recolectorId: event.recolectorId,
+      colaboradorId: event.colaboradorId,
       horaEstimadaInicio: event.horaEstimadaInicio,
       horaEstimadaFin: event.horaEstimadaFin,
       comentarioEmpresa: event.comentarioEmpresa,
@@ -101,8 +101,8 @@ class EmpresaSolicitudesBloc
     emit(EmpresaSolicitudesLoading());
     final result = await _marcarEnTransito(
       id: event.solicitudId,
-      latitudRecolector: event.latitudRecolector,
-      longitudRecolector: event.longitudRecolector,
+      latitudColaborador: event.latitudColaborador,
+      longitudColaborador: event.longitudColaborador,
       tiempoEstimadoMinutos: event.tiempoEstimadoMinutos,
     );
     await result.fold(
