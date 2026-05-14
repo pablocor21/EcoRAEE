@@ -7,7 +7,7 @@ abstract class EmpresaSolicitudesRemoteDatasource {
   Future<List<EmpresaSolicitudModel>> getSolicitudes({String? estado});
   Future<void> aceptarSolicitud({
     required int id,
-    required int recolectorId,
+    int? colaboradorId,
     required String horaEstimadaInicio,
     required String horaEstimadaFin,
     String? comentarioEmpresa,
@@ -15,8 +15,8 @@ abstract class EmpresaSolicitudesRemoteDatasource {
   Future<void> rechazarSolicitud({required int id, required String motivo});
   Future<void> marcarEnTransito({
     required int id,
-    double? latitudRecolector,
-    double? longitudRecolector,
+    double? latitudColaborador,
+    double? longitudColaborador,
     int? tiempoEstimadoMinutos,
   });
   Future<void> marcarRecolectada({
@@ -48,7 +48,7 @@ class EmpresaSolicitudesRemoteDatasourceImpl
   @override
   Future<void> aceptarSolicitud({
     required int id,
-    required int recolectorId,
+    int? colaboradorId,
     required String horaEstimadaInicio,
     required String horaEstimadaFin,
     String? comentarioEmpresa,
@@ -56,7 +56,7 @@ class EmpresaSolicitudesRemoteDatasourceImpl
     await _dio.patch(
       ApiConstants.aceptarSolicitud(id),
       data: {
-        'recolector_id': recolectorId,
+        if (colaboradorId != null) 'colaborador_id': colaboradorId,
         'hora_estimada_inicio': horaEstimadaInicio,
         'hora_estimada_fin': horaEstimadaFin,
         if (comentarioEmpresa != null && comentarioEmpresa.isNotEmpty)
@@ -76,15 +76,15 @@ class EmpresaSolicitudesRemoteDatasourceImpl
   @override
   Future<void> marcarEnTransito({
     required int id,
-    double? latitudRecolector,
-    double? longitudRecolector,
+    double? latitudColaborador,
+    double? longitudColaborador,
     int? tiempoEstimadoMinutos,
   }) async {
     await _dio.patch(
       ApiConstants.enTransitoSolicitud(id),
       data: {
-        if (latitudRecolector != null) 'latitud_recolector': latitudRecolector,
-        if (longitudRecolector != null) 'longitud_recolector': longitudRecolector,
+        if (latitudColaborador != null) 'latitud_colaborador': latitudColaborador,
+        if (longitudColaborador != null) 'longitud_colaborador': longitudColaborador,
         if (tiempoEstimadoMinutos != null)
           'tiempo_estimado_minutos': tiempoEstimadoMinutos,
       },

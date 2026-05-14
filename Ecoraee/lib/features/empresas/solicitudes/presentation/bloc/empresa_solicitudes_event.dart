@@ -18,14 +18,14 @@ class LoadEmpresaSolicitudes extends EmpresaSolicitudesEvent {
 
 class AceptarEmpresaSolicitud extends EmpresaSolicitudesEvent {
   final int solicitudId;
-  final int recolectorId;
+  final int? colaboradorId;
   final String horaEstimadaInicio;
   final String horaEstimadaFin;
   final String? comentarioEmpresa;
 
   const AceptarEmpresaSolicitud({
     required this.solicitudId,
-    required this.recolectorId,
+    this.colaboradorId,
     required this.horaEstimadaInicio,
     required this.horaEstimadaFin,
     this.comentarioEmpresa,
@@ -34,7 +34,7 @@ class AceptarEmpresaSolicitud extends EmpresaSolicitudesEvent {
   @override
   List<Object?> get props => [
         solicitudId,
-        recolectorId,
+        colaboradorId,
         horaEstimadaInicio,
         horaEstimadaFin,
         comentarioEmpresa,
@@ -56,22 +56,22 @@ class RechazarEmpresaSolicitud extends EmpresaSolicitudesEvent {
 
 class MarcarSolicitudEnTransito extends EmpresaSolicitudesEvent {
   final int solicitudId;
-  final double? latitudRecolector;
-  final double? longitudRecolector;
+  final double? latitudColaborador;
+  final double? longitudColaborador;
   final int? tiempoEstimadoMinutos;
 
   const MarcarSolicitudEnTransito({
     required this.solicitudId,
-    this.latitudRecolector,
-    this.longitudRecolector,
+    this.latitudColaborador,
+    this.longitudColaborador,
     this.tiempoEstimadoMinutos,
   });
 
   @override
   List<Object?> get props => [
         solicitudId,
-        latitudRecolector,
-        longitudRecolector,
+        latitudColaborador,
+        longitudColaborador,
         tiempoEstimadoMinutos,
       ];
 }

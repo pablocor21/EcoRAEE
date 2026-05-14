@@ -259,7 +259,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.dashboardColaborador,
-        builder: (context, state) => const DashboardColabScreen(),
+        builder: (context, state) => const RegistrosScreen(),
       ),
       GoRoute(
         path: AppRoutes.ajustesColaborador,

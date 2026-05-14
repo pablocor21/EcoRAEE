@@ -261,7 +261,7 @@ class _EmpresaSolicitudesPageState extends State<EmpresaSolicitudesPage> {
       context.read<EmpresaSolicitudesBloc>().add(
             AceptarEmpresaSolicitud(
               solicitudId: solicitudId,
-              recolectorId: recolectorId!,
+              colaboradorId: recolectorId,
               horaEstimadaInicio: inicio,
               horaEstimadaFin: fin,
               comentarioEmpresa: comentarioCtrl.text.trim().isEmpty

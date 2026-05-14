@@ -28,7 +28,7 @@ class EmpresaSolicitudesRepositoryImpl implements EmpresaSolicitudesRepository {
   @override
   Future<Either<Failure, void>> aceptarSolicitud({
     required int id,
-    required int recolectorId,
+    int? colaboradorId,
     required String horaEstimadaInicio,
     required String horaEstimadaFin,
     String? comentarioEmpresa,
@@ -36,7 +36,7 @@ class EmpresaSolicitudesRepositoryImpl implements EmpresaSolicitudesRepository {
     try {
       await _remoteDatasource.aceptarSolicitud(
         id: id,
-        recolectorId: recolectorId,
+        colaboradorId: colaboradorId,
         horaEstimadaInicio: horaEstimadaInicio,
         horaEstimadaFin: horaEstimadaFin,
         comentarioEmpresa: comentarioEmpresa,
@@ -67,15 +67,15 @@ class EmpresaSolicitudesRepositoryImpl implements EmpresaSolicitudesRepository {
   @override
   Future<Either<Failure, void>> marcarEnTransito({
     required int id,
-    double? latitudRecolector,
-    double? longitudRecolector,
+    double? latitudColaborador,
+    double? longitudColaborador,
     int? tiempoEstimadoMinutos,
   }) async {
     try {
       await _remoteDatasource.marcarEnTransito(
         id: id,
-        latitudRecolector: latitudRecolector,
-        longitudRecolector: longitudRecolector,
+        latitudColaborador: latitudColaborador,
+        longitudColaborador: longitudColaborador,
         tiempoEstimadoMinutos: tiempoEstimadoMinutos,
       );
       return const Right(null);

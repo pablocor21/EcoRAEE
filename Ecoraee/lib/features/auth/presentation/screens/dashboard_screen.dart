@@ -1,14 +1,50 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../config/router/app_router.dart';
 
-class DashboardScreen extends ConsumerWidget {
+import '../../../../config/router/app_router.dart';
+import '../../../../core/storage/secure_storage.dart';
+import '../../../../injection_container.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_bloc.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_event.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_state.dart';
+
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  String _nombre = 'Colaborador';
+  
+  @override
+  void initState() {
+    super.initState();
+    _loadNombre();
+  }
+
+  Future<void> _loadNombre() async {
+    try {
+      final data = await sl<SecureStorage>().getUserData();
+      if (data != null) {
+        final map = jsonDecode(data) as Map<String, dynamic>;
+        if (mounted) {
+          setState(() {
+            _nombre = map['nombre'] as String? ?? 'Colaborador';
+          });
+        }
+      }
+    } catch (_) {}
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<EmpresaSolicitudesBloc>()..add(const LoadEmpresaSolicitudes()),
+      child: Scaffold(
       // Usamos un Stack para manejar el fondo con gradiente y el contenido encima
       body: Stack(
         children: [
@@ -36,7 +72,7 @@ class DashboardScreen extends ConsumerWidget {
                   const SizedBox(height: 20),
 
                   // 3. HEADER: Perfil, Nombre y Botones de Acción
-                  const _HeaderSection(),
+                  _HeaderSection(nombre: _nombre),
 
                   const SizedBox(height: 25),
 
@@ -118,6 +154,7 @@ class DashboardScreen extends ConsumerWidget {
 
       // 10. BOTTOM NAVIGATION BAR (Estilo moderno)
       bottomNavigationBar: _CustomBottomNavBar(),
+      ),
     );
   }
 }
@@ -127,7 +164,8 @@ class DashboardScreen extends ConsumerWidget {
 // ──────────────────────────────────────────────────────────────────────────────
 
 class _HeaderSection extends StatelessWidget {
-  const _HeaderSection();
+  final String nombre;
+  const _HeaderSection({required this.nombre});
 
   @override
   Widget build(BuildContext context) {
@@ -150,13 +188,13 @@ class _HeaderSection extends StatelessWidget {
           ),
           const SizedBox(width: 15),
           // Saludo y Ciclo Activo
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hola, Juan José',
-                  style: TextStyle(
+                  'Hola, $nombre',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -253,22 +291,42 @@ class _StatsSummaryCard extends StatelessWidget {
           ),
           const SizedBox(height: 25),
           // Fila de estadísticas
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _StatItem(
-                value: '128',
-                label: 'Recolectas\nrealizadas en el mes',
-              ),
-              _VerticalDivider(),
-              _StatItem(value: '32', label: 'Recolectas\npendientes'),
-              _VerticalDivider(),
-              _StatItem(
-                value: '5',
-                label: 'Solicitudes\nactivas',
-                valueColor: const Color(0xFFB2F333),
-              ),
-            ],
+          BlocBuilder<EmpresaSolicitudesBloc, EmpresaSolicitudesState>(
+            builder: (context, state) {
+              int completadasMes = 0;
+              int recoleccionesPendientes = 0; // En Transito o Aceptadas
+              int activasGlobal = 0; // Pendientes globales
+
+              if (state is EmpresaSolicitudesLoaded) {
+                final solicitudes = state.solicitudes;
+                
+                // Ejemplo simple de calculo:
+                completadasMes = solicitudes.where((s) => s.estado == 'RECOLECTADA' || s.estado == 'COMPLETADA').length;
+                recoleccionesPendientes = solicitudes.where((s) => s.estado == 'ACEPTADA' || s.estado == 'EN_TRANSITO').length;
+                activasGlobal = solicitudes.where((s) => s.estado == 'PENDIENTE').length;
+              }
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _StatItem(
+                    value: state is EmpresaSolicitudesLoading ? '-' : '$completadasMes',
+                    label: 'Recolectas\nrealizadas en el mes',
+                  ),
+                  _VerticalDivider(),
+                  _StatItem(
+                    value: state is EmpresaSolicitudesLoading ? '-' : '$recoleccionesPendientes', 
+                    label: 'Tus recolectas\npendientes'
+                  ),
+                  _VerticalDivider(),
+                  _StatItem(
+                    value: state is EmpresaSolicitudesLoading ? '-' : '$activasGlobal',
+                    label: 'Solicitudes\nactivas globales',
+                    valueColor: const Color(0xFFB2F333),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),
