@@ -180,6 +180,7 @@ class _SolicitudesScreenState extends State<SolicitudesScreen> {
       ),
       bottomNavigationBar: const _CustomBottomNavBar(),
       extendBody: true,
+      ),
     );
   }
 }

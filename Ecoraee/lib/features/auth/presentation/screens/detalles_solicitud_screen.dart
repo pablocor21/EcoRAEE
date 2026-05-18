@@ -1,10 +1,14 @@
+import 'package:intl/intl.dart';
+
 import '../../../../config/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../empresas/solicitudes/domain/entities/empresa_solicitud_entity.dart';
 import 'rechazo_solicitud_screen.dart';
 
 class DetallesSolicitudScreen extends StatelessWidget {
-  const DetallesSolicitudScreen({super.key});
+  final dynamic solicitud;
+  const DetallesSolicitudScreen({super.key, this.solicitud});
 
   @override
   Widget build(BuildContext context) {
@@ -49,21 +53,21 @@ class DetallesSolicitudScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   // 3. TÍTULO Y ESTADO
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Laptop Asus ROG',
-                          style: TextStyle(
+                          solicitud != null ? 'Dispositivos #${solicitud!.id}' : 'Laptop Asus ROG',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 26,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
-                        SizedBox(height: 5),
-                        _StatusPill(label: 'Estado: en proceso'),
+                        const SizedBox(height: 5),
+                        _StatusPill(label: solicitud != null ? solicitud!.estado : 'en proceso'),
                       ],
                     ),
                   ),
@@ -87,7 +91,7 @@ class DetallesSolicitudScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Información de la solicitud
-                        const _InfoCard(),
+                        _InfoCard(solicitud: solicitud),
                         const SizedBox(height: 30),
 
                         // Descripción
@@ -198,7 +202,7 @@ class _StatusPill extends StatelessWidget {
             border: Border.all(color: const Color(0xFFE9C46A).withOpacity(0.5)),
           ),
           child: Text(
-            'en proceso',
+            label.toLowerCase(),
             style: TextStyle(
               color: const Color(0xFFE9C46A).withAlpha(255),
               fontSize: 15,
@@ -212,10 +216,23 @@ class _StatusPill extends StatelessWidget {
 }
 
 class _InfoCard extends StatelessWidget {
-  const _InfoCard();
+  final dynamic solicitud;
+  const _InfoCard({this.solicitud});
 
   @override
   Widget build(BuildContext context) {
+    String address = 'Carrera 55 # 86 - 120';
+    String date = '14 de marzo 2026';
+    String time = '10:00 am';
+    String userName = 'Ciudadano';
+
+    if (solicitud != null) {
+      address = solicitud!.direccionRecoleccion;
+      date = DateFormat('dd MMM yyyy').format(solicitud!.fechaPreferida);
+      time = DateFormat('hh:mm a').format(solicitud!.fechaPreferida);
+      userName = solicitud!.nombreSolicitante;
+    }
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -224,21 +241,21 @@ class _InfoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const _InfoRow(
+          _InfoRow(
             icon: Icons.location_on,
-            text: 'Carrera 55 # 86 - 120',
+            text: address,
           ),
           const SizedBox(height: 15),
-          const Row(
+          Row(
             children: [
               Expanded(
                 child: _InfoRow(
                   icon: Icons.calendar_today,
-                  text: '14 de marzo 2026',
+                  text: date,
                 ),
               ),
               Expanded(
-                child: _InfoRow(icon: Icons.access_time, text: '10:00 am'),
+                child: _InfoRow(icon: Icons.access_time, text: time),
               ),
             ],
           ),
@@ -254,10 +271,10 @@ class _InfoCard extends StatelessWidget {
                 child: Icon(Icons.person, color: Color(0xFF19133B)),
               ),
               const SizedBox(width: 15),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'Juan José Gómez Toro',
-                  style: TextStyle(
+                  userName,
+                  style: const TextStyle(
                     color: Color(0xFF19133B),
                     fontWeight: FontWeight.bold,
                     fontSize: 16,

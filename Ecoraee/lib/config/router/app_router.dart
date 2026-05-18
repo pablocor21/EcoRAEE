@@ -337,7 +337,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.detallesSolicitud,
-        builder: (context, state) => const DetallesSolicitudScreen(),
+        builder: (context, state) {
+          final extra = state.extra;
+          return DetallesSolicitudScreen(solicitud: extra);
+        },
       ),
       GoRoute(
         path: AppRoutes.crearSolicitud,
