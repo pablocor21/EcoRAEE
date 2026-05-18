@@ -56,27 +56,20 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                       ? const Center(child: CircularProgressIndicator(color: AppColors.navy))
                       : state.items.isEmpty
                           ? const _EmptyNotificaciones()
-                          : ListView(
+                          : ListView.builder(
                               padding: const EdgeInsets.symmetric(horizontal: 20),
-                              children: [
-                                _buildNotificationSection('Reciclaje recolectado', 'Ganaste 200 puntos, ya puedes revisar en tus puntos.', 'Hace 2 horas'),
-                                const SizedBox(height: 15),
-                                _buildNotificationSection('Reciclaje recolectado', 'Ganaste 200 puntos, ya puedes revisar en tus puntos.', 'Hace 12 horas'),
-                                const SizedBox(height: 25),
-                                const Text(
-                                  'Ayer',
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.navy,
+                              itemCount: state.items.length,
+                              itemBuilder: (context, index) {
+                                final notificacion = state.items[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 15),
+                                  child: _buildNotificationSection(
+                                    notificacion.titulo,
+                                    notificacion.mensaje,
+                                    _formatTimeAgo(notificacion.fecha),
                                   ),
-                                ),
-                                const SizedBox(height: 15),
-                                _buildNotificationSection('Reciclaje recolectado', 'Ganaste 200 puntos, ya puedes revisar en tus puntos.', 'ayer'),
-                                const SizedBox(height: 15),
-                                _buildNotificationSection('Reciclaje recolectado', 'Ganaste 200 puntos, ya puedes revisar en tus puntos.', 'ayer'),
-                                const SizedBox(height: 30),
-                              ],
+                                );
+                              },
                             ),
                 ),
               ],
@@ -128,6 +121,21 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
         ],
       ),
     );
+  }
+
+  String _formatTimeAgo(DateTime date) {
+    final diff = DateTime.now().difference(date);
+    if (diff.inDays > 1) {
+      return 'Hace ${diff.inDays} días';
+    } else if (diff.inDays == 1) {
+      return 'Ayer';
+    } else if (diff.inHours > 0) {
+      return 'Hace ${diff.inHours} horas';
+    } else if (diff.inMinutes > 0) {
+      return 'Hace ${diff.inMinutes} minutos';
+    } else {
+      return 'Hace un momento';
+    }
   }
 
 }

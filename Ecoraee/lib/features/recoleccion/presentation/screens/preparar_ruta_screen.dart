@@ -5,7 +5,8 @@ import 'iniciar_ruta_screen.dart';
 /// Pantalla para visualizar y preparar la ruta de recolección.
 /// Implementación puramente visual (SIN LÓGICA) como solicitado.
 class PrepararRutaScreen extends StatelessWidget {
-  const PrepararRutaScreen({super.key});
+  final dynamic solicitudes;
+  const PrepararRutaScreen({super.key, this.solicitudes});
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class PrepararRutaScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const IniciarRutaScreen(),
+                              builder: (context) => IniciarRutaScreen(solicitudes: solicitudes),
                             ),
                           );
                         },

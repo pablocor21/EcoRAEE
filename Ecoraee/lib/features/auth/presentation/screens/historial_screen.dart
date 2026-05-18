@@ -1,13 +1,27 @@
-import '../../../../config/router/app_router.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
-class HistorialScreen extends StatelessWidget {
+import '../../../../config/router/app_router.dart';
+import '../../../../injection_container.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_bloc.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_event.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_state.dart';
+
+class HistorialScreen extends StatefulWidget {
   const HistorialScreen({super.key});
 
   @override
+  State<HistorialScreen> createState() => _HistorialScreenState();
+}
+
+class _HistorialScreenState extends State<HistorialScreen> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocProvider(
+      create: (_) => sl<EmpresaSolicitudesBloc>()..add(const LoadEmpresaSolicitudes()),
+      child: Scaffold(
       body: Stack(
         children: [
           // 1. FONDO CON GRADIENTE
@@ -44,63 +58,103 @@ class HistorialScreen extends StatelessWidget {
                 const _HeaderSection(),
                 const SizedBox(height: 55),
 
-                // 3. TARJETAS DE ESTADÍSTICAS SUPERIORES
-                const _TopStatsRow(),
-                const SizedBox(height: 25),
-
-                // 4. CUERPO PRINCIPAL
+                // 3. TARJETAS DE ESTADÍSTICAS SUPERIORES Y CUERPO
                 Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFE9EDF0),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 25),
-                        // Sub-header: Actividad reciente
-                        const _ActivityHeader(),
-                        const SizedBox(height: 25),
+                  child: BlocBuilder<EmpresaSolicitudesBloc, EmpresaSolicitudesState>(
+                    builder: (context, state) {
+                      int totalReciclados = 0;
+                      int totalRecolectas = 0;
+                      int totalCO2 = 0;
+                      
+                      int portatiles = 0;
+                      int monitores = 0;
+                      int otros = 0;
 
-                        Expanded(
-                          child: ListView(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              // 5. ESTADÍSTICAS MEDIAS
-                              _MidStatsRow(),
-                              SizedBox(height: 25),
+                      List<dynamic> solicitudesFinalizadas = [];
 
-                              // 6. LISTA DE ACTIVIDAD
-                              _ActivityItem(
-                                title: 'Laptop Asus ROG',
-                                location: 'Poblado, Medellín',
-                                condition: 'Excelente condición',
-                                time: 'Hoy, a las 10:00 am',
-                                id: '12',
-                                imageUrl:
-                                    'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=200',
-                              ),
-                              SizedBox(height: 15),
-                              _ActivityItem(
-                                title: 'Monitor LG',
-                                location: 'Manrique, Medellín',
-                                condition: 'Excelente condición',
-                                time: 'Hoy, a las 12:00 m',
-                                id: '13',
-                                imageUrl:
-                                    'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=200',
-                              ),
-                              SizedBox(height: 100),
-                            ],
+                      if (state is EmpresaSolicitudesLoaded) {
+                        solicitudesFinalizadas = state.solicitudes.where((s) => s.estado == 'RECOLECTADA' || s.estado == 'COMPLETADA').toList();
+                        totalRecolectas = solicitudesFinalizadas.length;
+                        
+                        // Fake calculation based on requests count since we don't have devices detail in list API usually
+                        totalReciclados = totalRecolectas * 3; 
+                        totalCO2 = totalRecolectas * 15;
+                        
+                        portatiles = totalRecolectas * 1;
+                        monitores = totalRecolectas * 1;
+                        otros = totalRecolectas * 1;
+                      }
+
+                      return Column(
+                        children: [
+                          _TopStatsRow(
+                            reciclados: '$totalReciclados',
+                            recolectas: '$totalRecolectas',
+                            co2: '$totalCO2 kg',
                           ),
-                        ),
-                      ],
-                    ),
+                          const SizedBox(height: 25),
+                          
+                          Expanded(
+                            child: Container(
+                              width: double.infinity,
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFE9EDF0),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(40),
+                                  topRight: Radius.circular(40),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 25),
+                                  const _ActivityHeader(),
+                                  const SizedBox(height: 25),
+
+                                  Expanded(
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: state is EmpresaSolicitudesLoaded ? solicitudesFinalizadas.length + 2 : 2,
+                                      itemBuilder: (context, index) {
+                                        if (index == 0) {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(bottom: 25),
+                                            child: _MidStatsRow(
+                                              portatiles: '$portatiles',
+                                              monitores: '$monitores',
+                                              otros: '$otros',
+                                            ),
+                                          );
+                                        }
+                                        if (state is! EmpresaSolicitudesLoaded) {
+                                          return const Center(child: CircularProgressIndicator());
+                                        }
+                                        if (index == solicitudesFinalizadas.length + 1) {
+                                          return const SizedBox(height: 100);
+                                        }
+                                        
+                                        final sol = solicitudesFinalizadas[index - 1];
+                                        return Padding(
+                                          padding: const EdgeInsets.only(bottom: 15),
+                                          child: _ActivityItem(
+                                            title: 'Dispositivos #${sol.id}',
+                                            location: sol.direccionRecoleccion,
+                                            condition: 'Recolectado',
+                                            time: DateFormat('dd MMM yyyy, hh:mm a').format(sol.fechaPreferida),
+                                            id: '${sol.id}',
+                                            imageUrl: 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=200',
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],
@@ -110,6 +164,7 @@ class HistorialScreen extends StatelessWidget {
       ),
       bottomNavigationBar: const _CustomBottomNavBar(),
       extendBody: true,
+      ),
     );
   }
 }
@@ -172,7 +227,15 @@ class _CircularLogo extends StatelessWidget {
 }
 
 class _TopStatsRow extends StatelessWidget {
-  const _TopStatsRow();
+  final String reciclados;
+  final String recolectas;
+  final String co2;
+
+  const _TopStatsRow({
+    required this.reciclados,
+    required this.recolectas,
+    required this.co2,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -181,21 +244,21 @@ class _TopStatsRow extends StatelessWidget {
       child: Row(
         children: [
           _TopStatCard(
-            value: '120',
+            value: reciclados,
             label: 'Dispositivos\nreciclados',
             color: Colors.white,
             textColor: Color(0xFF19133B),
           ),
           SizedBox(width: 10),
           _TopStatCard(
-            value: '32',
+            value: recolectas,
             label: 'Recolectas',
             color: Color(0xFF7A9BBF),
             textColor: Colors.white,
           ),
           SizedBox(width: 10),
           _TopStatCard(
-            value: '45 kg',
+            value: co2,
             label: 'CO2\nAhorrado',
             color: Color(0xFF19133B),
             textColor: Colors.white,
@@ -285,17 +348,25 @@ class _ActivityHeader extends StatelessWidget {
 }
 
 class _MidStatsRow extends StatelessWidget {
-  const _MidStatsRow();
+  final String portatiles;
+  final String monitores;
+  final String otros;
+
+  const _MidStatsRow({
+    required this.portatiles,
+    required this.monitores,
+    required this.otros,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _MidStatCard(value: '120', label: 'Portátiles\nreciclados'),
+        _MidStatCard(value: portatiles, label: 'Portátiles\nreciclados'),
         SizedBox(width: 10),
-        _MidStatCard(value: '40', label: 'Monitores\nreciclados'),
+        _MidStatCard(value: monitores, label: 'Monitores\nreciclados'),
         SizedBox(width: 10),
-        _MidStatCard(value: '70', label: 'Otros disp.\nreciclados'),
+        _MidStatCard(value: otros, label: 'Otros disp.\nreciclados'),
       ],
     );
   }

@@ -3,99 +3,160 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'preparar_ruta_screen.dart';
-
-class RecoleccionScreen extends ConsumerWidget {
+import '../../../../injection_container.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_bloc.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_event.dart';
+import '../../../empresas/solicitudes/presentation/bloc/empresa_solicitudes_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+class RecoleccionScreen extends ConsumerStatefulWidget {
   const RecoleccionScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          // 1. FONDO CON GRADIENTE (Efecto espacial/oscuro de la imagen)
-          Container(
-            height:
-                250, // Altura para cubrir la parte superior detrás del contenido
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF0D0B21), // Azul muy oscuro arriba
-                  Color(0xFF19133B), // CicloxColors.dark
-                  Color(0xFF25214D), // Azul un poco más claro abajo
+  ConsumerState<RecoleccionScreen> createState() => _RecoleccionScreenState();
+}
+
+class _RecoleccionScreenState extends ConsumerState<RecoleccionScreen> {
+  String _activeTab = 'En proceso';
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<EmpresaSolicitudesBloc>()
+        ..add(LoadEmpresaSolicitudes(estado: _activeTab == 'En proceso' ? 'EN_TRANSITO' : 'ACEPTADA')),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              height: 250,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF0D0B21),
+                    Color(0xFF19133B),
+                    Color(0xFF25214D),
+                  ],
+                ),
+              ),
+            ),
+            SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  const _HeaderRow(),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFF4F6F8),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(35),
+                          topRight: Radius.circular(35),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 25),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 40),
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE4E7EB),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: BlocBuilder<EmpresaSolicitudesBloc, EmpresaSolicitudesState>(
+                              builder: (context, state) {
+                                return Row(
+                                  children: [
+                                    _TabItem(
+                                      label: 'Pendientes',
+                                      isActive: _activeTab == 'Pendientes',
+                                      onTap: () {
+                                        setState(() => _activeTab = 'Pendientes');
+                                        context.read<EmpresaSolicitudesBloc>().add(const LoadEmpresaSolicitudes(estado: 'ACEPTADA'));
+                                      },
+                                    ),
+                                    _TabItem(
+                                      label: 'En proceso',
+                                      isActive: _activeTab == 'En proceso',
+                                      onTap: () {
+                                        setState(() => _activeTab = 'En proceso');
+                                        context.read<EmpresaSolicitudesBloc>().add(const LoadEmpresaSolicitudes(estado: 'EN_TRANSITO'));
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Expanded(
+                            child: BlocBuilder<EmpresaSolicitudesBloc, EmpresaSolicitudesState>(
+                              builder: (context, state) {
+                                if (state is EmpresaSolicitudesLoading) {
+                                  return const Center(child: CircularProgressIndicator());
+                                } else if (state is EmpresaSolicitudesError) {
+                                  return Center(child: Text(state.message));
+                                } else if (state is EmpresaSolicitudesLoaded) {
+                                  if (state.solicitudes.isEmpty) {
+                                    return const Center(
+                                      child: Text(
+                                        'No hay recolecciones en este estado',
+                                        style: TextStyle(color: Colors.black54),
+                                      ),
+                                    );
+                                  }
+                                  return ListView.builder(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: state.solicitudes.length,
+                                    itemBuilder: (context, index) {
+                                      final sol = state.solicitudes[index];
+                                      return _LocationCard(
+                                        title: sol.nombreSolicitante,
+                                        address: sol.direccionRecoleccion,
+                                        time: DateFormat('dd/MM/yyyy HH:mm').format(sol.fechaPreferida),
+                                      );
+                                    },
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                            ),
+                          ),
+                          BlocBuilder<EmpresaSolicitudesBloc, EmpresaSolicitudesState>(
+                            builder: (context, state) {
+                              dynamic solicitudes = [];
+                              if (state is EmpresaSolicitudesLoaded) {
+                                solicitudes = state.solicitudes;
+                              }
+                              
+                              // Si no hay solicitudes, ocultamos el botón
+                              if (solicitudes.isEmpty) {
+                                return const SizedBox();
+                              }
+                              
+                              return _SlideToPrepareRoute(
+                                solicitudes: solicitudes, 
+                                activeTab: _activeTab,
+                              );
+                            }
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
-
-          // 2. CONTENIDO PRINCIPAL
-          SafeArea(
-            bottom: false,
-            child: Column(
-              children: [
-                // HEADER
-                const _HeaderRow(),
-
-                const SizedBox(height: 20),
-
-                // CONTENIDO BLANCO/GRIS
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFF4F6F8), // Gris muy claro
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(35),
-                        topRight: Radius.circular(35),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 25),
-                        // TABS
-                        const _TabsSection(),
-
-                        const SizedBox(height: 20),
-
-                        // LISTA DE TARJETAS
-                        Expanded(
-                          child: ListView(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              _LocationCard(
-                                title: 'Edificio residencia Doña Ana',
-                                address: 'Carrera 55 # 86 - 120',
-                                time: '10:00 am',
-                              ),
-                              _LocationCard(
-                                title: 'Barrio manrique La Esmeraldas',
-                                address: 'Carrera 55 # 86 - 120',
-                                time: '12:00 m',
-                              ),
-                              _LocationCard(
-                                title: 'Edificio residencia San Sebastián',
-                                address: 'Carrera 55 # 86 - 120',
-                                time: '02:00 pm',
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // SLIDER
-                        const _SlideToPrepareRoute(),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
+        bottomNavigationBar: const _CustomBottomNavBar(),
       ),
-      bottomNavigationBar: const _CustomBottomNavBar(),
     );
   }
 }
@@ -181,42 +242,7 @@ class _HeaderRow extends StatelessWidget {
   }
 }
 
-class _TabsSection extends StatefulWidget {
-  const _TabsSection();
-
-  @override
-  State<_TabsSection> createState() => _TabsSectionState();
-}
-
-class _TabsSectionState extends State<_TabsSection> {
-  String activeTab = 'En proceso';
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 40),
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: const Color(0xFFE4E7EB),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        children: [
-          _TabItem(
-            label: 'Pendientes',
-            isActive: activeTab == 'Pendientes',
-            onTap: () => setState(() => activeTab = 'Pendientes'),
-          ),
-          _TabItem(
-            label: 'En proceso',
-            isActive: activeTab == 'En proceso',
-            onTap: () => setState(() => activeTab = 'En proceso'),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// Removed _TabsSection as it was integrated into _RecoleccionScreenState
 
 class _TabItem extends StatelessWidget {
   final String label;
@@ -391,7 +417,9 @@ class _LocationCard extends StatelessWidget {
 }
 
 class _SlideToPrepareRoute extends StatefulWidget {
-  const _SlideToPrepareRoute();
+  final dynamic solicitudes;
+  final String activeTab;
+  const _SlideToPrepareRoute({this.solicitudes, required this.activeTab});
 
   @override
   State<_SlideToPrepareRoute> createState() => _SlideToPrepareRouteState();
@@ -425,15 +453,12 @@ class _SlideToPrepareRouteState extends State<_SlideToPrepareRoute> {
           return Stack(
             alignment: Alignment.centerLeft,
             children: [
-              // Texto de fondo centrado
-              const Center(
+              Center(
                 child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 30,
-                  ), // Empujar un poco a la derecha
+                  padding: const EdgeInsets.only(left: 30),
                   child: Text(
-                    'PREPARAR RUTA',
-                    style: TextStyle(
+                    widget.activeTab == 'Pendientes' ? 'INICIAR RUTA' : 'PREPARAR RUTA',
+                    style: const TextStyle(
                       color: Color(0xFF19133B),
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
@@ -457,23 +482,38 @@ class _SlideToPrepareRouteState extends State<_SlideToPrepareRoute> {
                   onHorizontalDragEnd: (details) {
                     setState(() {
                       if (_dragValue > maxDrag * 0.8) {
-                        // Acción completada
                         _dragValue = maxDrag;
 
-                        // Navegar a la pantalla de preparar ruta
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PrepararRutaScreen(),
-                          ),
-                        ).then((_) {
-                          // Restablecer el slider al volver de la pantalla
-                          if (mounted) {
-                            setState(() {
-                              _dragValue = 0;
-                            });
+                        if (widget.activeTab == 'Pendientes') {
+                          // Marcar todas como EN_TRANSITO
+                          if (widget.solicitudes != null && widget.solicitudes is List) {
+                            for (var sol in widget.solicitudes) {
+                              context.read<EmpresaSolicitudesBloc>().add(
+                                MarcarSolicitudEnTransito(
+                                  solicitudId: sol.id,
+                                ),
+                              );
+                            }
                           }
-                        });
+                          // Restablecer el slider
+                          Future.delayed(const Duration(milliseconds: 300), () {
+                            if (mounted) setState(() => _dragValue = 0);
+                          });
+                        } else {
+                          // Navegar a la pantalla de preparar ruta
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PrepararRutaScreen(solicitudes: widget.solicitudes),
+                            ),
+                          ).then((_) {
+                            if (mounted) {
+                              setState(() {
+                                _dragValue = 0;
+                              });
+                            }
+                          });
+                        }
                       } else {
                         // Regresar al inicio
                         _dragValue = 0;
